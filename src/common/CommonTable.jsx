@@ -1,5 +1,5 @@
-
 // import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     Table,
@@ -11,7 +11,11 @@ import {
     Paper,
     Button,
     TablePagination,
+    IconButton,
+    Menu,
+    MenuItem,
 } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const CommonTable = ({
     headers,
@@ -20,6 +24,7 @@ const CommonTable = ({
     onMarksListClick,
     onViewAttendanceClick,
     onAddClick,
+    onEditClick, // Added for dropdown
     addedBanks,
     totalRecords,
     page,
@@ -27,6 +32,21 @@ const CommonTable = ({
     onPageChange,
     onRowsPerPageChange,
 }) => {
+    // State for the dropdown menu
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [currentRow, setCurrentRow] = useState(null);
+    const open = Boolean(anchorEl);
+
+    // Handle dropdown open and close
+    const handleMenuOpen = (event, row) => {
+        setAnchorEl(event.currentTarget);
+        setCurrentRow(row);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+        setCurrentRow(null);
+    };
+
     return (
         <Paper sx={{ margin: '20px 0', boxShadow: 'none', ...style.paper }}>
             <TableContainer component={Paper} sx={{ overflowX: 'auto', ...style.container }}>
@@ -44,7 +64,7 @@ const CommonTable = ({
                                     {header.label}
                                 </TableCell>
                             ))}
-                            {(onMarksListClick || onViewAttendanceClick || onAddClick) && (
+                            {(onMarksListClick || onViewAttendanceClick || onAddClick || onEditClick) && (
                                 <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', ...(style.headerCell || {}) }}>
                                     Actions
                                 </TableCell>
@@ -55,7 +75,6 @@ const CommonTable = ({
                         {data.length > 0 ? data?.map((row, rowIndex) => (
                             <TableRow
                                 key={rowIndex}
-
                                 sx={{
                                     transition: 'background-color 0.3s ease',
                                     '&:hover': {
@@ -77,8 +96,9 @@ const CommonTable = ({
                                     </TableCell>
                                 ))}
 
-                                {(onMarksListClick || onViewAttendanceClick || onAddClick) && (
+                                {(onMarksListClick || onViewAttendanceClick || onAddClick || onEditClick) && (
                                     <TableCell sx={{ textAlign: 'center' }}>
+                                        {/* Marks List and View Attendance Buttons */}
                                         {onMarksListClick && (
                                             <Button
                                                 variant="contained"
@@ -112,6 +132,46 @@ const CommonTable = ({
                                             >
                                                 {addedBanks.includes(row.id) ? 'Added' : 'Add'}
                                             </Button>
+                                        )}
+
+                                        {/* Dropdown Menu */}
+                                        {onEditClick && (
+                                            <>
+                                                <IconButton
+                                                    aria-label="more"
+                                                    aria-controls="long-menu"
+                                                    aria-haspopup="true"
+                                                    onClick={(event) => handleMenuOpen(event, row)}
+                                                >
+                                                    <MoreVertIcon />
+                                                </IconButton>
+                                                <Menu
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleMenuClose}
+                                                    PaperProps={{
+                                                        style: {
+                                                            maxHeight: 48 * 4.5,
+                                                            width: '20ch',
+                                                            boxShadow: 'rgba(0, 0, 0, 0.20) 0px 2px 4px', // Light shadow
+                                                            borderRadius: '8px', // Optional: Soften the corners
+                                                        },
+                                                    }}
+                                                >
+                                                    <MenuItem onClick={() => { onEditClick(currentRow.id); handleMenuClose(); }}>
+                                                        Edit
+                                                    </MenuItem>
+                                                    {/* <MenuItem onClick={() => { onViewAttendanceClick(currentRow); handleMenuClose(); }}>
+                                                        View Attendance
+                                                    </MenuItem>
+                                                    <MenuItem onClick={() => { handleMenuClose(); }}>
+                                                        Question Paper
+                                                    </MenuItem>
+                                                    <MenuItem onClick={() => { handleMenuClose(); }}>
+                                                        Add To Calendar
+                                                    </MenuItem> */}
+                                                </Menu>
+                                            </>
                                         )}
                                     </TableCell>
                                 )}
@@ -157,6 +217,7 @@ CommonTable.propTypes = {
     onMarksListClick: PropTypes.func,
     onViewAttendanceClick: PropTypes.func,
     onAddClick: PropTypes.func,
+    onEditClick: PropTypes.func, // Added for dropdown
     addedBanks: PropTypes.array,
     style: PropTypes.object, // Custom styles for the table
 };
@@ -172,7 +233,6 @@ CommonTable.defaultProps = {
             fontWeight: 'bold',
         },
         bodyCell: {
-            // backgroundColor: '#fff',
             color: '#333',
         },
         pagination: {
@@ -182,6 +242,7 @@ CommonTable.defaultProps = {
     onMarksListClick: null,
     onViewAttendanceClick: null,
     onAddClick: null,
+    onEditClick: null, // Default to null so dropdown is optional
     addedBanks: [],
 };
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import CommonTable from '../common/CommonTable';
 import { useNavigate } from 'react-router-dom';
 import { Button, Select, MenuItem, FormControl, InputLabel, Grid, Box, Typography } from '@mui/material';
-import { useGetBatchesQuery, useGetExamDataQuery } from '../store/service/admin/AdminService';
+import { useGetBatchesQuery, useGetExamDataByIdQuery, useGetExamDataQuery } from '../store/service/admin/AdminService';
 
 function AdminDashboard() {
     const [page, setPage] = useState(0); // Current page
@@ -41,6 +41,12 @@ function AdminDashboard() {
         setSelectedDate('');
         setPage(0);
     };
+
+    const onEditClick = async (id) => {
+        console.log(id)
+        nav(`/addquestion?examId=${id}`)
+
+    }
 
     const nav = useNavigate();
     const handleAddNewExam = () => {
@@ -86,7 +92,7 @@ function AdminDashboard() {
                             >
                                 {batchList?.data.length > 0 ? (
                                     batchList.data.map((batch) => (
-                                        <MenuItem key={batch.id} value={batch.batch_id}>
+                                        <MenuItem key={batch.batch_id} value={batch.batch_id}>
                                             {batch.batch_name}
                                         </MenuItem>
                                     ))
@@ -134,6 +140,7 @@ function AdminDashboard() {
                 onRowsPerPageChange={handleRowsPerPageChange}
                 onMarksListClick={(row) => console.log('Marks List Clicked for', row)}
                 onViewAttendanceClick={(row) => console.log('View Attendance Clicked for', row)}
+                onEditClick={onEditClick}
             />
         </div>
     );

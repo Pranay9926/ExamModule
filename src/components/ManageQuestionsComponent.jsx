@@ -8,11 +8,11 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useGetQuestionIdMutation, useGetQuestionsAsPerBankIdQuery } from '../store/service/admin/AdminService';
+import { useGetQuestionIdMutation, useGetQuestionsAsPerBankIdQuery, useGetRandomQuestionIdsQuery } from '../store/service/admin/AdminService';
 import { getBankCount } from '../store/slices/adminSlice/ExamSlice';
 import EditQuestionSettingsModal from './EditQuestionSettingsModal';
 
-const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partId, bankId, randomQuestionsIds }) => {
+const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partId, bankId, randomQuestionsIds, examId }) => {
     const { data, isLoading, isError } = useGetQuestionsAsPerBankIdQuery(bankId);
     const [GetQuestionId] = useGetQuestionIdMutation();
     const [questions, setQuestions] = useState([]);
@@ -35,6 +35,7 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
             }
         }
     }, [data, isLoading, isError]);
+
 
     // Handle question selection
     const handleSelectQuestion = (id) => {
@@ -105,7 +106,7 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
     };
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box sx={{}}>
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
                 Questions: Capgemini Test - 1
                 <Typography
@@ -118,10 +119,10 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
             </Typography>
 
             {/* Table for displaying and selecting questions */}
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ p: 2 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="question table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow sx={{ backgroundColor: '#f4f5f7' }}>
                             {/* Show the Checkbox column only if autoSelect is false */}
                             {!autoSelect && <TableCell>Select</TableCell>}
                             <TableCell>Marks</TableCell>
@@ -142,9 +143,40 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
                                     </TableCell>
                                 )}
                                 <TableCell>
-                                    <Typography sx={{ fontWeight: 'bold', color: q.marks >= 5 ? 'green' : 'red' }}>
-                                        Marks: {q.marks}
-                                    </Typography>
+                                    <TableCell>
+                                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                            {/* Positive Marks */}
+                                            <Box
+                                                sx={{
+                                                    backgroundColor: '#28a745', // Green background for positive marks
+                                                    color: 'white',
+                                                    padding: '0.2rem 0.5rem',
+                                                    borderRadius: '0.25rem',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.875rem', // Slightly smaller text
+                                                }}
+                                            >
+                                                Marks: +{q.marks}
+                                            </Box>
+
+                                            {/* Negative Marks */}
+                                            {q.negative_marks && (
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: '#dc3545', // Red background for negative marks
+                                                        color: 'white',
+                                                        padding: '0.2rem 0.5rem',
+                                                        borderRadius: '0.25rem',
+                                                        fontWeight: 'bold',
+                                                        fontSize: '0.875rem',
+                                                    }}
+                                                >
+                                                    -{q.negative_marks}
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </TableCell>
+
                                 </TableCell>
                                 <TableCell>
                                     <div dangerouslySetInnerHTML={{ __html: q.question }}></div>

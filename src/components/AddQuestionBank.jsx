@@ -11,9 +11,9 @@ import { toast } from 'react-toastify';
 // Table headers for the question bank
 const tableHeaders = [
     { label: 'Exam Name', accessor: 'name' },
-    { label: 'Chapter Name', accessor: 'question_bank_chapter' },
+    { label: 'Chapter Name', accessor: 'questionBankChapter' },
     { label: 'Description', accessor: 'description' },
-    { label: 'Difficulty Level', accessor: 'question_bank_difficulty_id' },
+    { label: 'Difficulty Level', accessor: 'questionBankDifficultyId' },
 ];
 
 const AddQuestionBank = () => {
@@ -36,11 +36,11 @@ const AddQuestionBank = () => {
             const tableData = data.data.map((e) => ({
                 name: e.name,
                 id: e.id,
-                question_bank_subject_id: e.question_bank_subject_id,
-                question_bank_type_id: e.question_bank_type_id,
-                question_bank_chapter: e.questionBankChapter,
+                questionBankSubjectId: e.questionBankSubjectId,
+                questionBankTypeId: e.questionBankTypeId,
+                questionBankChapter: e.questionBankChapter,
                 description: e.description,
-                question_bank_difficulty_id: e.questionBankDifficultyId,
+                questionBankDifficultyId: e.questionBankDifficultyId,
                 questionsCount: e.questionsCount
 
             }));

@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
@@ -21,6 +21,7 @@ import {
   useGetSubjectsQuery,
   useGetInvigilatorsQuery,
   useAddExamDataMutation,
+  useUpdateExamDataMutation,
 } from '../store/service/admin/AdminService';
 import { toast } from 'react-toastify';
 
@@ -49,7 +50,7 @@ const validationSchema = Yup.object({
     .min(1, 'At least one invigilator is required.')
 });
 
-const ExamScheduling = () => {
+const ExamScheduling = ({ ExamData }) => {
   const [invigilators, setInvigilators] = useState([{ invigilator: null }]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
@@ -57,18 +58,35 @@ const ExamScheduling = () => {
   const { data: courseList } = useGetBatchesQuery();
   const { data: subjectList } = useGetSubjectsQuery();
   const [AddExamData] = useAddExamDataMutation();
+  const [UpdateExamData] = useUpdateExamDataMutation();
   const { data: invigilatorList, isLoading: isInvigilatorLoading } = useGetInvigilatorsQuery();
   const nav = useNavigate();
 
+  useEffect(() => {
+    console.log("ExamData", ExamData);
+    if (ExamData?.invigilators?.length > 0) {
+      const updatedInvigilators = ExamData.invigilators.map((invigilator) => ({
+        invigilator: {
+          name: invigilator.name,
+          email: invigilator.email,
+          phone: invigilator.phone,
+          id: invigilator.id,
+        },
+      }));
+      setInvigilators(updatedInvigilators);
+      formik.setFieldValue('invigilators', updatedInvigilators);
+    }
+  }, [ExamData]);
+
   const formik = useFormik({
     initialValues: {
-      examDate: '',
-      title: '',
-      subjectId: '',
-      batchId: '',
-      startsAt: '',
-      endsAt: '',
-      instructions: '',
+      examDate: ExamData?.examDate || '',
+      title: ExamData?.title || '',
+      subjectId: ExamData?.subjectId || '',
+      batchId: ExamData?.batchId || '',
+      startsAt: ExamData?.starts_at || '',
+      endsAt: ExamData?.ends_at || '',
+      instructions: ExamData?.instructions || '',
       invigilators: invigilators,
     },
     validationSchema: validationSchema,
@@ -112,7 +130,13 @@ const ExamScheduling = () => {
     };
 
     try {
-      const result = await AddExamData({ data: examDetails });
+      let result;
+      if (ExamData && ExamData.hasOwnProperty('id')) {
+        console.log("this is your data with id", examDetails, ExamData.id);
+        result = await UpdateExamData({ data: { data: examDetails }, id: ExamData.id });
+      } else {
+        result = await AddExamData({ data: examDetails });
+      }
       console.log(result);
       const { data, error } = result;
       if (result.data?.success === true) {
@@ -225,7 +249,7 @@ const ExamScheduling = () => {
               >
                 {courseList?.data.length > 0 ? (
                   courseList.data.map((course) => (
-                    <MenuItem key={course.id} value={course.batch_id}>
+                    <MenuItem key={course.batch_id} value={course.batch_id}>
                       {course.batch_name}
                     </MenuItem>
                   ))
