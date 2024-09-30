@@ -5,8 +5,11 @@ import './App.css';
 import AddQuestionBank from './components/AddQuestionBank';
 import ExamScheduling from './components/ExamScheduling';
 import ManageQuestionsComponent from './components/ManageQuestionsComponent';
+import PermissionUserExam from './components/PermissionUserExam';
 import QuestionBankComponent from './components/QuestionBankComponent';
+import UserExamModuel from './components/UserExamModuel';
 import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
         <Route path="/addquestion" element={<QuestionBankComponent />} />
         <Route path="/addQuestionBank" element={<AddQuestionBank />} />
         <Route path="/manageQuestions" element={<ManageQuestionsComponent />} />
+        <Route path="/user" element={<UserDashboard />} />
+        <Route path="/user/:id/exam/:examId" element={<PermissionUserExam />} />
+        <Route path="/user/:id/exam/:examId/assisment" element={<UserExamModuel />} />
 
       </Routes>
 

@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useGetQuestionIdMutation, useGetQuestionsAsPerBankIdQuery, useGetRandomQuestionIdsQuery } from '../store/service/admin/AdminService';
+import { useGetQuestionIdMutation, useGetQuestionsAsPerBankIdQuery } from '../store/service/admin/AdminService';
 import { getBankCount } from '../store/slices/adminSlice/ExamSlice';
 import EditQuestionSettingsModal from './EditQuestionSettingsModal';
 
@@ -28,7 +28,7 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
                 // console.log("!randomQuestionsIds.includes(e.id)", randomQuestionsIds);
                 const filteredData = data.data?.filter((e) => randomQuestionsIds.includes(e.id));
                 setQuestions(filteredData)
-                console.log(data.data?.filter((e) => randomQuestionsIds.includes(e.id)));
+                // console.log(data.data?.filter((e) => randomQuestionsIds.includes(e.id)));
             } else {
 
                 setQuestions(data.data);
@@ -114,7 +114,7 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
                     component="span"
                     sx={{ cursor: 'pointer', color: '#007bff', marginLeft: 1 }}
                 >
-                    <EditQuestionSettingsModal onUpdate={handleModalUpdate} totalQuestionCount={questions.length} />
+                    <EditQuestionSettingsModal onUpdate={handleModalUpdate} totalQuestionCount={questions?.length} />
                 </Typography>
             </Typography>
 
@@ -130,7 +130,7 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {questions.map((q) => (
+                        {questions && questions.length > 0 ? questions.map((q) => (
                             <TableRow key={q.id}>
                                 {/* Show the Checkbox only when autoSelect is false */}
                                 {!autoSelect && (
@@ -182,7 +182,10 @@ const ManageQuestionsComponent = ({ handleOpen, setSelectedQuestionsCount, partI
                                     <div dangerouslySetInnerHTML={{ __html: q.question }}></div>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        )) : (<TableRow>
+                            <TableCell colSpan={3} sx={{ textAlign: 'center', padding: '20px' }}>No data available</TableCell>
+                        </TableRow>)}
+
                     </TableBody>
                 </Table>
             </TableContainer>

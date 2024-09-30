@@ -20,12 +20,26 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 const CommonTable = ({
     headers,
     data,
-    style,
-    onMarksListClick,
-    onViewAttendanceClick,
-    onAddClick,
-    onEditClick, // Added for dropdown
-    addedBanks,
+    style = {
+        container: {},
+        paper: {},
+        headerCell: {
+            backgroundColor: '#f5f5f5',
+            color: '#333',
+            fontWeight: 'bold',
+        },
+        bodyCell: {
+            color: '#333',
+        },
+        pagination: {
+            backgroundColor: '#f5f5f5',
+        },
+    },
+    onMarksListClick = null,
+    onViewAttendanceClick = null,
+    onAddClick = null,
+    onEditClick = null,
+    addedBanks = [],
     totalRecords,
     page,
     rowsPerPage,
@@ -223,27 +237,27 @@ CommonTable.propTypes = {
 };
 
 // Default props
-CommonTable.defaultProps = {
-    style: {
-        container: {},
-        paper: {},
-        headerCell: {
-            backgroundColor: '#f5f5f5',
-            color: '#333',
-            fontWeight: 'bold',
-        },
-        bodyCell: {
-            color: '#333',
-        },
-        pagination: {
-            backgroundColor: '#f5f5f5',
-        },
-    },
-    onMarksListClick: null,
-    onViewAttendanceClick: null,
-    onAddClick: null,
-    onEditClick: null, // Default to null so dropdown is optional
-    addedBanks: [],
-};
+// CommonTable.defaultProps = {
+//     style: {
+//         container: {},
+//         paper: {},
+//         headerCell: {
+//             backgroundColor: '#f5f5f5',
+//             color: '#333',
+//             fontWeight: 'bold',
+//         },
+//         bodyCell: {
+//             color: '#333',
+//         },
+//         pagination: {
+//             backgroundColor: '#f5f5f5',
+//         },
+//     },
+//     onMarksListClick: null,
+//     onViewAttendanceClick: null,
+//     onAddClick: null,
+//     onEditClick: null, // Default to null so dropdown is optional
+//     addedBanks: [],
+// };
 
 export default CommonTable;
