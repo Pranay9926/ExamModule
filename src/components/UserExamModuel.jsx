@@ -1,18 +1,76 @@
-import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { Avatar, Button, Typography, Box, Grid2 } from '@mui/material';
-import QuestionPanel from './exam/QuestionPanel';
-import StatusPanel from './exam/StatusPanel';
-import { questionData } from '../utils/jsonData';
+import { Box, Button, Grid2, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
+import { useNavigate } from 'react-router-dom';
+import { questionData } from '../utils/jsonData';
+import QuestionPanel from './exam/QuestionPanel';
 import ResultComponent from './exam/ResultComponent';
+import StatusPanel from './exam/StatusPanel';
 
 const UserExamModule = () => {
     const [questions, setQuestions] = useState(questionData); // State to store questions
     const [activeQuestion, setActiveQuestion] = useState(questions[0]); // Current active question
+    const [startTime, setStartTime] = useState(null); // Store exam start time
+    const [isSubmit, setIsSubmit] = useState(false)
+    const examDurationInMinutes = 30; // Dynamic Exam Duration (can be fetched from server)
+    const nav = useNavigate();
+
+
+    // Mark the first question as visited when the component is mounted
+    useEffect(() => {
+        const updatedQuestions = questions.map((q, index) =>
+            index === 0 ? { ...q, visited: true } : q
+        );
+        setQuestions(updatedQuestions);
+    }, []); // This useEffect will run only once when the component mounts
+
+
+    useEffect(() => {
+        // Check if exam start time exists in localStorage
+        const savedStartTime = localStorage.getItem('examStartTime');
+
+        if (savedStartTime) {
+            // Use the saved start time if it exists
+            setStartTime(new Date(savedStartTime));
+        } else {
+            // Initialize start time and save it to localStorage
+            const currentTime = new Date();
+            setStartTime(currentTime);
+            localStorage.setItem('examStartTime', currentTime);
+        }
+    }, []);
+
+    // Calculate the total exam time dynamically
+    const getExamEndTime = () => {
+        if (startTime) {
+            // Add the exam duration to the start time
+            return new Date(startTime.getTime() + examDurationInMinutes * 60 * 1000);
+        }
+        return null;
+    };
+
+
+    // useEffect(() => {
+    //     const handleBeforeUnload = (event) => {
+    //         event.preventDefault();
+    //         event.returnValue = '';  // This triggers the browser's confirmation dialog
+    //     };
+
+    //     // Add the event listener for the beforeunload event
+    //     window.addEventListener('beforeunload', handleBeforeUnload);
+
+    //     return () => {
+    //         // Cleanup the event listener when the component is unmounted
+    //         window.removeEventListener('beforeunload', handleBeforeUnload);
+    //     };
+    // }, []);
+
+
+
 
     // Convert 19 minutes and 14 seconds into milliseconds
-    const totalTimeInMilliseconds = (30 * 60) * 1000; // 19 minutes and 14 seconds
+    // const totalTimeInMilliseconds = (30 * 60) * 1000; // 19 minutes and 14 seconds
 
     // Handle when the user selects an answer
     const handleAnswer = (questionId, selectedOption) => {
@@ -59,6 +117,8 @@ const UserExamModule = () => {
             selectedOption: q.selectedOption
         }));
         console.log("Quiz submitted with answers:", answers);
+        setIsSubmit(!isSubmit)
+        // nav(`/user/${1}/exam/${1}/result`)
         // You can send the answers to your server here
     };
 
@@ -81,10 +141,13 @@ const UserExamModule = () => {
                 </Typography>
                 <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
                     Time Left:
-                    <Countdown
-                        date={Date.now() + totalTimeInMilliseconds} // Set countdown timer
-                        renderer={renderer} // Custom renderer to format the timer
-                    />
+                    {startTime && (
+                        <Countdown
+                            date={getExamEndTime()} // Use dynamically calculated end time
+                            renderer={renderer} // Custom renderer to format the timer
+                            onComplete={handleSubmitQuiz} // Submit the quiz when time is up
+                        />
+                    )}
                 </Typography>
                 <Button onClick={() => { }}>
                     <CloseIcon sx={{ color: 'white' }} />
@@ -95,15 +158,19 @@ const UserExamModule = () => {
             <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
                 {/* Left: Question Panel */}
                 <Grid2 item size={9} sx={{ p: 0 }}>
-                    <QuestionPanel
-                        question={activeQuestion}
-                        onAnswer={handleAnswer}
-                        onNext={handleNextQuestion}
-                        onMarkForReview={handleMarkForReview}
-                        onClearResponse={handleClearResponse}
-                        totalQuestions={questions.length}
-                    />
-                    {/* <ResultComponent /> */}
+                    {isSubmit ?
+                        <ResultComponent />
+                        :
+                        <QuestionPanel
+                            question={activeQuestion}
+                            onAnswer={handleAnswer}
+                            onNext={handleNextQuestion}
+                            onMarkForReview={handleMarkForReview}
+                            onClearResponse={handleClearResponse}
+                            totalQuestions={questions.length}
+                        />
+                    }
+
                 </Grid2>
 
                 {/* Right: Status Panel */}

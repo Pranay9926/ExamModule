@@ -44,6 +44,18 @@ export const questionData = [
       "Clock buffers/inverter are faster than normal buffers/inverters",
       "Clock buffers/inverter are slower than normal buffers/inverters",
       "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
+      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
+      "Clock buffers/inverter are faster than normal buffers/inverters",
+      "Clock buffers/inverter are slower than normal buffers/inverters",
+      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
+      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
+      "Clock buffers/inverter are faster than normal buffers/inverters",
+      "Clock buffers/inverter are slower than normal buffers/inverters",
+      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
+      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
+      "Clock buffers/inverter are faster than normal buffers/inverters",
+      "Clock buffers/inverter are slower than normal buffers/inverters",
+      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
       "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters"
     ],
 

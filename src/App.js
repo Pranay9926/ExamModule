@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import AddQuestionBank from './components/AddQuestionBank';
+import ResultComponent from './components/exam/ResultComponent';
 import ExamScheduling from './components/ExamScheduling';
 import ManageQuestionsComponent from './components/ManageQuestionsComponent';
 import PermissionUserExam from './components/PermissionUserExam';
@@ -24,6 +25,7 @@ function App() {
         <Route path="/user" element={<UserDashboard />} />
         <Route path="/user/:id/exam/:examId" element={<PermissionUserExam />} />
         <Route path="/user/:id/exam/:examId/assisment" element={<UserExamModuel />} />
+        <Route path="/user/:id/exam/:examId/result" element={<ResultComponent />} />
 
       </Routes>
 

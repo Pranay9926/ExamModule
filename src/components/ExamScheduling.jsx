@@ -121,6 +121,7 @@ const ExamScheduling = ({ ExamData }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       setConfirmationOpen(true);
+      setIsSubmitting(true)
     },
   });
 
@@ -188,6 +189,7 @@ const ExamScheduling = ({ ExamData }) => {
       toast.error(e)
     }
     setIsReadOnly(false);
+    setIsSubmitting(false)
   };
 
   const handleCancelSubmit = () => {
@@ -195,14 +197,14 @@ const ExamScheduling = ({ ExamData }) => {
   };
 
   return (
-    <div className="bg-gray-100 flex justify-center items-center px-8">
-      <div className="md:px-0 px-6 w-full ">
+    <div className="bg-gray-100 flex justify-center items-center px-0 sm:px-1 md:px-6 2xl:px-8 min-h-screen	">
+      <div className="md:px-3 px-2 w-full">
         <div className="w-full p-6 overflow-y-auto">
-          {ExamData && ExamData?.id ? "" : <h2 className="text-2xl font-bold mb-3 text-center">Schedule an Exam</h2>}
-          <form onSubmit={formik.handleSubmit} className="grid gap-6">
+          {ExamData && ExamData?.id ? "" : <h2 className="text-2xl font-bold mb-5 text-center">Schedule an Exam</h2>}
+          <form onSubmit={formik.handleSubmit} className="grid sm:gap-6 gap-4">
 
             {/* Exam Date */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Exam Date <span className="text-[red]">*</span></label>
               <TextField
                 fullWidth
@@ -221,7 +223,7 @@ const ExamScheduling = ({ ExamData }) => {
             </div>
 
             {/* Title */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Title <span className="text-[red]">*</span></label>
               <TextField
                 fullWidth
@@ -238,7 +240,7 @@ const ExamScheduling = ({ ExamData }) => {
             </div>
 
             {/* Subject Name */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Subject Name <span className="text-[red]">*</span></label>
               <TextField
                 fullWidth
@@ -267,7 +269,7 @@ const ExamScheduling = ({ ExamData }) => {
             </div>
 
             {/* Batch */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Batch <span className="text-[red]">*</span></label>
               <TextField
                 fullWidth
@@ -404,7 +406,7 @@ const ExamScheduling = ({ ExamData }) => {
             </div>
 
             {/* Exam Instructions */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Exam Instructions</label>
               <TextField
                 fullWidth
@@ -424,11 +426,11 @@ const ExamScheduling = ({ ExamData }) => {
             </div>
 
             {/* Invigilator Section */}
-            <div className="flex items-center gap-4">
+            <div className="2xl:flex md:flex sm:flex flex-none items-center gap-4">
               <label className="w-1/3">Invigilators <span className="text-[red]">*</span></label>
               <div className="w-full">
                 {invigilators.map((item, index) => (
-                  <div key={index} className="flex items-center gap-2 mb-2">
+                  <div key={index} className="ss:flex grid items-center gap-2 mb-2">
                     <TextField
                       fullWidth
                       select
@@ -456,6 +458,7 @@ const ExamScheduling = ({ ExamData }) => {
 
                     <TextField
                       fullWidth
+
                       label="Contact"
                       name="contact"
                       value={item.invigilator?.phone || ''}
