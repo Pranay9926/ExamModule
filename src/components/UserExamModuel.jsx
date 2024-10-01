@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { Avatar, Button, Typography, Box, Grid } from '@mui/material';
+import { Avatar, Button, Typography, Box, Grid2 } from '@mui/material';
 import QuestionPanel from './exam/QuestionPanel';
 import StatusPanel from './exam/StatusPanel';
 import { questionData } from '../utils/jsonData';
 import Countdown from 'react-countdown';
+import ResultComponent from './exam/ResultComponent';
 
 const UserExamModule = () => {
     const [questions, setQuestions] = useState(questionData); // State to store questions
@@ -91,9 +92,9 @@ const UserExamModule = () => {
             </Box>
 
             {/* Main Content Section */}
-            <Grid container sx={{ height: `calc(100vh - 52px)` }}>
+            <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
                 {/* Left: Question Panel */}
-                <Grid item xs={9} sx={{ p: 0 }}>
+                <Grid2 item size={9} sx={{ p: 0 }}>
                     <QuestionPanel
                         question={activeQuestion}
                         onAnswer={handleAnswer}
@@ -102,18 +103,19 @@ const UserExamModule = () => {
                         onClearResponse={handleClearResponse}
                         totalQuestions={questions.length}
                     />
-                </Grid>
+                    {/* <ResultComponent /> */}
+                </Grid2>
 
                 {/* Right: Status Panel */}
-                <Grid item xs={3} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0' }}>
+                <Grid2 item size={3} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0' }}>
                     <StatusPanel
                         questions={questions}
                         activeQuestion={activeQuestion}
                         onQuestionChange={handleNextQuestion}
                         onSubmitQuiz={handleSubmitQuiz}
                     />
-                </Grid>
-            </Grid>
+                </Grid2>
+            </Grid2>
         </Box>
     );
 };

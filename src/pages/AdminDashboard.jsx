@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import CommonTable from '../common/CommonTable';
 import { useNavigate } from 'react-router-dom';
-import { Button, Select, MenuItem, FormControl, InputLabel, Grid, Box, Typography } from '@mui/material';
+import { Button, Select, MenuItem, FormControl, InputLabel, Grid2, Box, Typography } from '@mui/material';
 import { useGetBatchesQuery, useGetExamDataByIdQuery, useGetExamDataQuery } from '../store/service/admin/AdminService';
 
 function AdminDashboard() {
@@ -79,8 +79,8 @@ function AdminDashboard() {
 
             <Box sx={{ mb: 3 }}>
                 {/* Filters - Select Batch and Date */}
-                <Grid container spacing={2}>
-                    <Grid item xs={4}>
+                <Grid2 container spacing={2}>
+                    <Grid2 item size={4}>
                         <FormControl fullWidth>
                             <InputLabel id="1">Select Batch</InputLabel>
                             <Select
@@ -101,8 +101,8 @@ function AdminDashboard() {
                                 )}
                             </Select>
                         </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
+                    </Grid2>
+                    <Grid2 item size={4}>
                         <FormControl fullWidth>
                             <InputLabel id='2'>Date Criteria</InputLabel>
                             <Select
@@ -117,8 +117,8 @@ function AdminDashboard() {
                                 {/* Add more options */}
                             </Select>
                         </FormControl>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             </Box>
 
             {/* Table Component */}
