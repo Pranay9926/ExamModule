@@ -1,78 +1,49 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Grid2, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { Box, Button, Grid2, Typography, IconButton, Drawer } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu'; // Toggle button icon
 import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router-dom';
 import { questionData } from '../utils/jsonData';
 import QuestionPanel from './exam/QuestionPanel';
 import ResultComponent from './exam/ResultComponent';
 import StatusPanel from './exam/StatusPanel';
+import StatusResultPanel from './exam/StatusResultPanel';
 
 const UserExamModule = () => {
-    const [questions, setQuestions] = useState(questionData); // State to store questions
-    const [activeQuestion, setActiveQuestion] = useState(questions[0]); // Current active question
-    const [startTime, setStartTime] = useState(null); // Store exam start time
-    const [isSubmit, setIsSubmit] = useState(false)
-    const examDurationInMinutes = 30; // Dynamic Exam Duration (can be fetched from server)
+    const [questions, setQuestions] = useState(questionData);
+    const [activeQuestion, setActiveQuestion] = useState(questions[0]);
+    const [startTime, setStartTime] = useState(null);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [openStatusPanel, setOpenStatusPanel] = useState(false); // For toggle status panel
+    const examDurationInMinutes = 30;
     const nav = useNavigate();
 
-
-    // Mark the first question as visited when the component is mounted
     useEffect(() => {
         const updatedQuestions = questions.map((q, index) =>
             index === 0 ? { ...q, visited: true } : q
         );
         setQuestions(updatedQuestions);
-    }, []); // This useEffect will run only once when the component mounts
-
+    }, []);
 
     useEffect(() => {
-        // Check if exam start time exists in localStorage
         const savedStartTime = localStorage.getItem('examStartTime');
-
         if (savedStartTime) {
-            // Use the saved start time if it exists
             setStartTime(new Date(savedStartTime));
         } else {
-            // Initialize start time and save it to localStorage
             const currentTime = new Date();
             setStartTime(currentTime);
             localStorage.setItem('examStartTime', currentTime);
         }
     }, []);
 
-    // Calculate the total exam time dynamically
     const getExamEndTime = () => {
         if (startTime) {
-            // Add the exam duration to the start time
             return new Date(startTime.getTime() + examDurationInMinutes * 60 * 1000);
         }
         return null;
     };
 
-
-    // useEffect(() => {
-    //     const handleBeforeUnload = (event) => {
-    //         event.preventDefault();
-    //         event.returnValue = '';  // This triggers the browser's confirmation dialog
-    //     };
-
-    //     // Add the event listener for the beforeunload event
-    //     window.addEventListener('beforeunload', handleBeforeUnload);
-
-    //     return () => {
-    //         // Cleanup the event listener when the component is unmounted
-    //         window.removeEventListener('beforeunload', handleBeforeUnload);
-    //     };
-    // }, []);
-
-
-
-
-    // Convert 19 minutes and 14 seconds into milliseconds
-    // const totalTimeInMilliseconds = (30 * 60) * 1000; // 19 minutes and 14 seconds
-
-    // Handle when the user selects an answer
     const handleAnswer = (questionId, selectedOption) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, selectedOption, answered: true } : q
@@ -80,7 +51,6 @@ const UserExamModule = () => {
         setQuestions(updatedQuestions);
     };
 
-    // Handle marking a question for review
     const handleMarkForReview = (questionId) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, markedForReview: true, visited: true } : q
@@ -89,7 +59,6 @@ const UserExamModule = () => {
         handleNextQuestion(questionId + 1);
     };
 
-    // Handle clearing the selected response for a question
     const handleClearResponse = (questionId) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, selectedOption: null, answered: false } : q
@@ -97,7 +66,6 @@ const UserExamModule = () => {
         setQuestions(updatedQuestions);
     };
 
-    // Handle navigating to the next question and mark it as visited
     const handleNextQuestion = (nextQuestionId) => {
         const nextQuestion = questions.find(q => q.id === nextQuestionId);
         if (nextQuestion) {
@@ -106,34 +74,34 @@ const UserExamModule = () => {
                     q.id === nextQuestionId ? { ...q, visited: true } : q
                 )
             );
-            setActiveQuestion(nextQuestion); // Set next question as active
+            setActiveQuestion(nextQuestion);
         }
     };
 
-    // Handle submitting the quiz
     const handleSubmitQuiz = () => {
         const answers = questions.map(q => ({
             id: q.id,
             selectedOption: q.selectedOption
         }));
         console.log("Quiz submitted with answers:", answers);
-        setIsSubmit(!isSubmit)
-        // nav(`/user/${1}/exam/${1}/result`)
-        // You can send the answers to your server here
+        setIsSubmit(!isSubmit);
     };
 
-    // Renderer for the countdown
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            return <span>Time's up!</span>; // Show "Time's up!" when the countdown finishes
+            return <span>Time's up!</span>;
         } else {
-            // Show the timer in HH:MM:SS format
-            return <span> {hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</span>;
+            return <span>{hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</span>;
         }
     };
 
+    // Handle toggle for Status Panel
+    const toggleStatusPanel = (open) => () => {
+        setOpenStatusPanel(open);
+    };
+
     return (
-        <Box sx={{ width: '100%', bgcolor: '#f4f5f7' }}>
+        <Box sx={{ width: '100%', bgcolor: '#f4f5f7', }}>
             {/* Header Section */}
             <Box sx={{ bgcolor: '#f97316', display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
                 <Typography variant="h6" sx={{ color: 'white', ml: 2, fontWeight: 'bold' }}>
@@ -143,9 +111,9 @@ const UserExamModule = () => {
                     Time Left:
                     {startTime && (
                         <Countdown
-                            date={getExamEndTime()} // Use dynamically calculated end time
-                            renderer={renderer} // Custom renderer to format the timer
-                            onComplete={handleSubmitQuiz} // Submit the quiz when time is up
+                            date={getExamEndTime()}
+                            renderer={renderer}
+                            onComplete={handleSubmitQuiz}
                         />
                     )}
                 </Typography>
@@ -157,10 +125,10 @@ const UserExamModule = () => {
             {/* Main Content Section */}
             <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
                 {/* Left: Question Panel */}
-                <Grid2 item size={9} sx={{ p: 0 }}>
-                    {isSubmit ?
+                <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
+                    {isSubmit ? (
                         <ResultComponent />
-                        :
+                    ) : (
                         <QuestionPanel
                             question={activeQuestion}
                             onAnswer={handleAnswer}
@@ -169,20 +137,54 @@ const UserExamModule = () => {
                             onClearResponse={handleClearResponse}
                             totalQuestions={questions.length}
                         />
-                    }
-
+                    )}
                 </Grid2>
 
-                {/* Right: Status Panel */}
-                <Grid2 item size={3} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0' }}>
-                    <StatusPanel
-                        questions={questions}
-                        activeQuestion={activeQuestion}
-                        onQuestionChange={handleNextQuestion}
-                        onSubmitQuiz={handleSubmitQuiz}
-                    />
+                {/* Right: Status Panel (Visible on larger screens, toggle on small screens) */}
+                <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
+                    {isSubmit ? (
+                        <StatusResultPanel onSubmitQuiz={handleSubmitQuiz} />
+                    ) : (
+                        <StatusPanel
+                            questions={questions}
+                            activeQuestion={activeQuestion}
+                            onQuestionChange={handleNextQuestion}
+                            onSubmitQuiz={handleSubmitQuiz}
+                        />
+                    )}
                 </Grid2>
             </Grid2>
+
+            {/* Toggle Button for Status Panel on Small Screens */}
+            <Box sx={{ display: { xs: 'block', sm: 'none' }, position: 'fixed', bottom: 16, right: 16 }}>
+                <IconButton onClick={toggleStatusPanel(true)} sx={{ bgcolor: '#f97316', color: 'white' }}>
+                    <MenuIcon />
+                </IconButton>
+            </Box>
+
+            {/* Drawer for Status Panel on Small Screens */}
+            <Drawer
+                anchor="right"
+                open={openStatusPanel}
+                onClose={toggleStatusPanel(false)}
+                sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+                <Box sx={{ width: 300, p: 2 }}>
+                    {isSubmit ? (
+                        <StatusResultPanel onSubmitQuiz={handleSubmitQuiz} />
+                    ) : (
+                        <StatusPanel
+                            questions={questions}
+                            activeQuestion={activeQuestion}
+                            onQuestionChange={handleNextQuestion}
+                            onSubmitQuiz={handleSubmitQuiz}
+                        />
+                    )}
+                    <Button onClick={toggleStatusPanel(false)} sx={{ mt: 2 }} fullWidth variant="contained">
+                        Close
+                    </Button>
+                </Box>
+            </Drawer>
         </Box>
     );
 };

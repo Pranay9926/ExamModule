@@ -48,7 +48,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                             {status.id === 4 && <Box
                                 sx={{
                                     position: 'absolute',
-                                    top: -3,
+                                    top: 3,
                                     left: 3,
                                     width: 11,
                                     height: 20,
@@ -64,7 +64,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                 </Box>
                 {/* {/ Question number grid /} */}
                 <Box sx={{ px: 2, mt: 4 }}>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={1} gap={'5px'}>
                         {questions.map((question) => (
                             <Grid item xs={2.2} key={question.id}>
                                 <Box sx={{ position: 'relative', display: 'flex', gap: 8 }}>
