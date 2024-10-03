@@ -59,7 +59,7 @@ function AdminDashboard() {
                 <Typography variant="h5" >Examinations</Typography>
 
                 {/* Filter and Add Buttons */}
-                <div>
+                <div className='ml-[13px] md:ml-0 flex sm:flex-none flex-wrap gap-2'>
                     <Button
                         variant="contained"
                         sx={{ marginRight: 2 }}
@@ -80,7 +80,7 @@ function AdminDashboard() {
             <Box sx={{ mb: 3 }}>
                 {/* Filters - Select Batch and Date */}
                 <Grid2 container spacing={2}>
-                    <Grid2 item size={4}>
+                    <Grid2 item size={6}>
                         <FormControl fullWidth>
                             <InputLabel id="1">Select Batch</InputLabel>
                             <Select
@@ -102,7 +102,7 @@ function AdminDashboard() {
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 item size={4}>
+                    <Grid2 item size={6}>
                         <FormControl fullWidth>
                             <InputLabel id='2'>Date Criteria</InputLabel>
                             <Select

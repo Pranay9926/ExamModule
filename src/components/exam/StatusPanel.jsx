@@ -19,7 +19,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
 
     return (
         <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: '100%' }}>
-            {/* {/ Question status summary /} */}
+            {/* Question status summary */}
             <Box>
                 <Box sx={{ mb: 2, p: 2 }}>
                     {Object.entries(statusSummary).map(([key, status]) => (
@@ -89,7 +89,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                         {question.id}
                                     </Avatar>
 
-                                    {/* {/ Small triangle icon for "Answered & Marked for Review" /} */}
+                                    {/* Small triangle icon for "Answered & Marked for Review" */}
                                     {question.answered && question.markedForReview && (
                                         <Box
                                             sx={{
@@ -110,7 +110,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                 </Box>
             </Box>
 
-            {/* {/ Submit button /} */}
+            {/* Submit button */}
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
                 <Button
                     variant="contained"
