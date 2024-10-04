@@ -2,6 +2,8 @@ import React from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 
 const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz }) => {
+
+
     const statusSummary = {
         answered: { id: 6, label: "Correct", color: "#22c55e", borderRadius: "6px" },
         notVisited: { id: 0, label: "Unattempted", color: "#878787", borderRadius: "6px" },
@@ -91,7 +93,12 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                 </Box>
 
                 {/* Question number grid */}
-                <Box sx={{ padding: '8px', height: { xl: '65vh', md: '56vh', xs: '61vh' }, overflowY: 'auto' }}>
+                <Box sx={{
+                    padding: '8px', height: { xl: '63vh', lg: '63vh', md: '52vh', xs: '60vh' }, overflowY: 'auto',
+                    '@media (min-width: 599px) and (max-width: 763px)': {
+                        height: '52vh', // change height for this range
+                    },
+                }}>
                     <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px' }}>
                         <Box>Q.No.</Box>
                         <Box>Type</Box>

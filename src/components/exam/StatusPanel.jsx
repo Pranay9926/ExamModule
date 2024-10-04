@@ -95,10 +95,16 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
 
                     {/* {/ Question number grid /} */}
                     <Box sx={{ px: 2, mt: 7 }}>
-                        <Grid container spacing={1} gap={'5px'}>
+                        <Grid container spacing={1} sx={{
+                            gap: { md: '11px', xs: '4px', lg: '2px' }, '@media (min-width: 599px) and (max-width: 764px)': {
+                                gap: '12px',
+                            }, ml: '-20px'
+                        }}>
                             {questions.map((question) => (
                                 <Grid item xs={2.2} key={question.id}>
-                                    <Box sx={{ position: 'relative', display: 'flex', gap: 8 }}>
+                                    <Box sx={{
+                                        position: 'relative', display: 'flex', gap: 8,
+                                    }}>
                                         <Avatar
                                             sx={{
                                                 bgcolor: question.answered && question.markedForReview ? '#ab00ab'
