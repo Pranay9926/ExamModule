@@ -28,14 +28,12 @@ const StatusResultPanel = ({ questions, activeQuestion, onQuestionChange, onSubm
     ];
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: '100%' }}>
-
-            {/* Profile section */}
-            <Box sx={{ display: 'flex', alignItems: 'center', p: 2, borderBottom: '2px solid #ddd' }}>
+        <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: `calc(100% - 8%)` }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', px: '16px', py: 1, borderBottom: '2px solid #ddd' }}>
                 <Avatar
                     alt={profile.name}
                     src={profile.avatarUrl}
-                    sx={{ width: "40px", height: '40px', mr: 2 }}
+                    sx={{ width: "35px", height: '35px', mr: 2 }}
                 />
                 <Box>
                     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -43,11 +41,10 @@ const StatusResultPanel = ({ questions, activeQuestion, onQuestionChange, onSubm
                     </Typography>
                 </Box>
             </Box>
-
             {/* Question status summary */}
 
             <Box>
-                <Box sx={{ mb: 11, p: 2, display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                <Box sx={{ mb: { xs: 3, md: 3, xl: 10, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '20px', md: '16px', xs: '8px' } }}>
                     {Object.entries(statusSummary).map(([key, status]) => (
                         <Box
                             key={key}
@@ -79,7 +76,7 @@ const StatusResultPanel = ({ questions, activeQuestion, onQuestionChange, onSubm
                 </Box>
 
                 {/* Question number grid */}
-                <Box sx={{ padding: '8px', height: '52vh', overflowY: 'auto' }}>
+                <Box sx={{ padding: '8px', height: { xl: '65vh', md: '50vh', xs: '61vh' }, overflowY: 'auto' }}>
                     <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px' }}>
                         <Box>Q.No.</Box>
                         <Box>Type</Box>

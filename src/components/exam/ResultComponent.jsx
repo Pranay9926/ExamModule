@@ -28,11 +28,11 @@ const ResultComponent = ({ result }) => {
     const finalResult = result || mockResult;
 
     return (
-        <Box sx={{ width: '100%', height: '100%', mx: 'auto', p: 5, bgcolor: 'white', display: { xs: 'flex', }, justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', maxWidth: { xs: '100%', md: '80%' } }}>
+        <Box sx={{ width: '100%', height: '100%', mx: 'auto', px: 5, py: { xs: 1, md: 3 }, bgcolor: 'white', display: { xs: 'flex', }, justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', maxWidth: { xs: '100%', md: '80%' }, height: '100%' }}>
 
                 {/* Quiz Submitted Confirmation Section */}
-                <Box sx={{ display: { xs: 'grid', md: 'flex' }, justifyContent: 'space-between', alignItems: 'center', mb: 2, border: '1px solid #e0e0e0', py: 2, px: 4 }}>
+                <Box sx={{ display: { xs: 'grid', md: 'flex' }, justifyContent: 'space-between', alignItems: 'center', mb: 2, border: '1px solid #e0e0e0', py: 2, px: { xs: 2, md: 4 } }}>
                     <Box sx={{ display: 'flex', alignItems: 'start', gap: 1, flexDirection: "column" }}>
 
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>

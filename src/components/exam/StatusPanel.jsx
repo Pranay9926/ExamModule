@@ -8,7 +8,11 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
     const markedForReviewCount = questions.filter(q => q.markedForReview && !q.answered).length;
     const answeredMarkedForReviewCount = questions.filter(q => q.answered && q.markedForReview).length;
     const notVisitedCount = questions.filter(q => !q.visited).length;
+    const profile = {
+        name: "Vamsi Kumar",
+        avatarUrl: '', // Placeholder image
 
+    };
     const statusSummary = {
         answered: { id: 1, label: "Answered", count: answeredCount, color: "#22c55e", borderRadius: "0 0 20px 20px" },
         notAnswered: { id: 2, label: "Not Answered", count: notAnsweredCount, color: "#c11e1b", borderRadius: "20px 20px 0px 0px" },
@@ -18,52 +22,64 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: `calc(100% - 8%)` }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', px: '16px', py: 1, borderBottom: '2px solid #ddd' }}>
+                <Avatar
+                    alt={profile.name}
+                    src={profile.avatarUrl}
+                    sx={{ width: "35px", height: '35px', mr: 2 }}
+                />
+                <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        {profile.name}
+                    </Typography>
+                </Box>
+            </Box>
             {/* Question status summary */}
-            <Box>
-                <Box sx={{ mb: 2, p: 2 }}>
-                    {Object.entries(statusSummary).map(([key, status]) => (
-                        <Box
-                            key={key}
+
+            <Box sx={{ mb: 2, p: 2 }}>
+                {Object.entries(statusSummary).map(([key, status]) => (
+                    <Box
+                        key={key}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            mb: 1.5, // Margin for spacing between items
+                            position: 'relative'
+                        }}
+                    >
+                        <Avatar
                             sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                mb: 1.5, // Margin for spacing between items
-                                position: 'relative'
+                                bgcolor: status.color,
+                                borderRadius: status.borderRadius,
+                                width: 30, // Size for the circle
+                                height: 30,
+                                mr: 1, // Space between circle and text
+                                fontSize: '13px',
+                                fontWeight: 'bold',
                             }}
                         >
-                            <Avatar
-                                sx={{
-                                    bgcolor: status.color,
-                                    borderRadius: status.borderRadius,
-                                    width: 30, // Size for the circle
-                                    height: 30,
-                                    mr: 1, // Space between circle and text
-                                    fontSize: '13px',
-                                    fontWeight: 'bold',
-                                }}
-                            >
-                                {status.count}
-                            </Avatar>
-                            {status.id === 4 && <Box
-                                sx={{
-                                    position: 'absolute',
-                                    top: 3,
-                                    left: 3,
-                                    width: 11,
-                                    height: 20,
-                                    backgroundColor: '#25e32ef0',
-                                    clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '// Green triangle for answered & marked
-                                }}
-                            />}
-                            <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
-                                {status.label}
-                            </Typography>
-                        </Box>
-                    ))}
-                </Box>
+                            {status.count}
+                        </Avatar>
+                        {status.id === 4 && <Box
+                            sx={{
+                                position: 'absolute',
+                                top: { xs: 3, lg: 3, xl: -3 },
+                                left: 3,
+                                width: 11,
+                                height: 20,
+                                backgroundColor: '#25e32ef0',
+                                clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '// Green triangle for answered & marked
+                            }}
+                        />}
+                        <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
+                            {status.label}
+                        </Typography>
+                    </Box>
+                ))}
+
                 {/* {/ Question number grid /} */}
-                <Box sx={{ px: 2, mt: 4 }}>
+                <Box sx={{ px: 2, mt: 7 }}>
                     <Grid container spacing={1} gap={'5px'}>
                         {questions.map((question) => (
                             <Grid item xs={2.2} key={question.id}>

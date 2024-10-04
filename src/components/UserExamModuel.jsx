@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid2, Typography, IconButton, Drawer } from '@mui/material';
+import { Box, Button, Grid2, Typography, IconButton, Drawer, Avatar } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu'; // Toggle button icon
 import Countdown from 'react-countdown';
@@ -124,6 +124,7 @@ const UserExamModule = () => {
 
             {/* Main Content Section */}
             <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
+
                 {/* Left: Question Panel */}
                 <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                     {isSubmit ? (
@@ -142,6 +143,7 @@ const UserExamModule = () => {
 
                 {/* Right: Status Panel (Visible on larger screens, toggle on small screens) */}
                 <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
+
                     {isSubmit ? (
                         <StatusResultPanel onSubmitQuiz={handleSubmitQuiz} />
                     ) : (
@@ -169,6 +171,9 @@ const UserExamModule = () => {
                 onClose={toggleStatusPanel(false)}
                 sx={{ display: { xs: 'block', md: 'none' } }}
             >
+                <IconButton onClick={toggleStatusPanel(false)} sx={{ position: 'fixed', color: 'black', p: '2px' }}>
+                    <CloseIcon sx={{ fontWeight: '700', backgroundColor: '#aea6a67a', borderRadius: '2px' }} />
+                </IconButton>
                 <Box sx={{ width: 300, p: 2 }}>
                     {isSubmit ? (
                         <StatusResultPanel onSubmitQuiz={handleSubmitQuiz} />
@@ -180,9 +185,7 @@ const UserExamModule = () => {
                             onSubmitQuiz={handleSubmitQuiz}
                         />
                     )}
-                    <Button onClick={toggleStatusPanel(false)} sx={{ mt: 2 }} fullWidth variant="contained">
-                        Close
-                    </Button>
+
                 </Box>
             </Drawer>
         </Box>

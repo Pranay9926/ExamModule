@@ -61,7 +61,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                         </Box>
                     </Box>
 
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1, p: 2 }}>
                         {/* Mark for Review & Next */}
                         <Button
                             variant="outlined"
@@ -110,7 +110,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             Save & Next
                         </Button>
                     </Box>
-                </Box>}
+                </Box >}
         </>
     );
 };
