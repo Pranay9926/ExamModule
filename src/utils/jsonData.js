@@ -45,18 +45,6 @@ export const questionData = [
       "Clock buffers/inverter are slower than normal buffers/inverters",
       "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
       "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
-      "Clock buffers/inverter are faster than normal buffers/inverters",
-      "Clock buffers/inverter are slower than normal buffers/inverters",
-      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
-      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
-      "Clock buffers/inverter are faster than normal buffers/inverters",
-      "Clock buffers/inverter are slower than normal buffers/inverters",
-      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
-      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters",
-      "Clock buffers/inverter are faster than normal buffers/inverters",
-      "Clock buffers/inverter are slower than normal buffers/inverters",
-      "Clock buffers/inverters are having equal fall and rise times with high drive strengths than normal buffers/inverters",
-      "Normal buffers/inverters are having equal fall and rise times with high drive strengths than clock buffers/inverters"
     ],
 
   },
@@ -158,6 +146,34 @@ export const questionData = [
       "To select one of several input signals based on a control signal."
     ],
 
+  }
+];
+
+// Sample data for the exams
+const data1 = [
+  {
+    examName: 'March DV Test',
+    subjectName: "Maths",
+    time: 'Anytime',
+    mode: 'Online',
+    duration: '00:30:00',
+    status: 'Available'
+  },
+  {
+    examName: 'March PD 1 & PD2 Test 9',
+    subjectName: "English",
+    time: 'ByToday',
+    mode: 'Online',
+    duration: '00:45:00',
+    status: 'Available'
+  },
+  {
+    examName: 'Nov PD Test 24',
+    subjectName: "Hindi",
+    time: 'Anytime',
+    mode: 'Online',
+    duration: '00:30:00',
+    status: 'Available'
   }
 ];
 

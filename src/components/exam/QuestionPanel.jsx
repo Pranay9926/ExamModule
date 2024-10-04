@@ -3,7 +3,7 @@ import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Butt
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions }) => {
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection }) => {
     const [selectedOption, setSelectedOption] = useState(question.selectedOption || null);
     const [loading, setLoading] = useState(false)
 
@@ -43,7 +43,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                         <Box sx={{ bgcolor: '#d5d5d599', p: 1, mb: 3, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                             <Box sx={{ display: 'flex', alignItems: "center", }}>
                                 <Typography variant="h8" sx={{ fontWeight: 'bold' }}>SECTIONS: </Typography>
-                                <Box sx={{ bgcolor: "#4dc4ff", p: 1, ml: 2, borderRadius: 2 }}>Part A</Box>
+                                <Box onClick={() => getSection("Hello")} sx={{ bgcolor: "#4dc4ff", p: 1, ml: 2, borderRadius: 2, cursor: 'pointer' }}>Part A</Box>
                             </Box>
                             <Box><RefreshIcon onClick={handleRefresh} sx={{ fontSize: '30px', cursor: 'pointer' }} /> <CalculateOutlinedIcon sx={{ fontSize: '30px', cursor: 'pointer' }} /></Box>
                         </Box>

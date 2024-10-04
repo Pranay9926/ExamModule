@@ -86,7 +86,7 @@ const CommonTable = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.length > 0 ? data?.map((row, rowIndex) => (
+                        {data?.length > 0 ? data?.map((row, rowIndex) => (
                             <TableRow
                                 key={rowIndex}
                                 sx={{

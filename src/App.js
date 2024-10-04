@@ -23,9 +23,9 @@ function App() {
         <Route path="/addQuestionBank" element={<AddQuestionBank />} />
         <Route path="/manageQuestions" element={<ManageQuestionsComponent />} />
         <Route path="/user" element={<UserDashboard />} />
-        <Route path="/user/:id/exam/:examId" element={<PermissionUserExam />} />
-        <Route path="/user/:id/exam/:examId/assisment" element={<UserExamModuel />} />
-        <Route path="/user/:id/exam/:examId/result" element={<ResultComponent />} />
+        <Route path="/user/:userId/exam/:examId" element={<PermissionUserExam />} />
+        <Route path="/user/:userId/exam/:examId/assessment/:examAttemptId" element={<UserExamModuel />} />
+        <Route path="/user/:userId/exam/:examId/result" element={<ResultComponent />} />
 
       </Routes>
 

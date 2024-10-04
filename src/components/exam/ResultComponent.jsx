@@ -28,8 +28,8 @@ const ResultComponent = ({ result }) => {
     const finalResult = result || mockResult;
 
     return (
-        <Box sx={{ width: '100%', height: '100%', mx: 'auto', p: 5, bgcolor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', maxWidth: '80%' }}>
+        <Box sx={{ width: '100%', height: `100%`, mx: 'auto', p: 5, bgcolor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', maxWidth: '80%', }}>
 
                 {/* Quiz Submitted Confirmation Section */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, border: '1px solid #e0e0e0', py: 2, px: 4 }}>
