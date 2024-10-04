@@ -19,6 +19,7 @@ const ResultComponent = ({ result }) => {
         sectionMarks: '4 / 10',
         sectionTime: '00:30:00',
         totalTimeTaken: '00:24:46',
+        questionsAttempted: 30,
         questionsAttempted: 10,
         questionsSkipped: 0,
         answeredCorrect: 6,
@@ -28,11 +29,11 @@ const ResultComponent = ({ result }) => {
     const finalResult = result || mockResult;
 
     return (
-        <Box sx={{ width: '100%', height: `100%`, mx: 'auto', p: 5, bgcolor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', maxWidth: '80%', }}>
+        <Box sx={{ width: '100%', height: '100%', mx: 'auto', px: 2.5, py: { xs: 1, md: 3 }, bgcolor: 'white', display: { xs: 'flex', }, justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', maxWidth: { xs: '100%', md: '80%' }, height: '100%' }}>
 
                 {/* Quiz Submitted Confirmation Section */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, border: '1px solid #e0e0e0', py: 2, px: 4 }}>
+                <Box sx={{ display: { xs: 'grid', md: 'flex' }, justifyContent: 'space-between', alignItems: 'center', mb: 2, border: '1px solid #e0e0e0', py: 2, px: { xs: 2, md: 4 } }}>
                     <Box sx={{ display: 'flex', alignItems: 'start', gap: 1, flexDirection: "column" }}>
 
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -42,7 +43,7 @@ const ResultComponent = ({ result }) => {
                             Your Quiz have been submitted
                         </Typography>
                     </Box>
-                    <Box>
+                    <Box sx={{ mt: 2 }}>
                         <Typography>Name:</Typography>
                         <strong>{finalResult.name}</strong>
                         <Typography>Attempt ID: </Typography>
@@ -53,40 +54,40 @@ const ResultComponent = ({ result }) => {
 
                 <Box sx={{ border: '1px solid #e0e0e0', }}>
                     {/* Marks and Performance Summary */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Marks Scored</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.marksScored}</Typography>
+                            <Typography variant='h7' sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Marks Scored</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.marksScored}</Typography>
                         </Box>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Percentage</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.percentage}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Percentage</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.percentage}</Typography>
                         </Box>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Grade</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.grade}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Grade</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.grade}</Typography>
                         </Box>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Accuracy</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.accuracy}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Accuracy</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.accuracy}</Typography>
                         </Box>
                     </Box>
 
                     <Divider sx={{ my: 2 }} />
 
                     {/* Section Information */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Section Name</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.sectionName}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Section Name</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.sectionName}</Typography>
                         </Box>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Section Marks</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.sectionMarks}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Section Marks</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.sectionMarks}</Typography>
                         </Box>
                         <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant="h7" sx={{ fontWeight: 'bold', color: 'gray' }}>Section Time</Typography>
-                            <Typography sx={{ fontSize: 30 }}>{finalResult.sectionTime}</Typography>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, }}>Section Time</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.sectionTime}</Typography>
                         </Box>
                     </Box>
 
@@ -96,7 +97,7 @@ const ResultComponent = ({ result }) => {
                     <Box sx={{ display: 'flex', justifyContent: "space-between", alignItem: 'center', py: 2, px: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <AccessTimeIcon sx={{ fontSize: 22, mr: 1 }} />
-                            <Typography variant="h6" sx={{}}>Time Taken</Typography>
+                            <Typography sx={{ fontSize: { xs: '15px', md: '20px' } }}>Time Taken</Typography>
                         </Box>
                         <Typography>{finalResult.totalTimeTaken}</Typography>
                     </Box>
@@ -137,8 +138,8 @@ const ResultComponent = ({ result }) => {
                     </Box>
                     <Divider sx={{ my: 0 }} />
                     {/* Review Questions Button */}
-                    <Box sx={{ display: 'flex', justifyContent: 'start', px: 4, py: 2 }}>
-                        <Button variant="contained" color="warning" sx={{ px: 5, py: 1.5 }}>
+                    <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
+                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' } }} fontSize='12px'>
                             Review Questions
                         </Button>
                     </Box>
