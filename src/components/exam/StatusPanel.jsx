@@ -79,7 +79,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                             {status.id === 4 && <Box
                                 sx={{
                                     position: 'absolute',
-                                    top: { xs: 3, lg: 3, xl: -3 },
+                                    top: { xs: 3, lg: -3, xl: -3 },
                                     left: 3,
                                     width: 11,
                                     height: 20,
