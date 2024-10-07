@@ -67,6 +67,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             variant="outlined"
                             sx={{
                                 color: '#f97316',
+                                fontSize: '12px',
                                 borderColor: '#f97316',
                                 borderRadius: '20px',
                                 px: 3,
