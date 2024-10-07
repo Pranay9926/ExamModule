@@ -79,13 +79,6 @@ const UserExamModule = () => {
     //     // }, []);
 
     useEffect(() => {
-        // console.log("data2");
-
-        // const updatedQuestions = questions.map((q, index) =>
-        //     index === 0 ? { ...q, visited: true } : q
-        // );
-
-        // setQuestions(updatedQuestions);
 
         // Check if exam start time exists in localStorage
         const savedStartTime = localStorage.getItem('examStartTime');

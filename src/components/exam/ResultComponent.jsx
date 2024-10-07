@@ -24,6 +24,36 @@ const ResultComponent = ({ result }) => {
         answeredWrong: 4
     };
 
+    const sectionData = [
+        {
+            sectionName: 'Part A',
+            sectionMarks: '4 / 10',
+            percentage: '40%',
+            questionsAttempted: 29,
+            questionsSkipped: 1,
+            answeredCorrect: 6,
+            answeredWrong: 4
+        },
+        {
+            sectionName: 'Part B',
+            sectionMarks: '6 / 10',
+            percentage: '60%',
+            questionsAttempted: 30,
+            questionsSkipped: 0,
+            answeredCorrect: 6,
+            answeredWrong: 7
+        },
+        {
+            sectionName: 'Part C',
+            sectionMarks: '5 / 10',
+            percentage: '50%',
+            questionsAttempted: 45,
+            questionsSkipped: 1,
+            answeredCorrect: 6,
+            answeredWrong: 5
+        },
+    ]
+
     const finalResult = result || mockResult;
 
     const summaryData = [
@@ -97,48 +127,43 @@ const ResultComponent = ({ result }) => {
 
                 {/* Section Information */}
                 <Box sx={{ pb: 2 }}>
-                    <Box sx={{ border: '1px solid #e0e0e0' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
-                            <Box sx={{ textAlign: 'center' }}>
-                                <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.sectionName}</Typography>
-                            </Box>
-                            <Box sx={{ textAlign: 'center' }}>
-                                <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Marks</Typography>
-                                <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.sectionMarks}</Typography>
-                            </Box>
-                            <Box sx={{ textAlign: 'center' }}>
-                                <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{finalResult.percentage}</Typography>
-                            </Box>
-                        </Box>
-                        <Divider />
-
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 2, px: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <AccessTimeIcon sx={{ fontSize: 22, mr: 1 }} />
-                                <Typography sx={{ fontSize: { xs: '15px', md: '20px' } }}>Time Taken</Typography>
-                            </Box>
-                            <Typography>{finalResult.totalTimeTaken}</Typography>
-                        </Box>
-                        {/* Question Attempt Summary */}
-                        <Box sx={{ borderTop: '1px solid #e0e0e0', py: 2, px: 2 }}>
-                            {questionSummary.map((item, index) => (
-                                <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                    <Avatar sx={{ width: 20, height: 20, bgcolor: item.color, mr: 1 }}>{item.icon}</Avatar>
-                                    <Typography sx={{ flex: 1, color: item.color }}>{item.label}</Typography>
-                                    <Typography><strong>{item.value > 0 ? item.value : 'N/A'}</strong></Typography>
+                    {sectionData.map((item, index) => (
+                        <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.sectionName}</Typography>
                                 </Box>
-                            ))}
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.sectionMarks}</Typography>
+                                </Box>
+                                <Box sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Percentage</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.percentage}</Typography>
+                                </Box>
+                            </Box>
+                            <Divider />
+
+                            {/* Question Attempt Summary */}
+                            <Box sx={{ borderTop: '1px solid #e0e0e0', py: 2, px: 2 }}>
+                                {questionSummary.map((item, index) => (
+                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                        <Avatar sx={{ width: 20, height: 20, bgcolor: item.color, mr: 1 }}>{item.icon}</Avatar>
+                                        <Typography sx={{ flex: 1, color: item.color }}>{item.label}</Typography>
+                                        <Typography><strong>{item.value > 0 ? item.value : 'N/A'}</strong></Typography>
+                                    </Box>
+                                ))}
+                            </Box>
+                            {/* Review Questions Button */}
+                            <Divider />
+                            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
+                                <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }}>
+                                    Review Questions
+                                </Button>
+                            </Box>
                         </Box>
-                        {/* Review Questions Button */}
-                        <Divider />
-                        <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
-                            <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }}>
-                                Review Questions
-                            </Button>
-                        </Box>
-                    </Box>
+                    ))}
                 </Box>
 
             </Box>

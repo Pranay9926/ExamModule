@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Button, CircularProgress } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
+import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
+import { useParams } from 'react-router-dom';
 
 const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection }) => {
     const [selectedOption, setSelectedOption] = useState(question?.selectedOption || null);
     const [loading, setLoading] = useState(false)
+    const [uploadExamQuestions] = useUploadExamQuestionsMutation();
+    const { userId, examAttemptId } = useParams();
+
     // console.log("this is data", question);
     useEffect(() => {
         setSelectedOption(question?.selectedOption || null); // Update selected option when question changes
@@ -16,6 +21,26 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         setSelectedOption(selected);
         onAnswer(question?.id, selected); // Update the selected answer in the parent
     };
+
+    const handleSave = async () => {
+        onNext(question?.id + 1)
+
+        const payloadData = {
+            data: {
+                questionId: question?.question_id,
+                answerId: selectedOption,
+                examAttemptId: examAttemptId,
+                statusCode: 1
+            }
+        }
+        try {
+            if (selectedOption) {
+                let result = await uploadExamQuestions({ userId, payloadData: payloadData });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     const handleClearResponse = () => {
         setSelectedOption(null);
@@ -105,7 +130,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                 px: 4,
                                 '&:hover': { bgcolor: '#f97316' },
                             }}
-                            onClick={() => onNext(question?.id + 1)}
+                            onClick={handleSave}
                             disabled={question?.id === totalQuestions}
                         >
                             Save & Next

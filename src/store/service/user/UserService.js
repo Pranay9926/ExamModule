@@ -19,6 +19,13 @@ export const userApi = createApi({
                 method: 'GET',
             })
         }),
+        uploadExamQuestions: builder.mutation({
+            query: ({ userId, payloadData }) => ({
+                url: `student/${userId}/examQuestions`,
+                method: 'POST',
+                body: payloadData
+            })
+        }),
         AddExamData: builder.mutation({
             query: (payload) => ({
                 url: 'exams',
@@ -38,4 +45,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, } = userApi
+export const { useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, } = userApi
