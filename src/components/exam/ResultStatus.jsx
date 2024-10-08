@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
+import { useGetReviewAnswerSheetMutation } from '../../store/service/user/UserService';
 
 const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz }) => {
+    const [getReviewAnswerSheet] = useGetReviewAnswerSheetMutation();
+    const [reviewData, setReviewData] = useState();
+
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    console.log(reviewData, "");
+    const getData = async () => {
+        try {
+            const resultData = await getReviewAnswerSheet();
+            setReviewData(resultData);
+            console.log(resultData?.data?.data?.id, 'resultData11')
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
 
     const statusSummary = {
@@ -105,7 +124,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                         <Box>Mark</Box>
                     </Box>
                     <Box sx={{ borderTop: '1px solid #00000024', mt: '10px' }}>
-                        {resultsSummary.map((question) => (
+                        {reviewData && reviewData?.data?.data?.map((question, index) => (
                             <Box key={question.id} sx={{ display: 'flex', justifyContent: 'space-around', paddingTop: '10px', borderBottom: '1px solid #00000018' }}>
                                 {/* Question Number Avatar */}
                                 <Avatar
@@ -119,7 +138,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                                     }}
 
                                 >
-                                    {question.id}
+                                    {index + 1}
 
                                 </Avatar>
                                 {/* Type and Result */}
@@ -147,7 +166,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                                     }}
 
                                 >
-                                    {question.mark}
+                                    {question.obtainedMarks}
                                 </Button>
                             </Box>
                         ))}

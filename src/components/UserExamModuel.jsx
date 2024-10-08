@@ -25,7 +25,7 @@ const UserExamModule = () => {
     const [partId, setPartId] = useState("");
     const [getExamQuestions] = useGetExamQuestionsMutation();
     const nav = useNavigate();
-    const { userId, examAttemptId } = useParams();
+    const { userId, examId, examAttemptId } = useParams();
 
 
     // Parse the "30:15" format into milliseconds
@@ -63,20 +63,20 @@ const UserExamModule = () => {
         }
     };
 
-    //     // useEffect(() => {
-    //     //     const handleBeforeUnload = (event) => {
-    //     //         event.preventDefault();
-    //     //         event.returnValue = '';  // This triggers the browser's confirmation dialog
-    //     //     };
+    // useEffect(() => {
+    //     const handleBeforeUnload = (event) => {
+    //         event.preventDefault();
+    //         event.returnValue = '';  // This triggers the browser's confirmation dialog
+    //     };
 
-    //     //     // Add the event listener for the beforeunload event
-    //     //     window.addEventListener('beforeunload', handleBeforeUnload);
+    //     // Add the event listener for the beforeunload event
+    //     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    //     //     return () => {
-    //     //         // Cleanup the event listener when the component is unmounted
-    //     //         window.removeEventListener('beforeunload', handleBeforeUnload);
-    //     //     };
-    //     // }, []);
+    //     return () => {
+    //         // Cleanup the event listener when the component is unmounted
+    //         window.removeEventListener('beforeunload', handleBeforeUnload);
+    //     };
+    // }, []);
 
     useEffect(() => {
 
@@ -193,7 +193,7 @@ const UserExamModule = () => {
                     {/* Left: Question Panel */}
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {isSubmit ? (
-                            <ResultComponent />
+                            <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} />
                         ) : (
                             <QuestionPanel
                                 question={activeQuestion}

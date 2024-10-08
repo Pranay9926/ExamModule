@@ -1,74 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, Avatar, Button, Divider } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { useGetExamResultMutation } from '../../store/service/user/UserService';
+import { useState } from 'react';
 
-const ResultComponent = ({ result }) => {
-    const mockResult = {
-        name: 'Vamsi Kumar',
-        attemptId: '442349',
-        marksScored: '4.00 / 10',
-        percentage: '40%',
-        grade: 'C',
-        accuracy: '60%',
-        sectionName: 'Part A',
-        sectionMarks: '4 / 10',
-        sectionTime: '00:30:00',
-        totalTimeTaken: '00:24:46',
-        questionsAttempted: 29,
-        questionsSkipped: 1,
-        answeredCorrect: 6,
-        answeredWrong: 4
-    };
+const ResultComponent = ({ userId, examId, examAttemptId, result }) => {
+    const [examResultData, setExamResultData] = useState()
+    const [getExamResult] = useGetExamResultMutation()
+    console.log(userId, examId, examAttemptId)
+    useEffect(() => {
+        getData();
+    }, []);
 
-    const sectionData = [
-        {
-            sectionName: 'Part A',
-            sectionMarks: '4 / 10',
-            percentage: '40%',
-            questionsAttempted: 29,
-            questionsSkipped: 1,
-            answeredCorrect: 6,
-            answeredWrong: 4
-        },
-        {
-            sectionName: 'Part B',
-            sectionMarks: '6 / 10',
-            percentage: '60%',
-            questionsAttempted: 30,
-            questionsSkipped: 0,
-            answeredCorrect: 6,
-            answeredWrong: 7
-        },
-        {
-            sectionName: 'Part C',
-            sectionMarks: '5 / 10',
-            percentage: '50%',
-            questionsAttempted: 45,
-            questionsSkipped: 1,
-            answeredCorrect: 6,
-            answeredWrong: 5
-        },
-    ]
-
-    const finalResult = result || mockResult;
-
-    const summaryData = [
-        { label: 'Marks Scored', value: finalResult.marksScored },
-        { label: 'Percentage', value: finalResult.percentage },
-        // { label: 'Grade', value: finalResult.grade },
-        { label: 'Accuracy', value: finalResult.accuracy }
-    ];
-
-    const questionSummary = [
-        { label: 'Questions Attempted', value: finalResult.questionsAttempted, icon: <RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} />, color: '#a8a8a8' },
-        { label: 'Questions Skipped', value: finalResult.questionsSkipped, icon: <RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} />, color: '#a8a8a8' },
-        { label: 'Answered Correct', value: finalResult.answeredCorrect, icon: <CheckCircleOutlineIcon sx={{ border: '4px solid green' }} />, color: 'green' },
-        { label: 'Answered Wrong', value: finalResult.answeredWrong, icon: <CancelIcon sx={{ border: '4px solid red' }} />, color: 'red' }
-    ];
+    const getData = async () => {
+        try {
+            const resultData = await getExamResult({ userId, examId, examAttemptId })
+            setExamResultData(resultData?.data?.data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <Box sx={{ width: '100%', height: { xl: '94vh', lg: '94vh', md: '93vh', xs: '93vh' }, overflow: 'auto', mx: 'auto', px: 2.5, py: { xs: 1, md: '22px' }, bgcolor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -86,21 +41,27 @@ const ResultComponent = ({ result }) => {
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <Typography>Name:</Typography>
-                        <strong>{finalResult.name}</strong>
+                        <strong>{'Vamsi Kumar'}</strong>
                         <Typography>Attempt ID: </Typography>
-                        <strong>{finalResult.attemptId}</strong>
+                        <strong>{'442349'}</strong>
                     </Box>
                 </Box>
 
                 {/* Marks and Performance Summary */}
                 <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
-                        {summaryData.map((item, index) => (
-                            <Box key={index} sx={{ textAlign: 'center' }}>
-                                <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>{item.label}</Typography>
-                                <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.value}</Typography>
-                            </Box>
-                        ))}
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Marks scored</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
+                        </Box>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Percentage</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage} %</Typography>
+                        </Box>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>{'Accuracy'}</Typography>
+                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.accuracy.toFixed(2)} %</Typography>
+                        </Box>
                     </Box>
                     <Divider />
 
@@ -110,50 +71,76 @@ const ResultComponent = ({ result }) => {
                             <AccessTimeIcon sx={{ fontSize: 22, mr: 1 }} />
                             <Typography sx={{ fontSize: { xs: '15px', md: '20px' } }}>Time Taken</Typography>
                         </Box>
-                        <Typography>{finalResult.totalTimeTaken}</Typography>
+                        <Typography>{examResultData?.timeTaken}</Typography>
                     </Box>
 
                     {/* Question Attempt Summary */}
                     <Box sx={{ borderTop: '1px solid #e0e0e0', py: 2, px: 2 }}>
-                        {questionSummary.map((item, index) => (
-                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                <Avatar sx={{ width: 20, height: 20, bgcolor: item.color, mr: 1 }}>{item.icon}</Avatar>
-                                <Typography sx={{ flex: 1, color: item.color }}>{item.label}</Typography>
-                                <Typography><strong>{item.value > 0 ? item.value : 'N/A'}</strong></Typography>
-                            </Box>
-                        ))}
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
+                            <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
+                            <Typography><strong>{examResultData?.aggregateReport?.totalAttemptedCount > 0 ? examResultData?.aggregateReport?.totalAttemptedCount : 'N/A'}</strong></Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
+                            <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
+                            <Typography><strong>{examResultData?.aggregateReport?.skippedQuestions > 0 ? examResultData?.aggregateReport?.skippedQuestions : 'N/A'}</strong></Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
+                            <Typography sx={{ flex: 1, color: 'green' }}>{'Answered Correct'}</Typography>
+                            <Typography><strong>{examResultData?.aggregateReport?.correct > 0 ? examResultData?.aggregateReport?.correct : 'N/A'}</strong></Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
+                            <Typography sx={{ flex: 1, color: 'red' }}>{'Answered Correct'}</Typography>
+                            <Typography><strong>{examResultData?.aggregateReport?.wrong > 0 ? examResultData?.aggregateReport?.wrong : 'N/A'}</strong></Typography>
+                        </Box>
                     </Box>
                 </Box>
 
                 {/* Section Information */}
                 <Box sx={{ pb: 2 }}>
-                    {sectionData.map((item, index) => (
-                        <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
+                    {examResultData?.partWiseReport?.map((item, index) => (
+                        <Box key={index} sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.sectionName}</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>Part {item.partId}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.sectionMarks}</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item.percentage}</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{((item?.marksObtained / item?.maxMarksForSection) * 100).toFixed(2)} %</Typography>
                                 </Box>
                             </Box>
                             <Divider />
 
-                            {/* Question Attempt Summary */}
                             <Box sx={{ borderTop: '1px solid #e0e0e0', py: 2, px: 2 }}>
-                                {questionSummary.map((item, index) => (
-                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                        <Avatar sx={{ width: 20, height: 20, bgcolor: item.color, mr: 1 }}>{item.icon}</Avatar>
-                                        <Typography sx={{ flex: 1, color: item.color }}>{item.label}</Typography>
-                                        <Typography><strong>{item.value > 0 ? item.value : 'N/A'}</strong></Typography>
-                                    </Box>
-                                ))}
+                                {/* Total Questions Attempt */}
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                    <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
+                                    <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
+                                    <Typography><strong>{item?.totalAttempedCount > 0 ? item?.totalAttempedCount : 'N/A'}</strong></Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                    <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
+                                    <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
+                                    <Typography><strong>{item?.skippedQuestions > 0 ? item?.skippedQuestions : 'N/A'}</strong></Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                    <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
+                                    <Typography sx={{ flex: 1, color: 'green' }}>{'Answered Correct'}</Typography>
+                                    <Typography><strong>{item?.correct > 0 ? item?.correct : 'N/A'}</strong></Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                    <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
+                                    <Typography sx={{ flex: 1, color: 'red' }}>{'Answered Correct'}</Typography>
+                                    <Typography><strong>{item?.wrong > 0 ? item?.wrong : 'N/A'}</strong></Typography>
+                                </Box>
                             </Box>
                             {/* Review Questions Button */}
                             <Divider />

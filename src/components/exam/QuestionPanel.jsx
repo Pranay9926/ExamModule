@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection }) => {
     const [selectedOption, setSelectedOption] = useState(question?.selectedOption || null);
     const [loading, setLoading] = useState(false)
-    const [uploadExamQuestions] = useUploadExamQuestionsMutation();
+    const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId } = useParams();
 
     // console.log("this is data", question);
@@ -23,6 +23,17 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
     };
 
     const handleSave = async () => {
+        let statusCode;
+
+        if (selectedOption && question?.markedForReview) {
+            statusCode = 3; // Answered and Marked for Review
+        } else if (selectedOption) {
+            statusCode = 1; // Answered
+        } else if (question?.markedForReview) {
+            statusCode = 4; // Marked for Review
+        } else {
+            statusCode = 2; // Not Answered
+        }
         onNext(question?.id + 1)
 
         const payloadData = {
@@ -30,13 +41,12 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                 questionId: question?.question_id,
                 answerId: selectedOption,
                 examAttemptId: examAttemptId,
-                statusCode: 1
+                statusCode: statusCode
             }
         }
         try {
-            if (selectedOption) {
-                let result = await uploadExamQuestions({ userId, payloadData: payloadData });
-            }
+            let result = await UploadExamQuestions({ userId, payloadData: payloadData });
+            console.log("API result:", result);
         } catch (e) {
             console.log(e);
         }
