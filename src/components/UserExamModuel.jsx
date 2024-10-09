@@ -4,14 +4,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu'; // Toggle button icon
 import Countdown from 'react-countdown';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetExamQuestionsMutation } from '../store/service/user/UserService';
-import { questionData } from '../utils/jsonData';
+import { useGetExamQuestionsMutation, useGetReviewExamQuestionMutation } from '../store/service/user/UserService';
 import QuestionPanel from './exam/QuestionPanel';
 import ResultComponent from './exam/ResultComponent';
 import ResultStatus from './exam/ResultStatus';
 import StatusPanel from './exam/StatusPanel';
-
-
 
 const UserExamModule = () => {
     const [questions, setQuestions] = useState([]); // State to store questions
@@ -23,9 +20,13 @@ const UserExamModule = () => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [partId, setPartId] = useState("");
+    const [isReviewMode, setIsReviewMode] = useState(false); // Add state for review mode
+
     const [getExamQuestions] = useGetExamQuestionsMutation();
     const nav = useNavigate();
     const { userId, examId, examAttemptId } = useParams();
+    const [getReviewExamQuestion] = useGetReviewExamQuestionMutation();
+
 
 
     // Parse the "30:15" format into milliseconds
@@ -146,7 +147,27 @@ const UserExamModule = () => {
         }));
         console.log("Quiz submitted with answers:", questions);
         setIsSubmit(!isSubmit);
-        localStorage.clear("examStartTime")
+        localStorage.removeItem('examStartTime');
+    };
+
+
+    const handleReviewQuestion = async () => {
+        setIsReviewMode(true);  // Enable review mode
+        setIsSubmit(false);  // Set to false in review mode
+
+        try {
+            const resultData = await getReviewExamQuestion({ userId, examId });
+            const { data } = resultData;
+            if (data && data.data.length > 0) {
+                const updatedQuestions = data.data.map((q, index) =>
+                    index === 0 ? { ...q, visited: true } : q
+                );
+                setQuestions(updatedQuestions);
+                setActiveQuestion(data.data[0]);
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const renderer = ({ hours, minutes, seconds, completed }) => {
@@ -193,7 +214,7 @@ const UserExamModule = () => {
                     {/* Left: Question Panel */}
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {isSubmit ? (
-                            <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} />
+                            <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
                         ) : (
                             <QuestionPanel
                                 question={activeQuestion}
@@ -202,6 +223,8 @@ const UserExamModule = () => {
                                 onMarkForReview={handleMarkForReview}
                                 onClearResponse={handleClearResponse}
                                 totalQuestions={questions.length}
+                                isReviewMode={isReviewMode}  // Pass review mode to QuestionPanel
+
                             />
                         )}
                     </Grid2>

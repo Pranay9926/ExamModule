@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import { useGetReviewAnswerSheetMutation } from '../../store/service/user/UserService';
 
-const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz }) => {
+const ResultStatus = ({ onSubmitQuiz }) => {
     const [getReviewAnswerSheet] = useGetReviewAnswerSheetMutation();
     const [reviewData, setReviewData] = useState();
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'));
 
+    const profile = {
+        name: userDetails?.name,
+        img: userDetails?.avatar_url, // Placeholder image
+    };
 
     useEffect(() => {
         getData();
     }, []);
 
-    console.log(reviewData, "");
     const getData = async () => {
         try {
             const resultData = await getReviewAnswerSheet();
@@ -29,25 +33,10 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
         notAnswered: { id: 4, label: "Incorrect", color: "#c11e1b", borderRadius: "6px" },
     };
 
-    const profile = {
-        name: "Vamsi Kumar",
-        img: '', // Placeholder image
-    };
-
-    // 10 Dummy objects for questions summary
-
-    const resultsSummary = [
-        { id: 1, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: -0.5 },
-        { id: 2, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 3, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 4, type: "MCQ - Single ", result: "Incorrect", maxMarks: 1, mark: -0.5 },
-        { id: 5, type: "MCQ - Single ", result: "Incorrect", maxMarks: 1, mark: -0.5 },
-        { id: 6, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 7, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 8, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 9, type: "MCQ - Single ", result: "Correct", maxMarks: 1, mark: 1 },
-        { id: 10, type: "MCQ - Single", result: "Correct", maxMarks: 1, mark: 1 }
-    ];
+    // const profile = {
+    //     name: "Vamsi Kumar",
+    //     img: '', // Placeholder image
+    // };
 
     const getInitials = (name) => {
         return name
@@ -125,8 +114,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                     </Box>
                     <Box sx={{ borderTop: '1px solid #00000024', mt: '10px' }}>
                         {reviewData && reviewData?.data?.data?.map((question, index) => (
-                            <Box key={question.id} sx={{ display: 'flex', justifyContent: 'space-around', paddingTop: '10px', borderBottom: '1px solid #00000018' }}>
-                                {/* Question Number Avatar */}
+                            <Box key={question.id} sx={{ display: 'flex', justifyContent: 'space-around', paddingTop: '10px', borderBottom: '1px solid #00000018', alignItems: 'center' }}>
                                 <Avatar
                                     sx={{
                                         bgcolor: question.mark > 0 ? '#22c55e' : '#c11e1b',
@@ -147,7 +135,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                                         {question.type}
                                     </Typography>
                                     <Typography variant="caption" sx={{ color: '#595454' }}>
-                                        {question.result}
+                                        {question.questionStatus}
                                     </Typography>
                                     <Typography variant="caption" sx={{ color: '#595454' }}>
                                         Max. Marks: {question.maxMarks}
@@ -166,7 +154,7 @@ const ResultStatus = ({ questions, activeQuestion, onQuestionChange, onSubmitQui
                                     }}
 
                                 >
-                                    {question.obtainedMarks}
+                                    {question.obtainedMarks == null ? 0 : question.obtainedMarks}
                                 </Button>
                             </Box>
                         ))}

@@ -4,7 +4,7 @@ const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_API_URL}`,
     prepareHeaders: (headers) => {
         // const data = JSON.parse(String(localStorage.getItem("token")));
-        const data = "4|A7RryMau7A6c2mNyRXPcS7c6OIEkrLDV9LuB050I24edba5d";
+        const data = "31|uyUHQUw8TGBcj0xlU2jmsgMJvWEoQ9Iuk3lxMCwb5f1437ba";
         if (data) {
             headers.set("authorization", `Bearer ${data}`);
             // if (process.env.REACT_APP_API_URL)

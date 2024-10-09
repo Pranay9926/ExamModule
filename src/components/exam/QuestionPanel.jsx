@@ -5,16 +5,18 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection }) => {
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection, isReviewMode }) => {
     const [selectedOption, setSelectedOption] = useState(question?.selectedOption || null);
     const [loading, setLoading] = useState(false)
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId } = useParams();
+    console.log(selectedOption, 'selectedOption')
 
     // console.log("this is data", question);
     useEffect(() => {
-        setSelectedOption(question?.selectedOption || null); // Update selected option when question changes
-    }, [question]);
+        setSelectedOption(isReviewMode ? question?.answer?.selectedOption || null : null);  // Use selected answer if present in review mode
+    }, [question, isReviewMode]);
+
 
     const handleOptionChange = (event) => {
         const selected = event.target.value;
@@ -24,7 +26,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
 
     const handleSave = async () => {
         let statusCode;
-
+        console.log('SAVE api hit')
         if (selectedOption && question?.markedForReview) {
             statusCode = 3; // Answered and Marked for Review
         } else if (selectedOption) {
@@ -50,7 +52,20 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         } catch (e) {
             console.log(e);
         }
+        console.log('Save api hitted////')
     }
+
+    const getOptionStyles = (optionId) => {
+        if (!isReviewMode) return {}; // No special styles if not in review mode
+
+        if (optionId === question?.correctOption) {
+            return { backgroundColor: '#dff0d8', color: 'white' };  // Correct answer highlighted green
+        }
+        if (optionId === selectedOption && optionId !== question?.correctOption) {
+            return { backgroundColor: 'gray', color: 'white' };  // Incorrect answer highlighted gray
+        }
+        return {}; // Default style
+    };
 
     const handleClearResponse = () => {
         setSelectedOption(null);
@@ -89,7 +104,14 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                     <Typography variant="h6" sx={{ mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question?.id}</Typography>
                                     <Typography variant="h6" sx={{ mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
                                     {question?.meta.map((option, index) => (
-                                        <FormControlLabel key={index} value={option.id} control={<Radio />} label={<div dangerouslySetInnerHTML={{ __html: option.option }} />} />
+                                        <FormControlLabel
+                                            key={index}
+                                            value={option.id}
+                                            control={<Radio />}
+                                            disabled={isReviewMode}
+                                            label={<div dangerouslySetInnerHTML={{ __html: option.option }} />}
+                                            sx={getOptionStyles(option.id)}
+                                        />
                                     ))}
                                 </RadioGroup>
                             </FormControl>
@@ -115,7 +137,6 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             Mark for Review & Next
                         </Button>
 
-                        {/* Clear Response */}
                         <Button
                             variant="outlined"
                             sx={{

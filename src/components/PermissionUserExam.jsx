@@ -159,12 +159,13 @@ const PermissionUserExam = () => {
     const [userDetails, setUsermDetails] = useState({});
     let examAttemptId;
 
+
     useEffect(() => {
         if (data) {
             setExamDetails(data.data.examDetails)
             setUsermDetails(data.data.userDetails)
+            localStorage.setItem('userdetails', JSON.stringify(data?.data?.userDetails));
             examAttemptId = data.data.examAttemptId
-            console.log(examAttemptId);
         }
     }, [data, isLoading, isError])
 

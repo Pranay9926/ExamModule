@@ -8,11 +8,13 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
     const markedForReviewCount = questions.filter(q => q.markedForReview && !q.answered).length;
     const answeredMarkedForReviewCount = questions.filter(q => q.answered && q.markedForReview).length;
     const notVisitedCount = questions.filter(q => !q.visited).length;
-    const profile = {
-        name: "Vamsi Kumar",
-        avatarUrl: '', // Placeholder image
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'));
 
+    const profile = {
+        name: userDetails?.name,
+        avatarUrl: userDetails?.avatar_url,
     };
+
     const statusSummary = {
         answered: { id: 1, label: "Answered", count: answeredCount, color: "#22c55e", borderRadius: "0 0 20px 20px" },
         notAnswered: { id: 2, label: "Not Answered", count: notAnsweredCount, color: "#c11e1b", borderRadius: "20px 20px 0px 0px" },

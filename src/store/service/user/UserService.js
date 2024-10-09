@@ -51,10 +51,16 @@ export const userApi = createApi({
                 url: `student/7/exam/105/reviewExam?partId=B&size=1`,
                 method: 'GET'
             })
+        }),
+        getReviewExamQuestion: builder.mutation({
+            query: ({ userId, examId }) => ({
+                url: `student/${userId}/exam/${examId}/reviewExam?partId=B&size=1&review=1`,
+                method: 'GET'
+            })
         })
     }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation } = userApi
+export const { useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation, useGetReviewExamQuestionMutation } = userApi
