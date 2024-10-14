@@ -187,27 +187,38 @@ const UserExamModule = () => {
     return (
         <>
             {/* {questions ? */}
-            <Box sx={{ width: '100%', bgcolor: '#f4f5f7', }}>
+            <Box sx={{
+                width: '100%', bgcolor: '#f4f5f7', height: '100vh', '@media (min-width: 0px) and (max-width: 425px)': {
+                    height: '101vh', // change height for this range
+                },
+            }}>
                 {/* Header Section */}
-                <Box sx={{ bgcolor: '#f97316', display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
-                    <Typography variant="h6" sx={{ color: 'white', ml: 2, fontWeight: 'bold' }}>
-                        Nov PD Test 22
-                    </Typography>
-                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
-                        Time Left:
-                        {startTime && (
-                            <Countdown
-                                date={getExamEndTime()}
-                                renderer={renderer}
-                                onComplete={handleSubmitQuiz}
-                            />
-                        )}
-                    </Typography>
-                    <Button onClick={() => { }}>
+                <Box sx={{ bgcolor: '#f97316' }}>
+                    <Box sx={{
+                        bgcolor: '#f97316', display: {
+                            sm: 'flex', '@media (min-width: 425px) and (max-width: 599px)': {
+                                display: 'flex', // change height for this range
+                            },
+                        }, alignItems: 'center', p: 1, gap: { xl: '30%', sm: '20%', xs: '15%' },
+                    }}>
+                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
+                            Nov PD Test 22
+                        </Typography>
+                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
+                            Time Left:
+                            {startTime && (
+                                <Countdown
+                                    date={getExamEndTime()}
+                                    renderer={renderer}
+                                    onComplete={handleSubmitQuiz}
+                                />
+                            )}
+                        </Typography>
+                    </Box>
+                    <Button onClick={() => { }} sx={{ position: 'absolute', top: 0, right: 0 }}>
                         <CloseIcon sx={{ color: 'white' }} />
                     </Button>
                 </Box>
-
                 {/* Main Content Section */}
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
 
@@ -246,7 +257,11 @@ const UserExamModule = () => {
                 </Grid2>
 
                 {/* Toggle Button for Status Panel on Small Screens */}
-                <Box sx={{ display: { xs: 'block', sm: 'none' }, position: 'fixed', bottom: 16, right: 16 }}>
+                <Box sx={{
+                    display: { xs: 'block', sm: 'none' }, position: 'fixed', bottom: 16, right: 16, '@media (min-width: 350px) and (max-width: 463px)': {
+                        bottom: '65px',
+                    }
+                }}>
                     <IconButton onClick={toggleStatusPanel(true)} sx={{ bgcolor: '#f97316', color: 'white' }}>
                         <MenuIcon />
                     </IconButton>
@@ -257,8 +272,7 @@ const UserExamModule = () => {
                     anchor="right"
                     open={openStatusPanel}
                     onClose={toggleStatusPanel(false)}
-                    sx={{ display: { xs: 'block', md: 'none' } }}
-                >
+                    sx={{ display: { xs: 'block', md: 'none' } }}>
                     <IconButton onClick={toggleStatusPanel(false)} sx={{ position: 'fixed', color: 'black', p: '3px' }}>
                         <CloseIcon sx={{ fontWeight: '700', borderRadius: '2px' }} />
                     </IconButton>

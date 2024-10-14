@@ -98,18 +98,19 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             <Box><RefreshIcon onClick={handleRefresh} sx={{ fontSize: '30px', cursor: 'pointer' }} /> <CalculateOutlinedIcon sx={{ fontSize: '30px', cursor: 'pointer' }} /></Box>
                         </Box>
 
-                        <Box sx={{ p: 2, height: 'calc(100vh - 250px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
-                            <FormControl component="fieldset" sx={{ borderBottom: 2, borderColor: "#c0bfbf", pb: 8 }}>
+                        <Box sx={{ p: 2, height: 'calc(100vh - 289px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
+                            <FormControl component="fieldset" sx={{ borderBottom: 2, borderColor: "#c0bfbf", pb: 4 }}>
                                 <RadioGroup value={selectedOption} onChange={handleOptionChange}>
-                                    <Typography variant="h6" sx={{ mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question?.id}</Typography>
-                                    <Typography variant="h6" sx={{ mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
+                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question?.id}</Typography>
+                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '19px' }, mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
                                     {question?.meta.map((option, index) => (
                                         <FormControlLabel
+
                                             key={index}
                                             value={option.id}
                                             control={<Radio />}
                                             disabled={isReviewMode}
-                                            label={<div dangerouslySetInnerHTML={{ __html: option.option }} />}
+                                            label={<Box dangerouslySetInnerHTML={{ __html: option.option }} sx={{ fontSize: { xs: '14px', md: '16px', xl: '17px' } }} />}
                                             sx={getOptionStyles(option.id)}
                                         />
                                     ))}
@@ -141,6 +142,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             variant="outlined"
                             sx={{
                                 color: '#f97316',
+                                fontSize: '12px',
                                 borderColor: '#f97316',
                                 borderRadius: '20px',
                                 px: 3,
@@ -157,6 +159,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             sx={{
                                 bgcolor: '#f97316',
                                 color: '#fff',
+                                fontSize: '12px',
                                 borderRadius: '20px',
                                 px: 4,
                                 '&:hover': { bgcolor: '#f97316' },

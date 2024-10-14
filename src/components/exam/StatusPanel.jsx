@@ -69,10 +69,10 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                 sx={{
                                     bgcolor: status.color,
                                     borderRadius: status.borderRadius,
-                                    width: 30, // Size for the circle
-                                    height: 30,
+                                    width: { xs: 27, sm: 30 }, // Size for the circle
+                                    height: { xs: 27, sm: 30 },
                                     mr: 1, // Space between circle and text
-                                    fontSize: '13px',
+                                    fontSize: { xs: '11px', sm: '13px' },
                                     fontWeight: 'bold',
                                 }}
                             >
@@ -81,7 +81,14 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                             {status.id === 4 && <Box
                                 sx={{
                                     position: 'absolute',
-                                    top: { xs: 3, lg: -3, xl: -3 },
+                                    top: {
+                                        xs: -2, lg: -3, xl: -3,
+                                        '@media (min-width: 846px) and (max-width: 899px)': {
+                                            top: '-3px', // change height for this range
+                                        }, '@media (min-width: 900px) and (max-width: 1074px)': {
+                                            top: '0px', // change height for this range
+                                        },
+                                    },
                                     left: 3,
                                     width: 11,
                                     height: 20,
@@ -89,16 +96,16 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                     clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '// Green triangle for answered & marked
                                 }}
                             />}
-                            <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
+                            <Typography sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '12px', md: '13px', xl: '14px' } }}>
                                 {status.label}
                             </Typography>
                         </Box>
                     ))}
 
                     {/* {/ Question number grid /} */}
-                    <Box sx={{ px: 2, mt: 7 }}>
+                    <Box sx={{ paddingLeft: 2, mt: 7 }}>
                         <Grid container spacing={1} sx={{
-                            gap: { md: '11px', xs: '4px', lg: '2px' }, '@media (min-width: 599px) and (max-width: 764px)': {
+                            gap: { md: '4px', xs: '4px', lg: '2px' }, '@media (min-width: 599px) and (max-width: 764px)': {
                                 gap: '12px',
                             }, ml: '-20px'
                         }}>
@@ -120,7 +127,9 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                                         : question.markedForReview ? '16px'
                                                             : question.visited ? '20px 20px 0 0' : '6px',
                                                 width: 35, // Ensure size matches the image example
-                                                height: 35, // Ensure size matches the image example
+                                                height: 35,
+                                                fontSize: '15px',
+                                                // Ensure size matches the image example
                                                 '&:hover': { bgcolor: '#f97316' }
                                             }}
                                             onClick={() => onQuestionChange(question.id)}

@@ -59,15 +59,15 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                             <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Marks scored</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage.toFixed(2)} %</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage.toFixed(2)} %</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>{'Accuracy'}</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.accuracy.toFixed(2)} %</Typography>
+                                    <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.accuracy.toFixed(2)} %</Typography>
                                 </Box>
                             </Box>
                             <Divider />
@@ -85,22 +85,22 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                             <Box sx={{ borderTop: '1px solid #e0e0e0', py: 2, px: 2 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
-                                    <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
+                                    <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
                                     <Typography><strong>{examResultData?.aggregateReport?.totalAttemptedCount > 0 ? examResultData?.aggregateReport?.totalAttemptedCount : 'N/A'}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
-                                    <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
+                                    <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
                                     <Typography><strong>{examResultData?.aggregateReport?.skippedQuestions > 0 ? examResultData?.aggregateReport?.skippedQuestions : 'N/A'}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
-                                    <Typography sx={{ flex: 1, color: 'green' }}>{'Answered Correct'}</Typography>
+                                    <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'green' }}>{'Answered Correct'}</Typography>
                                     <Typography><strong>{examResultData?.aggregateReport?.correct > 0 ? examResultData?.aggregateReport?.correct : 'N/A'}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
-                                    <Typography sx={{ flex: 1, color: 'red' }}>{'Answered Correct'}</Typography>
+                                    <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'red' }}>{'Answered Incorrect'}</Typography>
                                     <Typography><strong>{examResultData?.aggregateReport?.wrong > 0 ? examResultData?.aggregateReport?.wrong : 'N/A'}</strong></Typography>
                                 </Box>
                             </Box>
@@ -113,15 +113,15 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>Part {item.partId}</Typography>
+                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part {item.partId}</Typography>
                                         </Box>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>
+                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>
                                         </Box>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 17 }, fontWeight: '600' }}>{((item?.marksObtained / item?.maxMarksForSection) * 100).toFixed(2)} %</Typography>
+                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{((item?.marksObtained / item?.maxMarksForSection) * 100).toFixed(2)} %</Typography>
                                         </Box>
                                     </Box>
                                     <Divider />
@@ -130,29 +130,29 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                         {/* Total Questions Attempt */}
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
-                                            <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
+                                            <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
                                             <Typography><strong>{item?.totalAttempedCount > 0 ? item?.totalAttempedCount : 'N/A'}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
-                                            <Typography sx={{ flex: 1, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
+                                            <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
                                             <Typography><strong>{item?.skippedQuestions > 0 ? item?.skippedQuestions : 'N/A'}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
-                                            <Typography sx={{ flex: 1, color: 'green' }}>{'Answered Correct'}</Typography>
+                                            <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'green' }}>{'Answered Correct'}</Typography>
                                             <Typography><strong>{item?.correct > 0 ? item?.correct : 'N/A'}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
-                                            <Typography sx={{ flex: 1, color: 'red' }}>{'Answered Correct'}</Typography>
+                                            <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'red' }}>{'Answered Incorrect'}</Typography>
                                             <Typography><strong>{item?.wrong > 0 ? item?.wrong : 'N/A'}</strong></Typography>
                                         </Box>
                                     </Box>
                                     {/* Review Questions Button */}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
-                                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }} onClick={() => handleReviewQuestion({ userId, examId })}
+                                        <Button variant="contained" color="warning" sx={{ p: { xs: '9px', md: '15px' }, fontSize: { xs: '11px' } }} onClick={() => handleReviewQuestion({ userId, examId })}
                                         >
                                             Review Questions
                                         </Button>
