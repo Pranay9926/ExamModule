@@ -73,14 +73,14 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                     </Box>
 
                 </Box>
-                <Box sx={{ mb: { xs: 3, md: 3, xl: 10, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '20px', md: '16px', xs: '8px' } }}>
+                <Box sx={{ mb: { xs: 3, md: 3, xl: 10, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '12px', md: '10px', xs: '8px' } }}>
                     {Object.entries(statusSummary).map(([key, status]) => (
                         <Box
                             key={key}
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                mb: 1.5,
+                                mb: '1px',
                                 position: 'relative'
                             }}
                         >
@@ -110,7 +110,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                         height: '52vh',
                     },
                 }}>
-                    <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px' }}>
+                    <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px', fontSize: { xs: '12px', sm: '13px' } }}>
                         <Box>Q.No.</Box>
                         <Box>Type</Box>
                         <Box>Mark</Box>
@@ -124,6 +124,11 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                                         borderRadius: '6px',
                                         width: 35,
                                         height: 35,
+                                        '@media (min-width: 600px) and (max-width: 724px)': {
+                                            height: '28px',
+                                            width: '28px',
+                                            fontSize: '12px'
+                                        },
                                         fontSize: '14px',
                                         fontWeight: 'bold',
                                     }}
@@ -131,14 +136,31 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                                     {index + 1}
 
                                 </Avatar>
-                                <Box sx={{ textAlign: 'center', display: 'grid' }}>
-                                    <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
+                                {/* Type and Result */}
+                                <Box sx={{
+                                    textAlign: 'center', display: 'grid', width: '58%'
+                                }}>
+
+                                    <Typography sx={{
+                                        color: '#333', fontWeight: 'bold', fontSize: { xs: '11px', sm: '10px', md: '10px', lg: '13px' }, '@media (min-width: 600px) and (max-width: 724px)': {
+                                            fontSize: '9px'
+                                        },
+                                    }}>
                                         {question.type}
                                     </Typography>
-                                    <Typography variant="caption" sx={{ color: '#595454' }}>
+                                    <Typography variant="caption" sx={{
+                                        color: '#595454', '@media (min-width: 600px) and (max-width: 724px)': {
+
+                                            fontSize: '8.9px'
+                                        },
+                                    }}>
                                         {question.questionStatus}
                                     </Typography>
-                                    <Typography variant="caption" sx={{ color: '#595454' }}>
+                                    <Typography variant="caption" sx={{
+                                        color: '#595454', '@media (min-width: 600px) and (max-width: 724px)': {
+                                            fontSize: '9px'
+                                        },
+                                    }}>
                                         Max. Marks: {question.maxMarks}
                                     </Typography>
                                 </Box>
@@ -146,8 +168,14 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                                 <Button
                                     variant="outlined"
                                     sx={{
-                                        minWidth: 60,
                                         height: 35,
+                                        '@media (min-width: 600px) and (max-width: 717px)': {
+                                            height: '30px',
+                                            minWidth: '38px'
+                                        }, '@media (min-width: 900px) and (max-width: 1117px)': {
+                                            height: '35px',
+                                            minWidth: '45px'
+                                        },
                                         border: '1px solid #00000094',
                                         borderRadius: '4px',
                                         textAlign: 'center',
