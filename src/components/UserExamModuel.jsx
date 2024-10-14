@@ -24,7 +24,7 @@ const UserExamModule = () => {
     const [isReviewMode, setIsReviewMode] = useState(false);
     const [partIds, setPartIds] = useState([])
     const [isSubmission, setIsSubmission] = useState(false)
-
+    const [submitButton, setSubmitButton] = useState(false)
     const [getExamQuestions] = useGetExamQuestionsMutation();
     const { userId, examId, examAttemptId } = useParams();
     const [getReviewExamQuestion] = useGetReviewExamQuestionMutation();
@@ -32,6 +32,7 @@ const UserExamModule = () => {
     useEffect(() => {
         getData();
     }, [page]);
+
 
     const getData = async (partId = "") => {
         try {
@@ -127,9 +128,6 @@ const UserExamModule = () => {
                 )
             );
             setActiveQuestion(nextQuestion);
-        } else {
-            console.log("nextQuestion", nextQuestion);
-            setPage(page + 1)
         }
     };
 
@@ -138,8 +136,11 @@ const UserExamModule = () => {
             id: q.id,
             selectedOption: q.selectedOption
         }));
+        console.log("openStatusPanel", openStatusPanel);
+        setOpenStatusPanel(false)
         setIsSubmit(!isSubmit);
         localStorage.removeItem('examStartTime');
+        console.log("isSubmission11111", isSubmission);
         setIsSubmission(!isSubmission)
     };
 
@@ -187,10 +188,8 @@ const UserExamModule = () => {
                 <Box sx={{ bgcolor: '#f97316' }}>
                     <Box sx={{
                         bgcolor: '#f97316', display: {
-                            sm: 'flex', '@media (min-width: 425px) and (max-width: 599px)': {
-                                display: 'flex', // change height for this range
-                            },
-                        }, alignItems: 'center', p: 1, gap: { xl: '30%', sm: '20%', xs: '15%' },
+                            sm: 'flex',
+                        }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
                             Nov PD Test 22
@@ -215,7 +214,7 @@ const UserExamModule = () => {
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {
                             isSubmission ? (
-                                <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} />
+                                <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} />
                             ) : isSubmit ? (
                                 <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
                             ) : (
@@ -237,13 +236,15 @@ const UserExamModule = () => {
                     <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
 
                         {isSubmit && !isSubmission ? (
-                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} />
+                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} submitButton={submitButton} />
                         ) : (
                             <StatusPanel
                                 questions={questions}
                                 activeQuestion={activeQuestion}
                                 onQuestionChange={handleNextQuestion}
                                 onSubmitQuiz={handleSubmitQuiz}
+                                isSubmission={isSubmission}
+
                             />
                         )}
                     </Grid2>
@@ -270,8 +271,8 @@ const UserExamModule = () => {
                         <CloseIcon sx={{ fontWeight: '700', borderRadius: '2px' }} />
                     </IconButton>
                     <Box sx={{ width: 300, p: 2, height: '100%' }}>
-                        {isSubmit ? (
-                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} />
+                        {isSubmit && !isSubmission ? (
+                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} submitButton={submitButton} />
                         ) : (
                             <StatusPanel
                                 questions={questions}

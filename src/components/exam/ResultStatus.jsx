@@ -73,7 +73,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                     </Box>
 
                 </Box>
-                <Box sx={{ mb: { xs: 3, md: 3, xl: 10, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '12px', md: '10px', xs: '8px' } }}>
+                <Box sx={{ mb: { xs: 3, md: 3, xl: 8, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '12px', md: '10px', xs: '8px' } }}>
                     {Object.entries(statusSummary).map(([key, status]) => (
                         <Box
                             key={key}
@@ -105,10 +105,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                 </Box>
 
                 <Box sx={{
-                    padding: '8px', height: { xl: '63vh', lg: '63vh', md: '52vh', xs: '60vh' }, overflowY: 'auto',
-                    '@media (min-width: 599px) and (max-width: 763px)': {
-                        height: '52vh',
-                    },
+                    padding: '8px', height: { xs: '70vh' }, overflowY: 'auto',
                 }}>
                     <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px', fontSize: { xs: '12px', sm: '13px' } }}>
                         <Box>Q.No.</Box>
@@ -192,7 +189,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
             </Box>
 
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, borderTop: '2px solid #00000018' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, borderTop: '2px solid #00000018' }}>
                 <Button
                     variant="contained"
                     fullWidth
@@ -202,7 +199,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                 >
                     Submit Quiz
                 </Button>
-            </Box>
+            </Box> */}
         </Box>
 
     );

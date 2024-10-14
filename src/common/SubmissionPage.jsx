@@ -9,11 +9,12 @@ const tableHeaders = [
     { label: 'Answered', accessor: 'answered' },
     { label: 'Not Answered', accessor: 'notAnswered' },
     { label: 'Marked for Review', accessor: 'markForReview' },
+    { label: 'Answered & Marked for Review', accessor: 'answeredAndMarkForReview' },
     { label: 'Not Visited', accessor: 'notVisited' },
     { label: 'Time Taken', accessor: 'timeTaken' }
 ];
 
-const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsSubmit }) => {
+const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setSubmitButton }) => {
     const [getExamStatistic] = useGetExamStatisticMutation()
     const [examStatisticData, setExamStatisticData] = useState();
 
@@ -33,6 +34,7 @@ const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsS
     const handleSubmitQuiz = () => {
         setIsSubmit(true);
         setIsSubmission(false);
+        setSubmitButton(true)
     };
 
     const handleQuitClick = () => {

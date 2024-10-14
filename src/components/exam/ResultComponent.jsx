@@ -86,22 +86,22 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
                                     <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
-                                    <Typography><strong>{examResultData?.aggregateReport?.totalAttemptedCount > 0 ? examResultData?.aggregateReport?.totalAttemptedCount : 'N/A'}</strong></Typography>
+                                    <Typography><strong>{examResultData?.aggregateReport?.totalAttemptedCount > 0 ? examResultData?.aggregateReport?.totalAttemptedCount : 0}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
                                     <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
-                                    <Typography><strong>{examResultData?.aggregateReport?.skippedQuestions > 0 ? examResultData?.aggregateReport?.skippedQuestions : 'N/A'}</strong></Typography>
+                                    <Typography><strong>{examResultData?.aggregateReport?.skippedQuestions > 0 ? examResultData?.aggregateReport?.skippedQuestions : 0}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
                                     <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'green' }}>{'Answered Correct'}</Typography>
-                                    <Typography><strong>{examResultData?.aggregateReport?.correct > 0 ? examResultData?.aggregateReport?.correct : 'N/A'}</strong></Typography>
+                                    <Typography><strong>{examResultData?.aggregateReport?.correct > 0 ? examResultData?.aggregateReport?.correct : 0}</strong></Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                     <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
                                     <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'red' }}>{'Answered Incorrect'}</Typography>
-                                    <Typography><strong>{examResultData?.aggregateReport?.wrong > 0 ? examResultData?.aggregateReport?.wrong : 'N/A'}</strong></Typography>
+                                    <Typography><strong>{examResultData?.aggregateReport?.wrong > 0 ? examResultData?.aggregateReport?.wrong : 0}</strong></Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -131,22 +131,22 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
                                             <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Attempted'}</Typography>
-                                            <Typography><strong>{item?.totalAttempedCount > 0 ? item?.totalAttempedCount : 'N/A'}</strong></Typography>
+                                            <Typography><strong>{item?.totalAttempedCount > 0 ? item?.totalAttempedCount : 0}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: '#a8a8a8', mr: 1 }}><RadioButtonUncheckedIcon sx={{ border: '4px solid #80808030' }} /></Avatar>
                                             <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: '#a8a8a8' }}>{'Questions Skipped'}</Typography>
-                                            <Typography><strong>{item?.skippedQuestions > 0 ? item?.skippedQuestions : 'N/A'}</strong></Typography>
+                                            <Typography><strong>{item?.skippedQuestions > 0 ? item?.skippedQuestions : 0}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: 'green', mr: 1 }}><CheckCircleOutlineIcon sx={{ border: '4px solid green' }} /></Avatar>
                                             <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'green' }}>{'Answered Correct'}</Typography>
-                                            <Typography><strong>{item?.correct > 0 ? item?.correct : 'N/A'}</strong></Typography>
+                                            <Typography><strong>{item?.correct > 0 ? item?.correct : 0}</strong></Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                             <Avatar sx={{ width: 20, height: 20, bgcolor: 'red', mr: 1 }}><CancelIcon sx={{ border: '4px solid red' }} /></Avatar>
                                             <Typography sx={{ flex: 1, fontSize: { xs: '14px', md: '15px', xl: '16px' }, color: 'red' }}>{'Answered Incorrect'}</Typography>
-                                            <Typography><strong>{item?.wrong > 0 ? item?.wrong : 'N/A'}</strong></Typography>
+                                            <Typography><strong>{item?.wrong > 0 ? item?.wrong : 0}</strong></Typography>
                                         </Box>
                                     </Box>
                                     {/* Review Questions Button */}

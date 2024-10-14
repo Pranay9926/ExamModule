@@ -2,14 +2,13 @@ import React from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import Grid from '@mui/material/Grid'; // Use the standard Grid for layout
 
-const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz }) => {
+const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz, isSubmission }) => {
     const answeredCount = questions.filter(q => q.answered && !q.markedForReview).length;
     const notAnsweredCount = questions.filter(q => !q.answered && q.visited).length;
     const markedForReviewCount = questions.filter(q => q.markedForReview && !q.answered).length;
     const answeredMarkedForReviewCount = questions.filter(q => q.answered && q.markedForReview).length;
     const notVisitedCount = questions.filter(q => !q.visited).length;
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
-
     const profile = {
         name: userDetails?.name,
         avatarUrl: userDetails?.avatar_url,
@@ -108,7 +107,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                 gap: '12px',
                             }, ml: '-20px'
                         }}>
-                            {questions.map((question, index = 0) => (
+                            {questions.map((question, index) => (
                                 <Grid item xs={2.2} key={question.id}>
                                     <Box sx={{
                                         position: 'relative', display: 'flex', gap: 8,
@@ -164,6 +163,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                     color="success"
                     sx={{ borderRadius: '20px', bgcolor: '#22c55e', px: 4 }}
                     onClick={onSubmitQuiz}
+                    disabled={isSubmission}
                 >
                     Submit Quiz
                 </Button>
