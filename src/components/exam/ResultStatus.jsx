@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import { useGetReviewAnswerSheetMutation } from '../../store/service/user/UserService';
 
-const ResultStatus = ({ onSubmitQuiz }) => {
+const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
     const [getReviewAnswerSheet] = useGetReviewAnswerSheetMutation();
     const [reviewData, setReviewData] = useState();
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
 
     const profile = {
         name: userDetails?.name,
-        img: userDetails?.avatar_url, // Placeholder image
+        img: userDetails?.avatar_url,
     };
 
     useEffect(() => {
@@ -18,9 +18,8 @@ const ResultStatus = ({ onSubmitQuiz }) => {
 
     const getData = async () => {
         try {
-            const resultData = await getReviewAnswerSheet();
+            const resultData = await getReviewAnswerSheet({ userId, examId });
             setReviewData(resultData);
-            console.log(resultData?.data?.data?.id, 'resultData11')
         } catch (e) {
             console.log(e)
         }
@@ -28,15 +27,10 @@ const ResultStatus = ({ onSubmitQuiz }) => {
 
 
     const statusSummary = {
-        answered: { id: 6, label: "Correct", color: "#22c55e", borderRadius: "6px" },
-        notVisited: { id: 0, label: "Unattempted", color: "#878787", borderRadius: "6px" },
-        notAnswered: { id: 4, label: "Incorrect", color: "#c11e1b", borderRadius: "6px" },
+        answered: { id: reviewData?.data?.meta['Correct'], label: "Correct", color: "#22c55e", borderRadius: "6px" },
+        notVisited: { id: reviewData?.data?.meta["Not Attempted"], label: "Not Attempted", color: "#878787", borderRadius: "6px" },
+        notAnswered: { id: reviewData?.data?.meta['Incorrect'], label: "Incorrect", color: "#c11e1b", borderRadius: "6px" },
     };
-
-    // const profile = {
-    //     name: "Vamsi Kumar",
-    //     img: '', // Placeholder image
-    // };
 
     const getInitials = (name) => {
         return name
@@ -48,11 +42,21 @@ const ResultStatus = ({ onSubmitQuiz }) => {
             : '';
     };
 
-
+    const getQuestionBgColor = (questionStatus) => {
+        switch (questionStatus) {
+            case 'Correct':
+                return '#22c55e';
+            case 'Incorrect':
+                return '#c11e1b';
+            case 'Not Attempted':
+                return '#878787';
+            default:
+                return '#878787';
+        }
+    };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "space-between", height: '100%' }}>
-            {/* Question status summary */}
             <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', px: '16px', py: 1, borderBottom: '2px solid #ddd' }}>
                     {profile.img ? (
@@ -100,11 +104,10 @@ const ResultStatus = ({ onSubmitQuiz }) => {
                     ))}
                 </Box>
 
-                {/* Question number grid */}
                 <Box sx={{
                     padding: '8px', height: { xl: '63vh', lg: '63vh', md: '52vh', xs: '60vh' }, overflowY: 'auto',
                     '@media (min-width: 599px) and (max-width: 763px)': {
-                        height: '52vh', // change height for this range
+                        height: '52vh',
                     },
                 }}>
                     <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px' }}>
@@ -117,19 +120,17 @@ const ResultStatus = ({ onSubmitQuiz }) => {
                             <Box key={question.id} sx={{ display: 'flex', justifyContent: 'space-around', paddingTop: '10px', borderBottom: '1px solid #00000018', alignItems: 'center' }}>
                                 <Avatar
                                     sx={{
-                                        bgcolor: question.mark > 0 ? '#22c55e' : '#c11e1b',
+                                        bgcolor: getQuestionBgColor(question.questionStatus),
                                         borderRadius: '6px',
                                         width: 35,
                                         height: 35,
                                         fontSize: '14px',
                                         fontWeight: 'bold',
                                     }}
-
                                 >
                                     {index + 1}
 
                                 </Avatar>
-                                {/* Type and Result */}
                                 <Box sx={{ textAlign: 'center', display: 'grid' }}>
                                     <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
                                         {question.type}
@@ -141,7 +142,7 @@ const ResultStatus = ({ onSubmitQuiz }) => {
                                         Max. Marks: {question.maxMarks}
                                     </Typography>
                                 </Box>
-                                {/* Marks Button with Square Border */}
+
                                 <Button
                                     variant="outlined"
                                     sx={{
@@ -162,7 +163,6 @@ const ResultStatus = ({ onSubmitQuiz }) => {
                 </Box>
             </Box>
 
-            {/* Submit button */}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, borderTop: '2px solid #00000018' }}>
                 <Button

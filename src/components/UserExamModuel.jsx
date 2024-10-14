@@ -1,64 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid2, Typography, IconButton, Drawer, Avatar, CircularProgress } from '@mui/material';
+import { Box, Button, Grid2, Typography, IconButton, Drawer } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu'; // Toggle button icon
 import Countdown from 'react-countdown';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetExamQuestionsMutation, useGetReviewExamQuestionMutation } from '../store/service/user/UserService';
 import QuestionPanel from './exam/QuestionPanel';
 import ResultComponent from './exam/ResultComponent';
 import ResultStatus from './exam/ResultStatus';
 import StatusPanel from './exam/StatusPanel';
+import SubmissionPage from '../common/SubmissionPage';
 
 const UserExamModule = () => {
-    const [questions, setQuestions] = useState([]); // State to store questions
-    const [activeQuestion, setActiveQuestion] = useState(); // Current active question
-    const [startTime, setStartTime] = useState(null); // Store exam start time
+    const [questions, setQuestions] = useState([]);
+    const [activeQuestion, setActiveQuestion] = useState();
+    const [startTime, setStartTime] = useState(null);
     const [isSubmit, setIsSubmit] = useState(false);
-    const [openStatusPanel, setOpenStatusPanel] = useState(false); // For toggle status panel
-    const [examDuration, setExamDuration] = useState("30:00"); // Mock exam duration in format mm:ss
+    const [openStatusPanel, setOpenStatusPanel] = useState(false);
+    const [examDuration, setExamDuration] = useState("00:00");
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    const [partId, setPartId] = useState("");
-    const [isReviewMode, setIsReviewMode] = useState(false); // Add state for review mode
+    // const [partId, setPartId] = useState("");
+    const [isReviewMode, setIsReviewMode] = useState(false);
+    const [partIds, setPartIds] = useState([])
+    const [isSubmission, setIsSubmission] = useState(false)
 
     const [getExamQuestions] = useGetExamQuestionsMutation();
-    const nav = useNavigate();
     const { userId, examId, examAttemptId } = useParams();
     const [getReviewExamQuestion] = useGetReviewExamQuestionMutation();
 
-
-
-    // Parse the "30:15" format into milliseconds
-    const parseTimeToMilliseconds = (time) => {
-        console.log("time", time);
-        // if (time !== null) {
-
-        const [minutes, seconds] = time.split(':').map(Number);
-        return (minutes * 60 + seconds) * 1000; // Convert to milliseconds
-        // }
-    };
-
-    // Mark the first question as visited when the component is mounted
     useEffect(() => {
         getData();
-        // console.log("Data", examAttemptId);
-    }, []); // This useEffect will run only once when the component mounts
+    }, [page]);
 
-    const getData = async () => {
+    const getData = async (partId = "") => {
         try {
             let result = await getExamQuestions({ userId, examAttemptId, partId, page, rowsPerPage });
             const { data } = result;
-            if (data && data.data.length > 0) {
-                console.log(result, "hello");
-                const updatedQuestions = data.data.map((q, index) =>
+            setPartIds(data?.partIds);
+            if (data && data?.data?.length > 0) {
+                const updatedQuestions = data?.data?.map((q, index) =>
                     index === 0 ? { ...q, visited: true } : q
                 );
-
                 setQuestions(updatedQuestions);
-                setActiveQuestion(data.data[0])
+                setActiveQuestion(data?.data[0]);
             }
-
         } catch (e) {
             console.log(e);
         }
@@ -80,32 +66,35 @@ const UserExamModule = () => {
     // }, []);
 
     useEffect(() => {
+        const examDetails = JSON.parse(localStorage.getItem('examDetails'));
+        const currentTime = new Date();
 
-        // Check if exam start time exists in localStorage
-        const savedStartTime = localStorage.getItem('examStartTime');
-        console.log(typeof localStorage.getItem('timeLeft'));
-        // setExamDuration(localStorage.getItem('timeLeft'))
+        if (examDetails) {
+            const [endHours, endMinutes] = examDetails.ends_at.split(':').map(Number);
 
-        if (savedStartTime) {
-            setStartTime(new Date(savedStartTime));
-        } else {
-            const currentTime = new Date();
-            setStartTime(currentTime);
-            localStorage.setItem('examStartTime', currentTime);
+            const examEndTime = new Date();
+            examEndTime.setHours(endHours);
+            examEndTime.setMinutes(endMinutes);
+            examEndTime.setSeconds(0);
+
+            const timeLeftInMs = examEndTime.getTime() - currentTime.getTime();
+
+            if (timeLeftInMs > 0) {
+                setExamDuration(timeLeftInMs);
+                setStartTime(currentTime);
+            } else {
+                console.log('Exam has already ended.');
+            }
         }
     }, []);
 
-    // Calculate the exam end time using the parsed exam duration
     const getExamEndTime = () => {
-        if (startTime) {
-            // Parse the duration string and convert it to milliseconds
-            const durationInMilliseconds = parseTimeToMilliseconds(examDuration);
-            return new Date(startTime.getTime() + durationInMilliseconds);
+        if (startTime && examDuration) {
+            return new Date(startTime.getTime() + examDuration);
         }
         return null;
     };
 
-    // Handle when the user selects an answer
     const handleAnswer = (questionId, selectedOption) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, selectedOption, answered: true } : q
@@ -130,6 +119,7 @@ const UserExamModule = () => {
 
     const handleNextQuestion = (nextQuestionId) => {
         const nextQuestion = questions.find(q => q.id === nextQuestionId);
+
         if (nextQuestion) {
             setQuestions(prevQuestions =>
                 prevQuestions.map(q =>
@@ -137,6 +127,9 @@ const UserExamModule = () => {
                 )
             );
             setActiveQuestion(nextQuestion);
+        } else {
+            console.log("nextQuestion", nextQuestion);
+            setPage(page + 1)
         }
     };
 
@@ -145,18 +138,18 @@ const UserExamModule = () => {
             id: q.id,
             selectedOption: q.selectedOption
         }));
-        console.log("Quiz submitted with answers:", questions);
         setIsSubmit(!isSubmit);
         localStorage.removeItem('examStartTime');
+        setIsSubmission(!isSubmission)
     };
 
 
-    const handleReviewQuestion = async () => {
-        setIsReviewMode(true);  // Enable review mode
-        setIsSubmit(false);  // Set to false in review mode
-
+    const handleReviewQuestion = async (obj) => {
+        setIsReviewMode(true);
+        setIsSubmit(false);
+        console.log("this is your data", obj);
         try {
-            const resultData = await getReviewExamQuestion({ userId, examId });
+            const resultData = await getReviewExamQuestion(obj);
             const { data } = resultData;
             if (data && data.data.length > 0) {
                 const updatedQuestions = data.data.map((q, index) =>
@@ -174,21 +167,17 @@ const UserExamModule = () => {
         if (completed) {
             return <span>Time's up!</span>;
         } else {
-            // Show the timer in HH:MM:SS format
             return <span>{hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</span>;
         }
     };
 
-    // Handle toggle for Status Panel
     const toggleStatusPanel = (open) => () => {
         setOpenStatusPanel(open);
     };
 
     return (
         <>
-            {/* {questions ? */}
-            <Box sx={{ width: '100%', bgcolor: '#f4f5f7', }}>
-                {/* Header Section */}
+            <Box sx={{ width: '100%', bgcolor: '#f4f5f7' }}>
                 <Box sx={{ bgcolor: '#f97316', display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
                     <Typography variant="h6" sx={{ color: 'white', ml: 2, fontWeight: 'bold' }}>
                         Nov PD Test 22
@@ -208,32 +197,33 @@ const UserExamModule = () => {
                     </Button>
                 </Box>
 
-                {/* Main Content Section */}
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
-
-                    {/* Left: Question Panel */}
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
-                        {isSubmit ? (
-                            <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
-                        ) : (
-                            <QuestionPanel
-                                question={activeQuestion}
-                                onAnswer={handleAnswer}
-                                onNext={handleNextQuestion}
-                                onMarkForReview={handleMarkForReview}
-                                onClearResponse={handleClearResponse}
-                                totalQuestions={questions.length}
-                                isReviewMode={isReviewMode}  // Pass review mode to QuestionPanel
-
-                            />
-                        )}
+                        {
+                            isSubmission ? (
+                                <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} />
+                            ) : isSubmit ? (
+                                <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
+                            ) : (
+                                <QuestionPanel
+                                    question={activeQuestion}
+                                    onAnswer={handleAnswer}
+                                    onNext={handleNextQuestion}
+                                    onMarkForReview={handleMarkForReview}
+                                    onClearResponse={handleClearResponse}
+                                    totalQuestions={questions.length}
+                                    isReviewMode={isReviewMode}
+                                    partIds={partIds}
+                                    getSection={getData}
+                                />
+                            )}
                     </Grid2>
 
                     {/* Right: Status Panel (Visible on larger screens, toggle on small screens) */}
                     <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
 
-                        {isSubmit ? (
-                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} />
+                        {isSubmit && !isSubmission ? (
+                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} />
                         ) : (
                             <StatusPanel
                                 questions={questions}
@@ -282,7 +272,7 @@ const UserExamModule = () => {
                         display: 'flex', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`
                     }}>
                         <CircularProgress />
-                    </Box>
+            </Box>
                 </>} */}
         </>
     );

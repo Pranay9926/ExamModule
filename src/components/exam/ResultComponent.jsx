@@ -152,7 +152,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                     {/* Review Questions Button */}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
-                                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }} onClick={() => handleReviewQuestion({ userId, examId })}
+                                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }} onClick={() => handleReviewQuestion({ userId, examId, partId: item?.partId })}
                                         >
                                             Review Questions
                                         </Button>

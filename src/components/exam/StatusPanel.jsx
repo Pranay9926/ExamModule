@@ -52,7 +52,6 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                     </Box>
 
                 </Box>
-                {/* Question status summary */}
 
                 <Box sx={{ mb: 2, p: 2 }}>
                     {Object.entries(statusSummary).map(([key, status]) => (
@@ -61,7 +60,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                mb: 1.5, // Margin for spacing between items
+                                mb: 1.5,
                                 position: 'relative'
                             }}
                         >
@@ -69,9 +68,9 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                 sx={{
                                     bgcolor: status.color,
                                     borderRadius: status.borderRadius,
-                                    width: 30, // Size for the circle
+                                    width: 30,
                                     height: 30,
-                                    mr: 1, // Space between circle and text
+                                    mr: 1,
                                     fontSize: '13px',
                                     fontWeight: 'bold',
                                 }}
@@ -95,14 +94,13 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                         </Box>
                     ))}
 
-                    {/* {/ Question number grid /} */}
                     <Box sx={{ px: 2, mt: 7 }}>
                         <Grid container spacing={1} sx={{
                             gap: { md: '11px', xs: '4px', lg: '2px' }, '@media (min-width: 599px) and (max-width: 764px)': {
                                 gap: '12px',
                             }, ml: '-20px'
                         }}>
-                            {questions.map((question) => (
+                            {questions.map((question, index = 0) => (
                                 <Grid item xs={2.2} key={question.id}>
                                     <Box sx={{
                                         position: 'relative', display: 'flex', gap: 8,
@@ -119,16 +117,15 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                                     : question.answered ? '0 0 20px 20px'
                                                         : question.markedForReview ? '16px'
                                                             : question.visited ? '20px 20px 0 0' : '6px',
-                                                width: 35, // Ensure size matches the image example
-                                                height: 35, // Ensure size matches the image example
+                                                width: 35,
+                                                height: 35,
                                                 '&:hover': { bgcolor: '#f97316' }
                                             }}
                                             onClick={() => onQuestionChange(question.id)}
                                         >
-                                            {question.id}
+                                            {index + 1}
                                         </Avatar>
 
-                                        {/* Small triangle icon for "Answered & Marked for Review" */}
                                         {question.answered && question.markedForReview && (
                                             <Box
                                                 sx={{
@@ -138,7 +135,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                                     width: 11,
                                                     height: 23,
                                                     backgroundColor: '#25e32ef0',
-                                                    clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '// Green triangle for answered & marked
+                                                    clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '
                                                 }}
                                             />
                                         )}
@@ -150,7 +147,6 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                 </Box>
             </Box>
 
-            {/* Submit button */}
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
                 <Button
                     variant="contained"

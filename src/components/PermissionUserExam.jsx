@@ -165,6 +165,7 @@ const PermissionUserExam = () => {
             setExamDetails(data.data.examDetails)
             setUsermDetails(data.data.userDetails)
             localStorage.setItem('userdetails', JSON.stringify(data?.data?.userDetails));
+            localStorage.setItem('examDetails', JSON.stringify(data?.data?.examDetails));
             examAttemptId = data.data.examAttemptId
         }
     }, [data, isLoading, isError])

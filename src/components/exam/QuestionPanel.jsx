@@ -5,17 +5,24 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection, isReviewMode }) => {
-    const [selectedOption, setSelectedOption] = useState(question?.selectedOption || null);
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection, isReviewMode, partIds, questions }) => {
+    const [selectedOption, setSelectedOption] = useState('');
     const [loading, setLoading] = useState(false)
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId } = useParams();
-    console.log(selectedOption, 'selectedOption')
+    const [activePart, setActivePart] = useState(null);
 
-    // console.log("this is data", question);
+
     useEffect(() => {
-        setSelectedOption(isReviewMode ? question?.answer?.selectedOption || null : null);  // Use selected answer if present in review mode
-    }, [question, isReviewMode]);
+        if (partIds && partIds.length > 0 && !activePart) {
+            setActivePart(partIds[0]);
+        }
+    }, [partIds, activePart]);
+
+    useEffect(() => {
+        let selectedValue = question?.answer?.selectedOption;
+        setSelectedOption(isReviewMode ? question?.answer?.selectedOption || null : question?.selectedOption || null);
+    }, [isReviewMode, question]);
 
 
     const handleOptionChange = (event) => {
@@ -24,14 +31,13 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         onAnswer(question?.id, selected); // Update the selected answer in the parent
     };
 
-    const handleSave = async () => {
+    const handleSave = async ({ markedForReview = false }) => {
         let statusCode;
-        console.log('SAVE api hit')
-        if (selectedOption && question?.markedForReview) {
+        if (selectedOption && markedForReview) {
             statusCode = 3; // Answered and Marked for Review
         } else if (selectedOption) {
             statusCode = 1; // Answered
-        } else if (question?.markedForReview) {
+        } else if (markedForReview) {
             statusCode = 4; // Marked for Review
         } else {
             statusCode = 2; // Not Answered
@@ -48,11 +54,9 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         }
         try {
             let result = await UploadExamQuestions({ userId, payloadData: payloadData });
-            console.log("API result:", result);
         } catch (e) {
             console.log(e);
         }
-        console.log('Save api hitted////')
     }
 
     const getOptionStyles = (optionId) => {
@@ -79,6 +83,11 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         }, 1000)
     }
 
+    const handlePartClick = (partId) => {
+        setActivePart(partId);
+        getSection(partId);
+    };
+
     return (
         <>
             {loading ? <Box>
@@ -91,9 +100,27 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                 <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }} >
                     <Box>
                         <Box sx={{ bgcolor: '#d5d5d599', p: 1, mb: 3, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
-                            <Box sx={{ display: 'flex', alignItems: "center", }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography variant="h8" sx={{ fontWeight: 'bold' }}>SECTIONS: </Typography>
-                                <Box onClick={() => getSection("Hello")} sx={{ bgcolor: "#4dc4ff", p: 1, ml: 2, borderRadius: 2, cursor: 'pointer' }}>Part A</Box>
+                                {partIds?.map((partId, index) => (
+                                    <Box
+                                        key={index}
+                                        onClick={() => handlePartClick(partId)}
+                                        sx={{
+                                            bgcolor: activePart === partId ? '#f97316' : "#4dc4ff",
+                                            color: activePart === partId ? 'white' : 'black',
+                                            p: 1,
+                                            ml: 2,
+                                            borderRadius: 2,
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                bgcolor: activePart === partId ? '#f97316' : '#76c7ff'
+                                            }
+                                        }}
+                                    >
+                                        {`Part ${partId}`}
+                                    </Box>
+                                ))}
                             </Box>
                             <Box><RefreshIcon onClick={handleRefresh} sx={{ fontSize: '30px', cursor: 'pointer' }} /> <CalculateOutlinedIcon sx={{ fontSize: '30px', cursor: 'pointer' }} /></Box>
                         </Box>
@@ -119,53 +146,89 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1, p: 2 }}>
-                        {/* Mark for Review & Next */}
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                color: '#f97316',
-                                fontSize: '12px',
-                                borderColor: '#f97316',
-                                borderRadius: '20px',
-                                px: 3,
-                                mr: 5,
-                                '&:hover': { backgroundColor: '#f97316', color: '#fff' },
-                            }}
-                            onClick={() => onMarkForReview(question?.id)}
-                            disabled={question?.id === totalQuestions}
-                        >
-                            Mark for Review & Next
-                        </Button>
+                        {isReviewMode ? (
+                            <>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: '#f97316',
+                                        fontSize: '12px',
+                                        borderColor: '#f97316',
+                                        borderRadius: '20px',
+                                        px: 3,
+                                        mr: 5,
+                                        '&:hover': { backgroundColor: '#f97316', color: '#fff' },
+                                    }}
+                                    onClick={() => onNext(question?.id - 1)}
+                                    disabled={question?.id === 1}  // Disable for the first question
+                                >
+                                    Previous
+                                </Button>
 
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                color: '#f97316',
-                                borderColor: '#f97316',
-                                borderRadius: '20px',
-                                px: 3,
-                                '&:hover': { backgroundColor: '#f97316', color: '#fff' },
-                            }}
-                            onClick={handleClearResponse}
-                        >
-                            Clear Response
-                        </Button>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: '#f97316',
+                                        borderColor: '#f97316',
+                                        borderRadius: '20px',
+                                        px: 3,
+                                        '&:hover': { backgroundColor: '#f97316', color: '#fff' },
+                                    }}
+                                    onClick={() => onNext(question?.id + 1)}
+                                    disabled={question?.id === totalQuestions}
+                                >
+                                    Next
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: '#f97316',
+                                        fontSize: '12px',
+                                        borderColor: '#f97316',
+                                        borderRadius: '20px',
+                                        px: 3,
+                                        mr: 5,
+                                        '&:hover': { backgroundColor: '#f97316', color: '#fff' },
+                                    }}
+                                    onClick={() => { handleSave({ markedForReview: true }); onMarkForReview(question?.id) }}
+                                    disabled={question?.id === totalQuestions}
+                                >
+                                    Mark for Review & Next
+                                </Button>
 
-                        {/* Save & Next */}
-                        <Button
-                            variant="contained"
-                            sx={{
-                                bgcolor: '#f97316',
-                                color: '#fff',
-                                borderRadius: '20px',
-                                px: 4,
-                                '&:hover': { bgcolor: '#f97316' },
-                            }}
-                            onClick={handleSave}
-                            disabled={question?.id === totalQuestions}
-                        >
-                            Save & Next
-                        </Button>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: '#f97316',
+                                        borderColor: '#f97316',
+                                        borderRadius: '20px',
+                                        px: 3,
+                                        '&:hover': { backgroundColor: '#f97316', color: '#fff' },
+                                    }}
+                                    onClick={handleClearResponse}
+                                >
+                                    Clear Response
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        bgcolor: '#f97316',
+                                        color: '#fff',
+                                        borderRadius: '20px',
+                                        px: 4,
+                                        '&:hover': { bgcolor: '#f97316' },
+                                    }}
+                                    onClick={handleSave}
+                                    disabled={question?.length === totalQuestions}
+                                >
+                                    Save & Next
+                                </Button>
+                            </>
+                        )}
                     </Box>
                 </Box >
             }
