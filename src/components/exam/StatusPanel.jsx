@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid'; // Use the standard Grid for layout
 
 const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz, isSubmission }) => {
     const answeredCount = questions.filter(q => q.answered && !q.markedForReview).length;
-    const notAnsweredCount = questions.filter(q => !q.answered && q.visited).length;
+    const notAnsweredCount = questions.filter(q => !q.answered && q.visited && !q.markedForReview).length;
     const markedForReviewCount = questions.filter(q => q.markedForReview && !q.answered).length;
     const answeredMarkedForReviewCount = questions.filter(q => q.answered && q.markedForReview).length;
     const notVisitedCount = questions.filter(q => !q.visited).length;
@@ -13,6 +13,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
         name: userDetails?.name,
         avatarUrl: userDetails?.avatar_url,
     };
+
 
     const statusSummary = {
         answered: { id: 1, label: "Answered", count: answeredCount, color: "#22c55e", borderRadius: "0 0 20px 20px" },

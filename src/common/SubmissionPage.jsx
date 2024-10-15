@@ -34,12 +34,12 @@ const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsS
     const handleSubmitQuiz = () => {
         setIsSubmit(true);
         setIsSubmission(false);
-        setSubmitButton(true)
+        // setSubmitButton(true)
     };
 
     const handleQuitClick = () => {
         console.log('click')
-        setIsSubmit(true);
+        setIsSubmit(false);
         setIsSubmission(false);
     };
 

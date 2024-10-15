@@ -10,46 +10,85 @@ import ResultComponent from './exam/ResultComponent';
 import ResultStatus from './exam/ResultStatus';
 import StatusPanel from './exam/StatusPanel';
 import SubmissionPage from '../common/SubmissionPage';
+import QuitConfirmation from '../common/QuitConfirmation';
+import { useDispatch, useSelector } from 'react-redux';
+import { getQuestionsData } from '../store/slices/userSlice/UserExamSlice'
 
 const UserExamModule = () => {
+    const dispatch = useDispatch();
+    const QuestionsData = useSelector(state => state?.UserExamReducer?.QuestionsData);
     const [questions, setQuestions] = useState([]);
     const [activeQuestion, setActiveQuestion] = useState();
     const [startTime, setStartTime] = useState(null);
     const [isSubmit, setIsSubmit] = useState(false);
     const [openStatusPanel, setOpenStatusPanel] = useState(false);
+    const [quitConfirmation, setQuitConfirmation] = useState(false);
     const [examDuration, setExamDuration] = useState("00:00");
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    // const [partId, setPartId] = useState("");
+    const [buttonDisable, setButtonDisable] = useState(false);
     const [isReviewMode, setIsReviewMode] = useState(false);
     const [partIds, setPartIds] = useState([])
+    const [activePartId, setActivePartId] = useState("")
     const [isSubmission, setIsSubmission] = useState(false)
     const [submitButton, setSubmitButton] = useState(false)
     const [getExamQuestions] = useGetExamQuestionsMutation();
     const { userId, examId, examAttemptId } = useParams();
     const [getReviewExamQuestion] = useGetReviewExamQuestionMutation();
 
+
+
+
+
+
+
     useEffect(() => {
         getData();
     }, [page]);
 
-
+    // Main function to fetch questions data
     const getData = async (partId = "") => {
-        try {
-            let result = await getExamQuestions({ userId, examAttemptId, partId, page, rowsPerPage });
-            const { data } = result;
-            setPartIds(data?.partIds);
-            if (data && data?.data?.length > 0) {
-                const updatedQuestions = data?.data?.map((q, index) =>
-                    index === 0 ? { ...q, visited: true } : q
-                );
-                setQuestions(updatedQuestions);
-                setActiveQuestion(data?.data[0]);
+        if (QuestionsData[partId]) {
+            setActivePartId(partId)
+            setQuestions(QuestionsData[partId]);
+            let activeIndex = QuestionsData[partId].findIndex(q => !q.answered)
+            console.log("ACTIVE", activeIndex);
+            setActiveQuestion(QuestionsData[partId][activeIndex]); // Set the first question as active
+        } else {
+            try {
+                let result = await getExamQuestions({ userId, examAttemptId, partId, page, rowsPerPage });
+                const { data } = result;
+                setPartIds(data?.partIds);
+                if (data && data?.data?.length > 0) {
+                    const updatedQuestions = data?.data?.map((q, index) =>
+                        index === 0 ? { ...q, visited: true } : q
+                    );
+                    if (partId === '') {
+                        partId = data?.partIds[0]
+                        setActivePartId(partId)
+                    } else {
+                        setActivePartId(partId)
+                    }
+                    let StoreData = { ...QuestionsData, [partId]: updatedQuestions }
+                    // Step 3: Dispatch the fetched data to the Redux store
+                    dispatch(getQuestionsData(StoreData));
+
+                    // Update the local state
+                    setQuestions(updatedQuestions);
+                    setActiveQuestion(updatedQuestions[0]);
+                }
+            } catch (e) {
+                console.error('Error fetching questions:', e);
             }
-        } catch (e) {
-            console.log(e);
         }
-    };
+    }
+
+
+
+
+
+
+
 
     // useEffect(() => {
     //     const handleBeforeUnload = (event) => {
@@ -67,6 +106,7 @@ const UserExamModule = () => {
     // }, []);
 
     useEffect(() => {
+        setButtonDisable(false)
         const examDetails = JSON.parse(localStorage.getItem('examDetails'));
         const currentTime = new Date();
 
@@ -96,59 +136,77 @@ const UserExamModule = () => {
         return null;
     };
 
+    // Updated handleAnswer to dispatch changes to Redux
     const handleAnswer = (questionId, selectedOption) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, selectedOption, answered: true } : q
         );
         setQuestions(updatedQuestions);
+
+        console.log(QuestionsData, 'QuestionsData1223434', activePartId)
+
+        // Update Redux with new answers for current partId
+        dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
     };
 
+    // Updated handleMarkForReview to dispatch changes to Redux
     const handleMarkForReview = (questionId) => {
         const updatedQuestions = questions.map(q =>
-            q.id === questionId ? { ...q, markedForReview: true, visited: true } : q
+            q.id === questionId ? { ...q, markedForReview: true } : q
         );
         setQuestions(updatedQuestions);
-        handleNextQuestion(questionId + 1);
+        dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions })); // Update Redux
+        handleNextQuestion(questionId + 1, updatedQuestions);
+
     };
 
+    // Updated handleClearResponse to dispatch changes to Redux
     const handleClearResponse = (questionId) => {
         const updatedQuestions = questions.map(q =>
             q.id === questionId ? { ...q, selectedOption: null, answered: false } : q
         );
         setQuestions(updatedQuestions);
+
+        // Update Redux with cleared response
+        dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
     };
 
-    const handleNextQuestion = (nextQuestionId) => {
-        const nextQuestion = questions.find(q => q.id === nextQuestionId);
+    // Updated handleNextQuestion to work with updated questions passed as argument
+    const handleNextQuestion = (nextQuestionId, questionsData = questions) => {
 
+        const nextQuestion = questionsData.find(q => q.id === nextQuestionId);
         if (nextQuestion) {
-            setQuestions(prevQuestions =>
-                prevQuestions.map(q =>
-                    q.id === nextQuestionId ? { ...q, visited: true } : q
-                )
+            setButtonDisable(false);
+            const updatedQuestions = questionsData.map(q =>
+                q.id === nextQuestionId ? { ...q, visited: true } : q
             );
+            setQuestions(updatedQuestions);
+            dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
             setActiveQuestion(nextQuestion);
+        } else {
+            // Disable the "Next" button if no more questions are found
+            setButtonDisable(true);
         }
     };
 
+    // handleSubmitQuiz remains unchanged for now
     const handleSubmitQuiz = () => {
         const answers = questions.map(q => ({
             id: q.id,
             selectedOption: q.selectedOption
         }));
-        console.log("openStatusPanel", openStatusPanel);
-        setOpenStatusPanel(false)
-        setIsSubmit(!isSubmit);
+        console.log("questions", questions);
+        setOpenStatusPanel(false);
+        setIsSubmit(false);
         localStorage.removeItem('examStartTime');
-        console.log("isSubmission11111", isSubmission);
-        setIsSubmission(!isSubmission)
+        setIsSubmission(!isSubmission);
     };
 
-
+    // handleReviewQuestion remains unchanged for now
     const handleReviewQuestion = async (obj) => {
         setIsReviewMode(true);
         setIsSubmit(false);
-        console.log("this is your data", obj);
+        setButtonDisable(false);
         try {
             const resultData = await getReviewExamQuestion(obj);
             const { data } = resultData;
@@ -205,37 +263,40 @@ const UserExamModule = () => {
                             )}
                         </Typography>
                     </Box>
-                    <Button onClick={() => { }} sx={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Button onClick={() => setQuitConfirmation(true)} sx={{ position: 'absolute', top: 0, right: 0 }}>
                         <CloseIcon sx={{ color: 'white' }} />
                     </Button>
                 </Box>
                 {/* Main Content Section */}
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
-                        {
-                            isSubmission ? (
-                                <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} />
-                            ) : isSubmit ? (
-                                <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
-                            ) : (
-                                <QuestionPanel
-                                    question={activeQuestion}
-                                    onAnswer={handleAnswer}
-                                    onNext={handleNextQuestion}
-                                    onMarkForReview={handleMarkForReview}
-                                    onClearResponse={handleClearResponse}
-                                    totalQuestions={questions.length}
-                                    isReviewMode={isReviewMode}
-                                    partIds={partIds}
-                                    getSection={getData}
-                                />
-                            )}
+                        {quitConfirmation ? <QuitConfirmation setQuitConfirmation={setQuitConfirmation} setIsSubmission={setIsSubmission}
+                            setIsSubmit={setIsSubmit} /> : <>
+                            {
+                                isSubmission ? (
+                                    <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} />
+                                ) : isSubmit ? (
+                                    <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
+                                ) : (
+                                    <QuestionPanel
+                                        question={activeQuestion}
+                                        onAnswer={handleAnswer}
+                                        onNext={handleNextQuestion}
+                                        onMarkForReview={handleMarkForReview}
+                                        onClearResponse={handleClearResponse}
+                                        questions={questions}
+                                        isReviewMode={isReviewMode}
+                                        partIds={partIds}
+                                        getSection={getData}
+                                        buttonDisable={buttonDisable}
+                                    />
+                                )}
+                        </>}
                     </Grid2>
 
                     {/* Right: Status Panel (Visible on larger screens, toggle on small screens) */}
                     <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
-
-                        {isSubmit && !isSubmission ? (
+                        {(isSubmit && !isSubmission) || isReviewMode ? (
                             <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} submitButton={submitButton} />
                         ) : (
                             <StatusPanel

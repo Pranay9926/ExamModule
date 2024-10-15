@@ -5,13 +5,12 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, totalQuestions, getSection, isReviewMode, partIds, questions }) => {
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable }) => {
     const [selectedOption, setSelectedOption] = useState('');
     const [loading, setLoading] = useState(false)
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId } = useParams();
     const [activePart, setActivePart] = useState(null);
-
 
     useEffect(() => {
         if (partIds && partIds.length > 0 && !activePart) {
@@ -161,7 +160,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
                                     onClick={() => onNext(question?.id - 1)}
-                                    disabled={question?.id === 1}  // Disable for the first question
+                                    disabled={question?.id === questions[0]?.id}  // Disable for the first question
                                 >
                                     Previous
                                 </Button>
@@ -176,7 +175,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
                                     onClick={() => onNext(question?.id + 1)}
-                                    disabled={question?.id === totalQuestions}
+                                    disabled={buttonDisable}
                                 >
                                     Next
                                 </Button>
@@ -195,7 +194,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
                                     onClick={() => { handleSave({ markedForReview: true }); onMarkForReview(question?.id) }}
-                                    disabled={question?.id === totalQuestions}
+
                                 >
                                     Mark for Review & Next
                                 </Button>
@@ -224,7 +223,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         '&:hover': { bgcolor: '#f97316' },
                                     }}
                                     onClick={handleSave}
-                                    disabled={question?.length === totalQuestions}
+                                    disabled={question?.id === questions[questions.length - 1]?.id}
                                 >
                                     Save & Next
                                 </Button>
