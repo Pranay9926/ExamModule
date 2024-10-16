@@ -1,58 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress } from '@mui/material';
 import { useGetExamStatisticMutation } from '../store/service/user/UserService';
-// import ResultComponent from '../exam/ResultComponent';  // Import ResultComponent
 
 const tableHeaders = [
     { label: 'Section Name', accessor: 'partId', isPart: true },
     { label: 'No. of Questions', accessor: 'noOfQuestions' },
+    { label: 'Max Questions Allowed', accessor: 'maxQuestionsAllowed' },
     { label: 'Answered', accessor: 'answered' },
     { label: 'Not Answered', accessor: 'notAnswered' },
     { label: 'Marked for Review', accessor: 'markForReview' },
-    { label: 'Answered & Marked for Review', accessor: 'answeredAndMarkForReview' },
     { label: 'Not Visited', accessor: 'notVisited' },
     { label: 'Time Taken', accessor: 'timeTaken' }
 ];
 
-const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setSubmitButton }) => {
-    const [getExamStatistic] = useGetExamStatisticMutation()
+const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsSubmit }) => {
+    const [getExamStatistic] = useGetExamStatisticMutation();
     const [examStatisticData, setExamStatisticData] = useState();
 
     useEffect(() => {
         getData();
-    }, [])
+    }, []);
 
     const getData = async () => {
         try {
             let result = await getExamStatistic({ userId, examId, examAttemptId });
-            setExamStatisticData(result?.data?.data)
+            setExamStatisticData(result?.data?.data);
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
     const handleSubmitQuiz = () => {
         setIsSubmit(true);
         setIsSubmission(false);
-        // setSubmitButton(true)
     };
 
     const handleQuitClick = () => {
-        console.log('click')
         setIsSubmit(false);
         setIsSubmission(false);
     };
 
     return (
         <>
-            {examStatisticData ?
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', flexDirection: 'column', gap: 4 }}>
-                    <TableContainer component={Paper} sx={{ maxWidth: 800 }}>
+            {examStatisticData ? (
+                <Box sx={{ alignItems: 'center' }}>
+                    <TableContainer sx={{ marginTop: '100px', border: '1px solid rgba(0, 0, 0, 0.12)', mx: { xl: '50px', md: '40px', sm: '30px', xs: '20px' }, width: 'auto' }}>
                         <Table aria-label="quiz details table">
                             <TableHead>
-                                <TableRow>
+                                <TableRow >
                                     {tableHeaders.map((header, index) => (
-                                        <TableCell key={index}>{header.label}</TableCell>
+                                        <TableCell key={index} sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)', fontWeight: 'bold', textAlign: 'center', fontSize: { xs: '11px', sm: '12px', md: '13px', xl: '14px', padding: '5px' } }}>{header.label}</TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
@@ -60,7 +57,7 @@ const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsS
                                 {examStatisticData?.map((row, rowIndex) => (
                                     <TableRow key={rowIndex}>
                                         {tableHeaders.map((header, colIndex) => (
-                                            <TableCell key={colIndex}>
+                                            <TableCell key={colIndex} sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)', fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' }, padding: '10px' }}>
                                                 {header.isPart ? `Part ${row[header.accessor]}` : row[header.accessor]}
                                             </TableCell>
                                         ))}
@@ -70,46 +67,24 @@ const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsS
                         </Table>
                     </TableContainer>
 
-                    <Typography variant="h6" align="center">
+                    <Typography variant="h6" align="center" sx={{ fontSize: { xs: '13px', sm: '15px', md: '17px', xl: '20px' }, marginTop: 2 }}>
                         Are you sure you want to submit?
                     </Typography>
 
-                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-                        <Button variant="contained" color="warning" onClick={handleSubmitQuiz}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, marginTop: 2 }}>
+                        <Button variant="contained" sx={{ fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' } }} color="warning" onClick={handleSubmitQuiz}>
                             Submit
                         </Button>
-                        <Button variant="outlined" color="primary" onClick={handleQuitClick}>
+                        <Button variant="outlined" sx={{ fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' } }} color="primary" onClick={handleQuitClick}>
                             No, Go Back To Quiz
                         </Button>
                     </Box>
-
-                    {/* {showQuitConfirmation && (
-                        <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <ErrorOutlineIcon sx={{ fontSize: 50, color: '#f44336', marginBottom: '20px' }} />
-                            <Typography variant="body1" gutterBottom>
-                                Quitting will automatically submit the assessment. Do you really want to quit?
-                            </Typography>
-
-                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
-                                <Button variant="outlined" color="error" >
-                                    Quit
-                                </Button>
-                                <Button variant="contained" color="warning" onClick={handleCloseQuitConfirmation}>
-                                    No, Go Back To Quiz
-                                </Button>
-                            </Box>
-                        </Box>
-                    )} */}
-
-                    {/* {isSubmit && (
-                <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} />
-            )} */}
                 </Box>
-                : <Box sx={{
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`
-                }}>
+            ) : (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)` }}>
                     <CircularProgress />
-                </Box>}
+                </Box>
+            )}
         </>
     );
 };

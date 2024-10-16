@@ -239,7 +239,7 @@ const UserExamModule = () => {
             {/* {questions ? */}
             <Box sx={{
                 width: '100%', bgcolor: '#f4f5f7', height: '100vh', '@media (min-width: 0px) and (max-width: 425px)': {
-                    height: '101vh', // change height for this range
+                    height: '100vh', // change height for this range
                 },
             }}>
                 {/* Header Section */}
@@ -268,7 +268,7 @@ const UserExamModule = () => {
                     </Button>
                 </Box>
                 {/* Main Content Section */}
-                <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
+                <Grid2 container spacing={0} sx={{ height: `calc(100vh - 49px)`, '@media (min-width: 0px) and (max-width: 599px)': { height: `calc(100vh - 63px)` }, '@media (min-width: 599px) and (max-width: 1100px)': { height: `calc(100vh - 42px)` } }}>
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {quitConfirmation ? <QuitConfirmation setQuitConfirmation={setQuitConfirmation} setIsSubmission={setIsSubmission}
                             setIsSubmit={setIsSubmit} /> : <>

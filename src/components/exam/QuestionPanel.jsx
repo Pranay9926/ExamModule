@@ -100,12 +100,13 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                     <Box>
                         <Box sx={{ bgcolor: '#d5d5d599', p: 1, mb: 3, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="h8" sx={{ fontWeight: 'bold' }}>SECTIONS: </Typography>
+                                <Typography variant="h8" sx={{ fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', xl: '16px' } }}>SECTIONS: </Typography>
                                 {partIds?.map((partId, index) => (
                                     <Box
                                         key={index}
                                         onClick={() => handlePartClick(partId)}
                                         sx={{
+                                            fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' },
                                             bgcolor: activePart === partId ? '#f97316' : "#4dc4ff",
                                             color: activePart === partId ? 'white' : 'black',
                                             p: 1,
@@ -194,7 +195,6 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
                                     onClick={() => { handleSave({ markedForReview: true }); onMarkForReview(question?.id) }}
-
                                 >
                                     Mark for Review & Next
                                 </Button>
@@ -204,6 +204,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                     sx={{
                                         color: '#f97316',
                                         borderColor: '#f97316',
+                                        fontSize: '12px',
                                         borderRadius: '20px',
                                         px: 3,
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
@@ -219,6 +220,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         bgcolor: '#f97316',
                                         color: '#fff',
                                         borderRadius: '20px',
+                                        fontSize: '12px',
                                         px: 4,
                                         '&:hover': { bgcolor: '#f97316' },
                                     }}
