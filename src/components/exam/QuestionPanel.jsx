@@ -5,11 +5,11 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable }) => {
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable, handleReviewQuestion }) => {
     const [selectedOption, setSelectedOption] = useState('');
     const [loading, setLoading] = useState(false)
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
-    const { userId, examAttemptId } = useParams();
+    const { userId, examAttemptId, examId } = useParams();
     const [activePart, setActivePart] = useState(null);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
 
     useEffect(() => {
         let selectedValue = question?.answer?.selectedOption;
-        setSelectedOption(isReviewMode ? question?.answer?.selectedOption || null : question?.selectedOption || null);
+        setSelectedOption(selectedValue ? question?.answer?.selectedOption || null : question?.selectedOption || null);
     }, [isReviewMode, question]);
 
 
@@ -59,13 +59,14 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
     }
 
     const getOptionStyles = (optionId) => {
+
         if (!isReviewMode) return {}; // No special styles if not in review mode
 
         if (optionId === question?.correctOption) {
             return { backgroundColor: '#dff0d8', color: 'white' };  // Correct answer highlighted green
         }
-        if (optionId === selectedOption && optionId !== question?.correctOption) {
-            return { backgroundColor: 'gray', color: 'white' };  // Incorrect answer highlighted gray
+        if (optionId === Number(selectedOption) && optionId !== question?.correctOption) {
+            return { backgroundColor: '#fababa', color: 'white' };  // Incorrect answer highlighted gray
         }
         return {}; // Default style
     };
@@ -84,7 +85,12 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
 
     const handlePartClick = (partId) => {
         setActivePart(partId);
-        getSection(partId);
+        if (isReviewMode) {
+            handleReviewQuestion({ userId, examId, partId })
+        } else {
+            getSection(partId);
+        }
+
     };
 
     return (
@@ -117,7 +123,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                             }
                                         }}
                                     >
-                                        {`Part ${partId}`}
+                                        {`Part`} {String.fromCharCode(65 + index)}
                                     </Box>
                                 ))}
                             </Box>
@@ -127,11 +133,10 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                         <Box sx={{ p: 2, height: 'calc(100vh - 289px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
                             <FormControl component="fieldset" sx={{ borderBottom: 2, borderColor: "#c0bfbf", pb: 4 }}>
                                 <RadioGroup value={selectedOption} onChange={handleOptionChange}>
-                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question?.id}</Typography>
+                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {questions.findIndex(q => q.id === question.id) + 1} </Typography>
                                     <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '19px' }, mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
                                     {question?.meta.map((option, index) => (
                                         <FormControlLabel
-
                                             key={index}
                                             value={option.id}
                                             control={<Radio />}

@@ -7,11 +7,15 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useGetExamResultMutation } from '../../store/service/user/UserService';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, result }) => {
-    const [examResultData, setExamResultData] = useState()
+    const [examResultData, setExamResultData] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null); // Track the error message
     const [getExamResult] = useGetExamResultMutation();
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
+    const navigate = useNavigate();
+
     const profile = {
         name: userDetails?.name,
         attempt_Id: examAttemptId
@@ -23,16 +27,35 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
 
     const getData = async () => {
         try {
-            const resultData = await getExamResult({ userId, examId, examAttemptId })
-            setExamResultData(resultData?.data?.data)
+            const resultData = await getExamResult({ userId, examId, examAttemptId });
+            setExamResultData(resultData?.data?.data);
         } catch (e) {
-            console.log(e)
+            if (e?.status === 400 && e?.data?.message === "Exam Already Submitted") {
+                setErrorMessage(e.data.message); // Set the error message
+            } else {
+                console.log(e);
+            }
         }
-    }
+    };
+
+    const handleGoBack = () => {
+        navigate('/user'); // Navigate back to the user page
+    };
 
     return (
         <>
-            {examResultData ?
+            {errorMessage ? (
+                <Box sx={{
+                    display: 'flex', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`, textAlign: 'center'
+                }}>
+                    <Typography variant="h6" sx={{ color: '#f97316', mb: 2 }}>
+                        {errorMessage}
+                    </Typography>
+                    <Button variant="contained" onClick={handleGoBack} sx={{ bgcolor: '#f97316' }}>
+                        Go Back
+                    </Button>
+                </Box>
+            ) : examResultData ?
                 <Box sx={{ width: '100%', height: { xl: '94vh', lg: '94vh', md: '93vh', xs: '93vh' }, overflow: 'auto', mx: 'auto', px: 2.5, py: { xs: 1, md: '22px' }, bgcolor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Box sx={{ width: '100%', maxWidth: { xs: '100%', md: '80%' }, height: '100%' }}>
 

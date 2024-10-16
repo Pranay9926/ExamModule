@@ -24,6 +24,8 @@ const UserExamModule = () => {
     const [openStatusPanel, setOpenStatusPanel] = useState(false);
     const [quitConfirmation, setQuitConfirmation] = useState(false);
     const [examDuration, setExamDuration] = useState("00:00");
+    const [timeLeft, setTimeLeft] = useState(examDuration); // Track time left for countdown
+    const [isTimeOver, setIsTimeOver] = useState(false); // Track whether time is over or exam is submitted
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [buttonDisable, setButtonDisable] = useState(false);
@@ -35,6 +37,7 @@ const UserExamModule = () => {
     const [getExamQuestions] = useGetExamQuestionsMutation();
     const { userId, examId, examAttemptId } = useParams();
     const [getReviewExamQuestion] = useGetReviewExamQuestionMutation();
+    const examDetails = JSON.parse(localStorage.getItem('examDetails'));
 
 
 
@@ -52,7 +55,6 @@ const UserExamModule = () => {
             setActivePartId(partId)
             setQuestions(QuestionsData[partId]);
             let activeIndex = QuestionsData[partId].findIndex(q => !q.answered)
-            console.log("ACTIVE", activeIndex);
             setActiveQuestion(QuestionsData[partId][activeIndex]); // Set the first question as active
         } else {
             try {
@@ -107,7 +109,7 @@ const UserExamModule = () => {
 
     useEffect(() => {
         setButtonDisable(false)
-        const examDetails = JSON.parse(localStorage.getItem('examDetails'));
+
         const currentTime = new Date();
 
         if (examDetails) {
@@ -223,8 +225,8 @@ const UserExamModule = () => {
     };
 
     const renderer = ({ hours, minutes, seconds, completed }) => {
-        if (completed) {
-            return <span>Time's up!</span>;
+        if (isTimeOver || completed) {
+            return <span>00:00</span>; // Display 00:00 when exam is over
         } else {
             return <span>{hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</span>;
         }
@@ -250,7 +252,7 @@ const UserExamModule = () => {
                         }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
-                            Nov PD Test 22
+                            {examDetails.title}
                         </Typography>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
                             Time Left:
@@ -274,7 +276,8 @@ const UserExamModule = () => {
                             setIsSubmit={setIsSubmit} /> : <>
                             {
                                 isSubmission ? (
-                                    <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} />
+                                    <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} setTimeLeft={setTimeLeft}
+                                        setIsTimeOver={setIsTimeOver} />
                                 ) : isSubmit ? (
                                     <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
                                 ) : (
@@ -284,6 +287,7 @@ const UserExamModule = () => {
                                         onNext={handleNextQuestion}
                                         onMarkForReview={handleMarkForReview}
                                         onClearResponse={handleClearResponse}
+                                        handleReviewQuestion={handleReviewQuestion}
                                         questions={questions}
                                         isReviewMode={isReviewMode}
                                         partIds={partIds}

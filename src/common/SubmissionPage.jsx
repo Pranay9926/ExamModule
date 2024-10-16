@@ -14,7 +14,8 @@ const tableHeaders = [
     { label: 'Time Taken', accessor: 'timeTaken' }
 ];
 
-const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setSubmitButton }) => {
+const SubmissionPage = ({
+    userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setTimeLeft, setIsTimeOver }) => {
     const [getExamStatistic] = useGetExamStatisticMutation()
     const [examStatisticData, setExamStatisticData] = useState();
 
@@ -32,6 +33,8 @@ const SubmissionPage = ({ userId, examId, examAttemptId, setIsSubmission, setIsS
     }
 
     const handleSubmitQuiz = () => {
+        setTimeLeft(0); // Reset countdown to 00:00
+        setIsTimeOver(true); // Mark exam as over
         setIsSubmit(true);
         setIsSubmission(false);
         // setSubmitButton(true)

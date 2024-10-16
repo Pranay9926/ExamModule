@@ -23,7 +23,7 @@ const UserDashboard = () => {
                     mb: 3,
                 }}
             >
-                My Exams
+                <Box component="span" sx={{ color: '#032246' }}>  My </Box>Exams
             </Typography>
 
             {/* Main Tabs */}
@@ -47,7 +47,7 @@ const UserDashboard = () => {
                         },
                         '& .MuiTab-root': {
                             textTransform: 'none',
-                            color: '#f97316', // Orange color for inactive tabs
+                            color: '#032246', // Orange color for inactive tabs
                             fontWeight: 'bold',
                             borderRadius: '5px 5px 0 0',
                         },

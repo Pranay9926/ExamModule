@@ -3,17 +3,17 @@ import { Box, Typography, Avatar, Button } from '@mui/material';
 import Grid from '@mui/material/Grid'; // Use the standard Grid for layout
 
 const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz, isSubmission }) => {
-    const answeredCount = questions.filter(q => q.answered && !q.markedForReview).length;
-    const notAnsweredCount = questions.filter(q => !q.answered && q.visited && !q.markedForReview).length;
-    const markedForReviewCount = questions.filter(q => q.markedForReview && !q.answered).length;
-    const answeredMarkedForReviewCount = questions.filter(q => q.answered && q.markedForReview).length;
-    const notVisitedCount = questions.filter(q => !q.visited).length;
+    const answeredCount = questions.filter(q => (q.answered && !q.markedForReview) || (q.statusCode === "1")).length;
+    const notAnsweredCount = questions.filter(q => (!q.answered && q.visited && !q.markedForReview) || (q.statusCode === "2")).length;
+    const markedForReviewCount = questions.filter(q => (q.markedForReview && !q.answered) || (q.statusCode === "4")).length;
+    const answeredMarkedForReviewCount = questions.filter(q => (q.answered && q.markedForReview) || (q.statusCode === "3")).length;
+    const notVisitedCount = questions.filter(q => !q.visited || (q.statusCode === "5")).length;
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
     const profile = {
         name: userDetails?.name,
         avatarUrl: userDetails?.avatar_url,
     };
-
+    console.log("question", questions);
 
     const statusSummary = {
         answered: { id: 1, label: "Answered", count: answeredCount, color: "#22c55e", borderRadius: "0 0 20px 20px" },
@@ -115,16 +115,16 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                     }}>
                                         <Avatar
                                             sx={{
-                                                bgcolor: question.answered && question.markedForReview ? '#ab00ab'
-                                                    : question.answered ? '#22c55e'
-                                                        : question.markedForReview ? '#ab00ab'
-                                                            : question.visited ? '#c11e1b' : '#e0e0e0',
+                                                bgcolor: (question.answered && question.markedForReview) || question.statusCode === "3" ? '#ab00ab'
+                                                    : question.answered || question.statusCode === "1" ? '#22c55e'
+                                                        : question.markedForReview || question.statusCode === "4" ? '#ab00ab'
+                                                            : question.visited || question.statusCode === "2" ? '#c11e1b' : '#e0e0e0',
                                                 color: 'white',
                                                 cursor: 'pointer',
-                                                borderRadius: question.answered && question.markedForReview ? '16px'
-                                                    : question.answered ? '0 0 20px 20px'
-                                                        : question.markedForReview ? '16px'
-                                                            : question.visited ? '20px 20px 0 0' : '6px',
+                                                borderRadius: (question.answered && question.markedForReview) || question.statusCode === "3" ? '16px'
+                                                    : question.answered || question.statusCode === "1" ? '0 0 20px 20px'
+                                                        : question.markedForReview || question.statusCode === "4" ? '16px'
+                                                            : question.visited || question.statusCode === "2" ? '20px 20px 0 0' : '6px',
                                                 width: 35, // Ensure size matches the image example
                                                 height: 35,
                                                 fontSize: '15px',
@@ -136,7 +136,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                             {index + 1}
                                         </Avatar>
 
-                                        {question.answered && question.markedForReview && (
+                                        {((question.answered && question.markedForReview) || question.statusCode === "3") && (
                                             <Box
                                                 sx={{
                                                     position: 'absolute',
