@@ -4,6 +4,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable, handleReviewQuestion }) => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -11,6 +12,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId, examId } = useParams();
     const [activePart, setActivePart] = useState(null);
+    // console.log("question", question);
 
     useEffect(() => {
         if (partIds && partIds.length > 0 && !activePart) {
@@ -41,7 +43,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         } else {
             statusCode = 2; // Not Answered
         }
-        onNext(question?.id + 1)
+
 
         const payloadData = {
             data: {
@@ -53,6 +55,10 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         }
         try {
             let result = await UploadExamQuestions({ userId, payloadData: payloadData });
+            if (result.data.success) {
+                onNext(question?.id + 1)
+            }
+            console.log("log", result);
         } catch (e) {
             console.log(e);
         }
@@ -106,12 +112,13 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                     <Box>
                         <Box sx={{ bgcolor: '#d5d5d599', p: 1, mb: 3, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="h8" sx={{ fontWeight: 'bold' }}>SECTIONS: </Typography>
+                                <Typography variant="h8" sx={{ fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', xl: '16px' } }}>SECTIONS: </Typography>
                                 {partIds?.map((partId, index) => (
                                     <Box
                                         key={index}
                                         onClick={() => handlePartClick(partId)}
                                         sx={{
+                                            fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' },
                                             bgcolor: activePart === partId ? '#f97316' : "#4dc4ff",
                                             color: activePart === partId ? 'white' : 'black',
                                             p: 1,
@@ -198,8 +205,8 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                         mr: 5,
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
+                                    disabled={question?.id === questions[questions.length - 1]?.id && question?.saved}
                                     onClick={() => { handleSave({ markedForReview: true }); onMarkForReview(question?.id) }}
-
                                 >
                                     Mark for Review & Next
                                 </Button>
@@ -209,29 +216,48 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                     sx={{
                                         color: '#f97316',
                                         borderColor: '#f97316',
+                                        fontSize: '12px',
                                         borderRadius: '20px',
                                         px: 3,
                                         '&:hover': { backgroundColor: '#f97316', color: '#fff' },
                                     }}
+                                    disabled={question?.id === questions[questions.length - 1]?.id && question?.saved}
                                     onClick={handleClearResponse}
                                 >
                                     Clear Response
                                 </Button>
 
-                                <Button
+                                {question?.saved ? <Button
                                     variant="contained"
                                     sx={{
                                         bgcolor: '#f97316',
                                         color: '#fff',
                                         borderRadius: '20px',
+                                        fontSize: '12px',
                                         px: 4,
                                         '&:hover': { bgcolor: '#f97316' },
                                     }}
-                                    onClick={handleSave}
                                     disabled={question?.id === questions[questions.length - 1]?.id}
+                                    onClick={() => onNext(question.id + 1)}
+
                                 >
-                                    Save & Next
+                                    Next
                                 </Button>
+                                    : (<Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: '#f97316',
+                                            color: '#fff',
+                                            borderRadius: '20px',
+                                            fontSize: '12px',
+                                            px: 4,
+                                            '&:hover': { bgcolor: '#f97316' },
+                                        }}
+                                        onClick={handleSave}
+                                        disabled={question?.id === questions[questions.length - 1]?.id && question?.saved}
+                                    >
+                                        {question?.id === questions[questions.length - 1]?.id && !question?.saved ? "Save" : "Save & Next"}
+                                    </Button>)}
                             </>
                         )}
                     </Box>

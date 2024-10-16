@@ -8,13 +8,26 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PaperIcon from '@mui/icons-material/Article'; // Use a suitable icon for paper
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Slide from '@mui/material/Slide';
+import { useNavigate } from 'react-router-dom';
 
-// Transition for sliding down effect
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="down" ref={ref} {...props} />;
+    return (
+        <Slide
+            direction="down"
+            ref={ref}
+            {...props}
+            timeout={{ enter: 300, exit: 200 }}
+            easing={{
+                enter: 'ease-out',
+                exit: 'ease-in'
+            }}
+        />)
 });
 
 const ReviewDialog = ({ openModal, handleCloseModal, selectedRow }) => {
+    console.log("data ", selectedRow);
+    localStorage.setItem('reviewDetails', JSON.stringify(selectedRow));
+    const nav = useNavigate()
     return (
         <Dialog
             open={openModal}
@@ -73,14 +86,14 @@ const ReviewDialog = ({ openModal, handleCloseModal, selectedRow }) => {
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <PaperIcon sx={{ color: '#f97316', mr: 1, fontSize: { xs: '14px', sm: '16px', md: '18px', xl: '22px' } }} />
-                                <Typography sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>{selectedRow.score} / {selectedRow.totalMarks}</Typography>
+                                <Typography sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>{selectedRow?.report?.aggregateReport?.totalMarksObtained} / {selectedRow.totalMarks}</Typography>
                             </Box>
                         </Box>
                         <Box sx={{
                             display: 'flex', gap: 2, justifyContent: "end"
                         }}>
                             <Box>
-                                <Button onClick={handleCloseModal} color='#09b509db' sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>
+                                <Button onClick={() => nav(`/user/7/exam/${selectedRow.id}/review/${13}`)} color='#09b509db' sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>
                                     Evaluated
                                 </Button>
                             </Box>

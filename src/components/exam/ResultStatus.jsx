@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import { useGetReviewAnswerSheetMutation } from '../../store/service/user/UserService';
 
-const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
+const ResultStatus = ({ onSubmitQuiz, userId, examId, setIsSubmit, showReport, setShowReport }) => {
     const [getReviewAnswerSheet] = useGetReviewAnswerSheetMutation();
     const [reviewData, setReviewData] = useState();
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
+
+    console.log("  variant=", showReport);
 
     const profile = {
         name: userDetails?.name,
@@ -31,6 +33,13 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
         notVisited: { id: reviewData?.data?.meta["Not Attempted"], label: "Not Attempted", color: "#878787", borderRadius: "6px" },
         notAnswered: { id: reviewData?.data?.meta['Incorrect'], label: "Incorrect", color: "#c11e1b", borderRadius: "6px" },
     };
+
+    const handleReport = () => {
+        setIsSubmit(true)
+        setShowReport(false)
+
+
+    }
 
     const getInitials = (name) => {
         return name
@@ -73,36 +82,55 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                     </Box>
 
                 </Box>
-                <Box sx={{ mb: { xs: 3, md: 3, xl: 8, }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '12px', md: '10px', xs: '8px' } }}>
-                    {Object.entries(statusSummary).map(([key, status]) => (
-                        <Box
-                            key={key}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                mb: '1px',
-                                position: 'relative'
-                            }}
-                        >
-                            <Avatar
+                <Box>
+                    <Box sx={{ mb: showReport ? 0 : { xs: 3, md: 3, xl: 8 }, p: 2, display: 'flex', flexWrap: 'wrap', gap: { xl: '12px', md: '10px', xs: '8px' } }}>
+                        {Object.entries(statusSummary).map(([key, status]) => (
+                            <Box
+                                key={key}
                                 sx={{
-                                    bgcolor: status.color,
-                                    borderRadius: status.borderRadius,
-                                    width: 30,
-                                    height: 30,
-                                    mr: 1,
-                                    fontSize: '13px',
-                                    fontWeight: 'bold',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    mb: '1px',
+                                    position: 'relative'
                                 }}
                             >
-                                {status.id}
-                            </Avatar>
-                            <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
-                                {status.label}
-                            </Typography>
-                        </Box>
-                    ))}
+                                <Avatar
+                                    sx={{
+                                        bgcolor: status.color,
+                                        borderRadius: status.borderRadius,
+                                        width: 30,
+                                        height: 30,
+                                        mr: 1,
+                                        fontSize: '13px',
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    {status.id}
+                                </Avatar>
+                                <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
+                                    {status.label}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
+                    {showReport && <Box sx={{ mb: 2, px: 2 }}>
+                        <Button onClick={handleReport} sx={{
+                            border: '1px solid #f97316',
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            fontSize: '10px',
+                            backgroundColor: '#f97316',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#ff690087',
+                                color: '#fff',
+                            },
+
+                        }} >Show Report</Button>
+                    </Box>}
                 </Box>
+
+
 
                 <Box sx={{
                     padding: '8px', height: { xs: '70vh' }, overflowY: 'auto',
@@ -200,7 +228,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId }) => {
                     Submit Quiz
                 </Button>
             </Box> */}
-        </Box>
+        </Box >
 
     );
 

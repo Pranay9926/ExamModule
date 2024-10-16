@@ -24,8 +24,8 @@ const UserExamModule = () => {
     const [openStatusPanel, setOpenStatusPanel] = useState(false);
     const [quitConfirmation, setQuitConfirmation] = useState(false);
     const [examDuration, setExamDuration] = useState("00:00");
-    const [timeLeft, setTimeLeft] = useState(examDuration); // Track time left for countdown
-    const [isTimeOver, setIsTimeOver] = useState(false); // Track whether time is over or exam is submitted
+    const [timeLeft, setTimeLeft] = useState(() => localStorage.getItem('timeLeft') || "00:00"); // Initialize from localStorage
+    const [isTimeOver, setIsTimeOver] = useState(() => JSON.parse(localStorage.getItem('isTimeOver')) || false); // Initialize from localStorage
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [buttonDisable, setButtonDisable] = useState(false);
@@ -124,7 +124,9 @@ const UserExamModule = () => {
 
             if (timeLeftInMs > 0) {
                 setExamDuration(timeLeftInMs);
+                setTimeLeft(timeLeftInMs); // Set time left
                 setStartTime(currentTime);
+                localStorage.setItem('timeLeft', timeLeftInMs); // Persist time left in localStorage
             } else {
                 console.log('Exam has already ended.');
             }
@@ -180,16 +182,28 @@ const UserExamModule = () => {
         if (nextQuestion) {
             setButtonDisable(false);
             const updatedQuestions = questionsData.map(q =>
-                q.id === nextQuestionId ? { ...q, visited: true } : q
+                q.id === nextQuestionId ? { ...q, visited: true } : q.id === nextQuestionId - 1 ? { ...q, saved: true } : q
             );
             setQuestions(updatedQuestions);
             dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
             setActiveQuestion(nextQuestion);
         } else {
+            const updatedQuestions = questionsData.map(q =>
+                q.id === nextQuestionId - 1 ? { ...q, saved: true } : q
+            );
+            setQuestions(updatedQuestions);
+            dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
             // Disable the "Next" button if no more questions are found
+
+            setActiveQuestion(updatedQuestions.find(q => q.id === nextQuestionId - 1));
             setButtonDisable(true);
         }
     };
+
+    const handleQuitConfirmations = () => {
+        setQuitConfirmation(true)
+        setIsSubmission(false)
+    }
 
     // handleSubmitQuiz remains unchanged for now
     const handleSubmitQuiz = () => {
@@ -241,7 +255,7 @@ const UserExamModule = () => {
             {/* {questions ? */}
             <Box sx={{
                 width: '100%', bgcolor: '#f4f5f7', height: '100vh', '@media (min-width: 0px) and (max-width: 425px)': {
-                    height: '101vh', // change height for this range
+                    height: '100vh', // change height for this range
                 },
             }}>
                 {/* Header Section */}
@@ -252,7 +266,7 @@ const UserExamModule = () => {
                         }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
-                            {examDetails.title}
+                            {examDetails?.title}
                         </Typography>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
                             Time Left:
@@ -265,12 +279,12 @@ const UserExamModule = () => {
                             )}
                         </Typography>
                     </Box>
-                    <Button onClick={() => setQuitConfirmation(true)} sx={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Button onClick={handleQuitConfirmations} sx={{ position: 'absolute', top: 0, right: 0 }}>
                         <CloseIcon sx={{ color: 'white' }} />
                     </Button>
                 </Box>
                 {/* Main Content Section */}
-                <Grid2 container spacing={0} sx={{ height: `calc(100vh - 52px)` }}>
+                <Grid2 container spacing={0} sx={{ height: `calc(100vh - 49px)`, '@media (min-width: 0px) and (max-width: 599px)': { height: `calc(100vh - 63px)` }, '@media (min-width: 599px) and (max-width: 1100px)': { height: `calc(100vh - 42px)` } }}>
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {quitConfirmation ? <QuitConfirmation setQuitConfirmation={setQuitConfirmation} setIsSubmission={setIsSubmission}
                             setIsSubmit={setIsSubmit} /> : <>
@@ -293,6 +307,7 @@ const UserExamModule = () => {
                                         partIds={partIds}
                                         getSection={getData}
                                         buttonDisable={buttonDisable}
+                                        activePartId={activePartId}
                                     />
                                 )}
                         </>}

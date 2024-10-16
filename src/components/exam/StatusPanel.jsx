@@ -13,7 +13,6 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
         name: userDetails?.name,
         avatarUrl: userDetails?.avatar_url,
     };
-    console.log("question", questions);
 
     const statusSummary = {
         answered: { id: 1, label: "Answered", count: answeredCount, color: "#22c55e", borderRadius: "0 0 20px 20px" },
