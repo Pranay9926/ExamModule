@@ -143,10 +143,10 @@ const ReviewPage = () => {
                         }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
-                            {examDetails.title}
+                            {examDetails?.title}
                         </Typography>
                         <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
-                            Time Taken: {examDetails.duration}
+                            Time Taken: {examDetails?.duration}
                         </Typography>
                     </Box>
                     <Button onClick={() => { navigate('/user'); }} sx={{ position: 'absolute', top: 0, right: 0 }}>

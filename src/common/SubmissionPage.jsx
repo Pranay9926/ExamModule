@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, CircularProgress } from '@mui/material';
 import { useGetExamStatisticMutation } from '../store/service/user/UserService';
+import { useNavigate } from 'react-router-dom';
 
 const tableHeaders = [
     { label: 'Section Name', accessor: 'partId', isPart: true },
@@ -14,9 +15,12 @@ const tableHeaders = [
 ];
 
 const SubmissionPage = ({
-    userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setTimeLeft, setIsTimeOver }) => {
-    const [getExamStatistic] = useGetExamStatisticMutation()
+    userId, examId, examAttemptId, setIsSubmission, setIsSubmit, setTimeLeft, setIsTimeOver
+}) => {
+    const [getExamStatistic] = useGetExamStatisticMutation();
     const [examStatisticData, setExamStatisticData] = useState();
+    const [errorMessage, setErrorMessage] = useState(null); // For handling error messages
+    const navigate = useNavigate();
 
     useEffect(() => {
         getData();
@@ -25,7 +29,11 @@ const SubmissionPage = ({
     const getData = async () => {
         try {
             let result = await getExamStatistic({ userId, examId, examAttemptId });
-            setExamStatisticData(result?.data?.data);
+            if (result?.data?.status === 400) {
+                setErrorMessage(result.data.message); // Handle 400 error
+            } else {
+                setExamStatisticData(result?.data?.data);
+            }
         } catch (e) {
             console.log(e);
         }
@@ -45,10 +53,24 @@ const SubmissionPage = ({
         setIsSubmit(false);
         setIsSubmission(false);
     };
+    const handleGoBack = () => {
+        navigate('/user'); // Navigate back to the user page
+    };
 
     return (
         <>
-            {examStatisticData ? (
+            {errorMessage ? ( // Display error message if 400 error occurs
+                <Box sx={{
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`, textAlign: 'center'
+                }}>
+                    <Typography variant="h6" sx={{ color: '#f97316', mb: 2 }}>
+                        {errorMessage}
+                    </Typography>
+                    <Button variant="contained" onClick={handleGoBack} sx={{ bgcolor: '#f97316' }}>
+                        Go Back
+                    </Button>
+                </Box>
+            ) : examStatisticData ? (
                 <Box sx={{ alignItems: 'center' }}>
                     <TableContainer sx={{ marginTop: '100px', border: '1px solid rgba(0, 0, 0, 0.12)', mx: { xl: '50px', md: '40px', sm: '30px', xs: '20px' }, width: 'auto' }}>
                         <Table aria-label="quiz details table">

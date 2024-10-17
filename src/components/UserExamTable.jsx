@@ -235,50 +235,76 @@ const UserExamTable = ({ Value }) => {
         setSelectedRow(null);
     };
 
-    const renderActions = (row) => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, p: 3 }}>
-            {Value === 0 ? (
-                <Box
-                    component="a"
-                    href={`/user/${7}/exam/${row.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{
-                        display: 'inline-block',
-                        textDecoration: 'none',
-                        border: '1px solid #f97316',
-                        color: '#f97316',
-                        borderRadius: '20px',
-                        padding: '8px 16px',
-                        fontSize: '14px',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        '&:hover': {
-                            backgroundColor: '#f97316',
-                            color: '#fff',
-                        },
-                    }}
-                >
-                    Attempt
-                </Box>
-            ) : (
-                <Button
-                    variant="text"
-                    color="warning"
-                    size="small"
-                    onClick={() => handleReview(row)}
-                    sx={{ color: '#f97316' }}
-                >
-                    Review
-                </Button>
-            )}
-        </Box>
-    );
+
+
+    // Function to combine date and time into a single Date object for proper comparison
+    const combineDateAndTime = (date, time) => {
+        const [hours, minutes] = time.split(':');
+        const [year, month, day] = date.split('-');
+        return new Date(year, month - 1, day, hours, minutes); // month-1 since JS Date() months are 0-indexed
+    };
+
+    const isButtonEnabled = (examDate, startsAt, endsAt) => {
+        const currentTime = new Date(); // Get current time
+        const startTime = combineDateAndTime(examDate, startsAt); // Combine date and start time
+        const endTime = combineDateAndTime(examDate, endsAt); // Combine date and end time
+
+        // console.log(currentTime, startTime, endTime); // Debug to ensure times are correct
+        return currentTime >= startTime && currentTime <= endTime;
+        // Check if the current time is between the start and end times
+    }
+
+
+    const renderActions = (row) => {
+        const buttonEnabled = isButtonEnabled(row.examDate, row.starts_at, row.ends_at);
+
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, p: 3 }}>
+                {Value === 0 ? (
+                    <Box
+                        component="a"
+                        href={buttonEnabled ? `/user/${7}/exam/${row.id}` : '#'}
+                        target={buttonEnabled ? "_blank" : undefined}
+                        rel="noopener noreferrer"
+                        sx={{
+                            display: 'inline-block',
+                            textDecoration: 'none',
+                            border: '1px solid #f97316',
+                            color: buttonEnabled ? '#f97316' : '#ccc',
+                            borderRadius: '20px',
+                            padding: '8px 16px',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            cursor: buttonEnabled ? 'pointer' : 'not-allowed',
+                            '&:hover': {
+                                backgroundColor: buttonEnabled ? '#f97316' : undefined,
+                                color: buttonEnabled ? '#fff' : undefined,
+                            },
+                        }}
+                    >
+                        Attempt
+                    </Box>
+                ) : (
+                    <Button
+                        variant="text"
+                        color="warning"
+                        size="small"
+                        onClick={() => handleReview(row)}
+                        sx={{ color: '#f97316' }}
+                    >
+                        Review
+                    </Button>
+                )}
+            </Box>
+        );
+    };
+
 
     const renderStatusIcons = (row) => (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, color: '#777' }}>
             <PendingActionsIcon sx={{ color: '#f97316', fontSize: '18px' }} />
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>
                 {`${row.examDate} ${row.starts_at} to ${row.ends_at}`}
             </Typography>
             <AccessTimeIcon sx={{ color: '#f97316', fontSize: '18px' }} />
@@ -288,15 +314,16 @@ const UserExamTable = ({ Value }) => {
 
     const renderExamNameWithStatus = (row) => (
         <Box>
-            <Typography variant="h6" sx={{ color: '#032246', mb: 1 }}>
+            <Typography variant="h6" sx={{ color: '#1e293b', mb: 1, fontSize: { xs: '13px', sm: '15px', md: '17px', xl: '18px' } }}>
                 {row.title}
             </Typography>
-            <Typography sx={{ color: '#032246', mb: 2 }}>
+            <Typography sx={{ color: '#1e293b', mb: { xs: 1, md: 2 }, fontSize: { xs: '12px', sm: '14px', md: '16px', xl: '17px' } }}>
                 {row.subjectName}
             </Typography>
             {renderStatusIcons(row)}
         </Box>
     );
+
 
     const transformedData = userExamData.map((exam, index) => ({
         index: `${index + 1}.`,

@@ -25,7 +25,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const ReviewDialog = ({ openModal, handleCloseModal, selectedRow }) => {
-    console.log("data ", selectedRow);
     localStorage.setItem('reviewDetails', JSON.stringify(selectedRow));
     const nav = useNavigate()
     return (
@@ -86,7 +85,7 @@ const ReviewDialog = ({ openModal, handleCloseModal, selectedRow }) => {
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <PaperIcon sx={{ color: '#f97316', mr: 1, fontSize: { xs: '14px', sm: '16px', md: '18px', xl: '22px' } }} />
-                                <Typography sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>{selectedRow?.report?.aggregateReport?.totalMarksObtained} / {selectedRow.totalMarks}</Typography>
+                                <Typography sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }}>{selectedRow?.totalMarksObtained} / {selectedRow.totalMarks}</Typography>
                             </Box>
                         </Box>
                         <Box sx={{

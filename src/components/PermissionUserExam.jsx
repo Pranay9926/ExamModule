@@ -51,7 +51,7 @@ const PermissionUserExam = () => {
     const handleStartExam = () => {
         if (isChecked && data.data) {
             navigate(`${window.location.pathname}/assessment/${data.data.examAttemptId}`);
-            localStorage.setItem('timeLeft', data.data.timeLeft);
+            // localStorage.setItem('timeLeft', data.data.timeLeft);
         }
     };
 
@@ -70,7 +70,7 @@ const PermissionUserExam = () => {
                 </Box>
             )}
 
-            {isError && error?.status === 400 && error?.data?.message === "Exam Already Submitted" && (
+            {isError && error?.status === 400 && (
                 <Box sx={{
                     display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`
                 }}>

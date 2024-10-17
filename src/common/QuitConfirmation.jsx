@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Button, Typography, Stack, Paper } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-const QuitConfirmation = ({ setQuitConfirmation, setIsSubmission, setIsSubmit }) => {
+const QuitConfirmation = ({ setQuitConfirmation, setIsSubmission, setIsSubmit, setTimeLeft, setIsTimeOver }) => {
     const handleQuit = () => {
+        setTimeLeft(0); // Reset countdown to 00:00
+        setIsTimeOver(true); // Mark exam as over
         setQuitConfirmation(false)
         setIsSubmission(false)
         setIsSubmit(true)

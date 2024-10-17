@@ -7,7 +7,6 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId, setIsSubmit, showReport, s
     const [reviewData, setReviewData] = useState();
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
 
-    console.log("  variant=", showReport);
 
     const profile = {
         name: userDetails?.name,

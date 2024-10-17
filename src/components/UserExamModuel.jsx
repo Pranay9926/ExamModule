@@ -49,12 +49,21 @@ const UserExamModule = () => {
         getData();
     }, [page]);
 
+
+    useEffect(() => {
+        if (activeQuestion) {
+            const activeQuestionData = questions.find((ques) => ques.id === activeQuestion.id);
+            setActiveQuestion(activeQuestionData)
+        }
+    }, [dispatch, questions])
+
     // Main function to fetch questions data
     const getData = async (partId = "") => {
         if (QuestionsData[partId]) {
             setActivePartId(partId)
             setQuestions(QuestionsData[partId]);
-            let activeIndex = QuestionsData[partId].findIndex(q => !q.answered)
+            let activeIndex = QuestionsData[partId].findIndex(q => ((!q.answered && q.answer === null) || q.answer !== null))
+            // console.log("Active", activeIndex);
             setActiveQuestion(QuestionsData[partId][activeIndex]); // Set the first question as active
         } else {
             try {
@@ -88,24 +97,20 @@ const UserExamModule = () => {
 
 
 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = '';  // This triggers the browser's confirmation dialog
+        };
 
+        // Add the event listener for the beforeunload event
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
-
-
-    // useEffect(() => {
-    //     const handleBeforeUnload = (event) => {
-    //         event.preventDefault();
-    //         event.returnValue = '';  // This triggers the browser's confirmation dialog
-    //     };
-
-    //     // Add the event listener for the beforeunload event
-    //     window.addEventListener('beforeunload', handleBeforeUnload);
-
-    //     return () => {
-    //         // Cleanup the event listener when the component is unmounted
-    //         window.removeEventListener('beforeunload', handleBeforeUnload);
-    //     };
-    // }, []);
+        return () => {
+            // Cleanup the event listener when the component is unmounted
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
     useEffect(() => {
         setButtonDisable(false)
@@ -142,14 +147,32 @@ const UserExamModule = () => {
 
     // Updated handleAnswer to dispatch changes to Redux
     const handleAnswer = (questionId, selectedOption) => {
-        const updatedQuestions = questions.map(q =>
-            q.id === questionId ? { ...q, selectedOption, answered: true } : q
-        );
+        const data = questions.find((q) => q.id === questionId)
+        // console.log("hello", questionId, selectedOption);
+        let updatedQuestions = []
+
+        if (data.saved) {
+            if (data?.answer?.selectedOption !== selectedOption) {
+                updatedQuestions = questions.map(q =>
+                    q.id === questionId ? { ...q, selectedOption, answered: true, saved: false, statusCode: "" } : q
+                );
+            } else {
+                updatedQuestions = questions.map(q =>
+                    q.id === questionId ? { ...q, selectedOption, answered: true, saved: true, statusCode: "" } : q
+                );
+            }
+        } else {
+            updatedQuestions = questions.map(q =>
+                q.id === questionId ? { ...q, selectedOption, answered: true, statusCode: "" } : q
+            );
+            if (data?.answer?.selectedOption === selectedOption) {
+                updatedQuestions = updatedQuestions.map(q =>
+                    q.id === questionId ? { ...q, selectedOption, answered: true, saved: true, statusCode: "" } : q
+                );
+            }
+
+        }
         setQuestions(updatedQuestions);
-
-        console.log(QuestionsData, 'QuestionsData1223434', activePartId)
-
-        // Update Redux with new answers for current partId
         dispatch(getQuestionsData({ ...QuestionsData, [activePartId]: updatedQuestions }));
     };
 
@@ -167,7 +190,7 @@ const UserExamModule = () => {
     // Updated handleClearResponse to dispatch changes to Redux
     const handleClearResponse = (questionId) => {
         const updatedQuestions = questions.map(q =>
-            q.id === questionId ? { ...q, selectedOption: null, answered: false } : q
+            q.id === questionId ? { ...q, selectedOption: null, answered: false, saved: false, answer: null, statusCode: "" } : q
         );
         setQuestions(updatedQuestions);
 
@@ -211,7 +234,7 @@ const UserExamModule = () => {
             id: q.id,
             selectedOption: q.selectedOption
         }));
-        console.log("questions", questions);
+        // console.log("questions", questions);
         setOpenStatusPanel(false);
         setIsSubmit(false);
         localStorage.removeItem('examStartTime');
@@ -287,7 +310,8 @@ const UserExamModule = () => {
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 49px)`, '@media (min-width: 0px) and (max-width: 599px)': { height: `calc(100vh - 63px)` }, '@media (min-width: 599px) and (max-width: 1100px)': { height: `calc(100vh - 42px)` } }}>
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {quitConfirmation ? <QuitConfirmation setQuitConfirmation={setQuitConfirmation} setIsSubmission={setIsSubmission}
-                            setIsSubmit={setIsSubmit} /> : <>
+                            setIsSubmit={setIsSubmit} setTimeLeft={setTimeLeft}
+                            setIsTimeOver={setIsTimeOver} /> : <>
                             {
                                 isSubmission ? (
                                     <SubmissionPage userId={userId} examId={examId} examAttemptId={examAttemptId} setIsSubmit={setIsSubmit} setIsSubmission={setIsSubmission} setSubmitButton={setSubmitButton} setTimeLeft={setTimeLeft}

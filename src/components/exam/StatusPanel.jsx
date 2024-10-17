@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Typography, Avatar, Button } from '@mui/material';
 import Grid from '@mui/material/Grid'; // Use the standard Grid for layout
 
 const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz, isSubmission }) => {
-    const answeredCount = questions.filter(q => (q.answered && !q.markedForReview) || (q.statusCode === "1")).length;
-    const notAnsweredCount = questions.filter(q => (!q.answered && q.visited && !q.markedForReview) || (q.statusCode === "2")).length;
-    const markedForReviewCount = questions.filter(q => (q.markedForReview && !q.answered) || (q.statusCode === "4")).length;
-    const answeredMarkedForReviewCount = questions.filter(q => (q.answered && q.markedForReview) || (q.statusCode === "3")).length;
-    const notVisitedCount = questions.filter(q => !q.visited || (q.statusCode === "5")).length;
+    // console.log("question", questions);
+    const answeredCount = useMemo(() => {
+        return questions.filter(q => (q.answered && !q.markedForReview) || (q.statusCode === "1")).length;
+    }, [questions]);
+
+    const notAnsweredCount = useMemo(() => {
+        return questions.filter(q => ((!q.answered && !q.answer) && q.visited && !q.markedForReview) || (q.statusCode === "2")).length;
+    }, [questions]);
+
+    const markedForReviewCount = useMemo(() => {
+        return questions.filter(q => (q.markedForReview && !q.answered) || (q.statusCode === "4")).length;
+    }, [questions]);
+
+    const answeredMarkedForReviewCount = useMemo(() => {
+        return questions.filter(q => (q.answered && q.markedForReview) || (q.statusCode === "3")).length;
+    }, [questions]);
+
+    const notVisitedCount = useMemo(() => {
+        return questions.length - (answeredCount + notAnsweredCount + markedForReviewCount + answeredMarkedForReviewCount);
+    }, [questions, answeredCount, notAnsweredCount, markedForReviewCount, answeredMarkedForReviewCount]);
+
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
     const profile = {
         name: userDetails?.name,
@@ -135,7 +151,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                             {index + 1}
                                         </Avatar>
 
-                                        {((question.answered && question.markedForReview) || question.statusCode === "3") && (
+                                        {((question.answered && question.markedForReview) || question.statusCode == "3") && (
                                             <Box
                                                 sx={{
                                                     position: 'absolute',

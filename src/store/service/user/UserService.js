@@ -7,12 +7,16 @@ export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
+        getStudentData: builder.query({
+            query: ({ userId }) => `students/${userId}`,
+        }),
         getUserExamData: builder.query({
             query: ({ userId, ExamType, page, rowsPerPage }) => `student/${userId}/exams?examType=${ExamType}&size=${rowsPerPage}&page=${page}`,
         }),
         getAttemptedId: builder.query({
             query: ({ userId, examId }) => `student/${userId}/exam/${examId}/initiateExam`,
         }),
+
         getExamQuestions: builder.mutation({
             query: ({ userId, examAttemptId, partId, rowsPerPage, page }) => ({
                 url: `student/${userId}/examQuestions?examAttemptId=${examAttemptId}&partId=${partId}&page=${page}&size=${rowsPerPage}`,
@@ -67,4 +71,4 @@ export const userApi = createApi({
     }),
 })
 
-export const { useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation, useGetReviewExamQuestionMutation, useGetExamStatisticMutation } = userApi
+export const { useGetStudentDataQuery, useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation, useGetReviewExamQuestionMutation, useGetExamStatisticMutation } = userApi

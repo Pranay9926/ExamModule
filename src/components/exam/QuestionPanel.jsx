@@ -22,7 +22,8 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
 
     useEffect(() => {
         let selectedValue = question?.answer?.selectedOption;
-        setSelectedOption(selectedValue ? question?.answer?.selectedOption || null : question?.selectedOption || null);
+        // setSelectedOption(selectedValue ? selectedValue : question?.selectedOption || null);
+        setSelectedOption(question && question.selectedOption ? question.selectedOption : selectedValue || null);
     }, [isReviewMode, question]);
 
 
@@ -43,7 +44,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         } else {
             statusCode = 2; // Not Answered
         }
-
+        onNext(question?.id + 1)
 
         const payloadData = {
             data: {
@@ -55,10 +56,9 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         }
         try {
             let result = await UploadExamQuestions({ userId, payloadData: payloadData });
-            if (result.data.success) {
-                onNext(question?.id + 1)
-            }
-            console.log("log", result);
+            // if (result.data.success) {
+            //     onNext(question?.id + 1)
+            // }
         } catch (e) {
             console.log(e);
         }
@@ -114,6 +114,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography variant="h8" sx={{ fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', xl: '16px' } }}>SECTIONS: </Typography>
                                 {partIds?.map((partId, index) => (
+
                                     <Box
                                         key={index}
                                         onClick={() => handlePartClick(partId)}
@@ -140,7 +141,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                         <Box sx={{ p: 2, height: 'calc(100vh - 289px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
                             <FormControl component="fieldset" sx={{ borderBottom: 2, borderColor: "#c0bfbf", pb: 4 }}>
                                 <RadioGroup value={selectedOption} onChange={handleOptionChange}>
-                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {questions.findIndex(q => q.id === question.id) + 1} </Typography>
+                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question && questions.findIndex(q => q.id === question.id) + 1} </Typography>
                                     <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '19px' }, mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
                                     {question?.meta.map((option, index) => (
                                         <FormControlLabel
@@ -194,7 +195,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                             </>
                         ) : (
                             <>
-                                <Button
+                                {!question?.saved && <Button
                                     variant="outlined"
                                     sx={{
                                         color: '#f97316',
@@ -209,7 +210,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                     onClick={() => { handleSave({ markedForReview: true }); onMarkForReview(question?.id) }}
                                 >
                                     Mark for Review & Next
-                                </Button>
+                                </Button>}
 
                                 <Button
                                     variant="outlined"

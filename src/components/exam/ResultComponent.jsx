@@ -20,7 +20,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
         name: userDetails?.name,
         attempt_Id: examAttemptId
     };
-    console.log(userId, examId, examAttemptId)
+    // console.log(userId, examId, examAttemptId)
     useEffect(() => {
         getData();
     }, []);
@@ -28,13 +28,14 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
     const getData = async () => {
         try {
             const resultData = await getExamResult({ userId, examId, examAttemptId });
-            setExamResultData(resultData?.data?.data);
-        } catch (e) {
-            if (e?.status === 400 && e?.data?.message === "Exam Already Submitted") {
-                setErrorMessage(e.data.message); // Set the error message
+            if (resultData?.data?.status === 400) {
+                setErrorMessage(resultData.data.message); // Handle 400 error
             } else {
-                console.log(e);
+                setExamResultData(resultData?.data?.data);
             }
+        } catch (e) {
+
+            console.log(e);
         }
     };
 
@@ -46,7 +47,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
         <>
             {errorMessage ? (
                 <Box sx={{
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`, textAlign: 'center'
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 60px)`, textAlign: 'center'
                 }}>
                     <Typography variant="h6" sx={{ color: '#f97316', mb: 2 }}>
                         {errorMessage}
@@ -136,7 +137,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part {item.partId}</Typography>
+                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part  {String.fromCharCode(65 + index)}</Typography>
                                         </Box>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>

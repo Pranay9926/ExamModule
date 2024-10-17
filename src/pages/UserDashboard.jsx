@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { Tabs, Tab, Box, Paper, Typography } from '@mui/material';
+import { Box, Paper, Tab, Tabs, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import TabPanel, { a11yProps } from '../common/TabPanel';
 import UserExamTable from '../components/UserExamTable';
+import { useGetStudentDataQuery } from '../store/service/user/UserService';
 
 const UserDashboard = () => {
     const [mainTab, setMainTab] = useState(0); // For Exams and Attempted Exams tabs
+    const { data } = useGetStudentDataQuery({ userId: 7 });
+
+
+    useEffect(() => {
+        if (data) {
+            localStorage.setItem('userdetails', JSON.stringify(data?.data));
+        }
+    }, [data]);
+
 
     const handleMainTabChange = (event, newValue) => {
         setMainTab(newValue);
@@ -21,10 +31,12 @@ const UserDashboard = () => {
                     color: '#f97316', // Orange color for the heading
                     fontWeight: 'bold',
                     mb: 3,
+                    fontSize: { xs: '18px', sm: '20px', md: '23px', xl: '27px' }
                 }}
             >
                 <Box component="span" sx={{ color: '#032246' }}>  My </Box>Exams
             </Typography>
+
 
             {/* Main Tabs */}
             <Paper square>
@@ -53,8 +65,9 @@ const UserDashboard = () => {
                         },
                     }}
                 >
-                    <Tab label="Upcoming Exams" {...a11yProps(0)} />
-                    <Tab label="Attempted Exams" {...a11yProps(1)} />
+
+                    <Tab label="Upcoming Exams" {...a11yProps(0)} sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }} />
+                    <Tab label="Attempted Exams" {...a11yProps(1)} sx={{ fontSize: { xs: '11px', sm: '12px', md: '14px', xl: '15px' } }} />
                 </Tabs>
             </Paper>
 

@@ -79,7 +79,6 @@ const AddQuestionBank = () => {
 
         if (isBankAddedInAnyPart) {
             // If the bank is already added in any part, show a warning or prevent the addition
-            console.log('This question bank is already added in another part.');
             toast.error("This question bank is already added in another part.")
             return;
         }
