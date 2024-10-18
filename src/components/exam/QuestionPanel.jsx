@@ -141,7 +141,38 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                         <Box sx={{ p: 2, height: 'calc(100vh - 289px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
                             <FormControl component="fieldset" sx={{ borderBottom: 2, borderColor: "#c0bfbf", pb: 4 }}>
                                 <RadioGroup value={selectedOption} onChange={handleOptionChange}>
-                                    <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, mb: 3, borderTop: 1, borderBottom: 1, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question && questions.findIndex(q => q.id === question.id) + 1} </Typography>
+                                    <Box sx={{ borderTop: 1, borderBottom: 1, mb: 3, display: 'flex', justifyContent: "space-between" }}>
+                                        <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '20px' }, borderColor: "#c0bfbf", pt: 2, pb: 2, fontWeight: 'bold' }}>Question {question && questions.findIndex(q => q.id === question.id) + 1} </Typography>
+                                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                            <Box
+                                                sx={{
+                                                    backgroundColor: '#28a745', // Green background for positive marks
+                                                    color: 'white',
+                                                    padding: '0.2rem 0.5rem',
+                                                    borderRadius: '0.25rem',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.875rem',
+                                                }}
+                                            >
+                                                Marks: +{question.score}
+                                            </Box>
+
+                                            {question.negativeScore && (
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: '#dc3545', // Red background for negative marks
+                                                        color: 'white',
+                                                        padding: '0.2rem 0.5rem',
+                                                        borderRadius: '0.25rem',
+                                                        fontWeight: 'bold',
+                                                        fontSize: '0.875rem',
+                                                    }}
+                                                >
+                                                    -{question.negativeScore}
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </Box>
                                     <Typography sx={{ fontSize: { xs: '16px', md: '18px', lg: '19px' }, mb: 3 }}>  {<div dangerouslySetInnerHTML={{ __html: question?.question }} />}</Typography>
                                     {question?.meta.map((option, index) => (
                                         <FormControlLabel

@@ -339,6 +339,15 @@ const ExamScheduling = ({ ExamData }) => {
                     name="startsAtMinutes"
                     value={formik.values.startsAtMinutes}
                     onChange={formik.handleChange}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          top: '50%',
+                          height: '50%',
+                          // background: 'black',
+                        },
+                      },
+                    }}
                     error={formik.touched.startsAtMinutes && Boolean(formik.errors.startsAtMinutes)}
                   >
                     <MenuItem disabled>✔ Min</MenuItem>
@@ -391,6 +400,15 @@ const ExamScheduling = ({ ExamData }) => {
                     name="endsAtMinutes"
                     value={formik.values.endsAtMinutes}
                     onChange={formik.handleChange}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          top: '40%',
+                          height: '40%',
+                          // background: 'black',
+                        },
+                      },
+                    }}
                     error={formik.touched.endsAtMinutes && Boolean(formik.errors.endsAtMinutes)}
                   >
                     <MenuItem disabled>✔ Min</MenuItem>

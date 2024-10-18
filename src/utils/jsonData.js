@@ -34,7 +34,21 @@ export const timeOptionsHours = [
   { label: '11 PM', value: '23' },
 ];
 
-export const timeOptionsMinutes = ['00', '15', '30', '45'];
+
+export const timeOptionsMinutes = [
+  "00",
+  "5",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+  "40",
+  "45",
+  "50",
+  '55'
+];
 
 export const questionData = [
   {

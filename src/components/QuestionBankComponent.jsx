@@ -328,7 +328,7 @@ import TestDataComponent from './TestDataComponent';
 import BasicDetailsComponent from './BasicDetailsComponent';
 import ExamScheduling from './ExamScheduling';
 import { useGetExamDataByIdMutation, useGetExamDataByIdQuery } from '../store/service/admin/AdminService';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const QuestionBankComponent = () => {
     const [mainTab, setMainTab] = useState(0); // For Curriculum and Test tabs
@@ -337,6 +337,7 @@ const QuestionBankComponent = () => {
     const handleMainTabChange = (event, newValue) => setMainTab(newValue);
     const handleSubTabChange = (event, newValue) => setSubTab(newValue);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const [getExamDataById] = useGetExamDataByIdMutation();
 
@@ -348,6 +349,32 @@ const QuestionBankComponent = () => {
             getExamData(examID)
         }
     }, [])
+
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = '';  // This triggers the browser's confirmation dialog
+
+            // Store an indication in localStorage that the user has reloaded the page
+            localStorage.setItem('reload', 'true');
+        };
+
+        // Add the event listener for the beforeunload event
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Check if the user has reloaded and navigate to `/`
+        if (localStorage.getItem('reload') === 'true') {
+            localStorage.removeItem('reload');  // Clean up the stored reload flag
+            navigate('/');  // Navigate to the home page or any other path
+        }
+
+        return () => {
+            // Cleanup the event listener when the component is unmounted
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [navigate]);
+
 
     const getExamData = async (id) => {
         try {
