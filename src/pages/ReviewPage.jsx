@@ -116,6 +116,7 @@ const ReviewPage = () => {
                 setQuestions(updatedQuestions);
                 setActiveQuestion(data.data[0]);
                 setPartIds(data?.partIds);
+                setActivePartId(obj.partId)
             }
         } catch (e) {
             console.log(e);
@@ -157,7 +158,7 @@ const ReviewPage = () => {
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 49px)`, '@media (min-width: 0px) and (max-width: 599px)': { height: `calc(100vh - 63px)` }, '@media (min-width: 599px) and (max-width: 1100px)': { height: `calc(100vh - 42px)` } }}>
                     <Grid2 item size={{ xs: 12, sm: 8, md: 9 }} sx={{ p: 0 }}>
                         {isSubmit ? (
-                            <ResultComponent userId={userId} examId={examId} examAttemptId={examAttemptId} handleReviewQuestion={handleReviewQuestion} />
+                            <ResultComponent userId={userId} examId={examId} handleReviewQuestion={handleReviewQuestion} />
                         ) : (
                             <QuestionPanel
                                 question={activeQuestion}
@@ -168,6 +169,7 @@ const ReviewPage = () => {
                                 partIds={partIds}
                                 getSection={getData}
                                 buttonDisable={buttonDisable}
+                                activePartId={activePartId}
                             />
                         )}
 
@@ -203,7 +205,7 @@ const ReviewPage = () => {
                     </IconButton>
                     <Box sx={{ width: 300, p: 2, height: '100%' }}>
 
-                        <ResultStatus userId={userId} examId={examId} setIsSubmit={setIsSubmit} isSubmit={isSubmit} />
+                        <ResultStatus userId={userId} examId={examId} setIsSubmit={setIsSubmit} isSubmit={isSubmit} showReport={isReviewMode} setShowReport={setIsReviewMode} />
 
 
                     </Box>

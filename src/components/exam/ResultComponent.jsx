@@ -5,7 +5,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useGetExamResultMutation } from '../../store/service/user/UserService';
+import { useGetExamReportMutation, useGetExamResultMutation } from '../../store/service/user/UserService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
     const [examResultData, setExamResultData] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null); // Track the error message
     const [getExamResult] = useGetExamResultMutation();
+    const [getExamReport] = useGetExamReportMutation();
     const userDetails = JSON.parse(localStorage.getItem('userdetails'));
     const navigate = useNavigate();
 
@@ -27,11 +28,17 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
 
     const getData = async () => {
         try {
-            const resultData = await getExamResult({ userId, examId, examAttemptId });
-            if (resultData?.data?.status === 400) {
-                setErrorMessage(resultData.data.message); // Handle 400 error
+            let resultData;
+            if (examAttemptId) {
+                resultData = await getExamResult({ userId, examId, examAttemptId });
             } else {
+                resultData = await getExamReport({ userId, examId });
+            }
+            const { data, error } = resultData;
+            if (resultData?.data?.success === true) {
                 setExamResultData(resultData?.data?.data);
+            } else {
+                setErrorMessage(resultData.data.message); // Handle 400 error
             }
         } catch (e) {
 
@@ -80,9 +87,13 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
 
                         {/* Marks and Performance Summary */}
                         <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
+                            <Box sx={{ textAlign: 'center', borderBottom: '1px solid #e0e0e0', }}>
+                                <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Title</Typography>
+                                <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Total Marked Scored </Typography>
+                            </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                 <Box sx={{ textAlign: 'center' }}>
-                                    <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Total Marked Scored</Typography>
+                                    <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Marks scored</Typography>
                                     <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
@@ -134,11 +145,12 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                         <Box sx={{ pb: 2 }}>
                             {examResultData?.partWiseReport?.map((item, index) => (
                                 <Box key={index} sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
+                                    <Box sx={{ textAlign: 'center', borderBottom: '1px solid #e0e0e0', }}>
+                                        <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
+                                        <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part  {String.fromCharCode(65 + index)}</Typography>
+                                    </Box>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
-                                        <Box sx={{ textAlign: 'center' }}>
-                                            <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part  {String.fromCharCode(65 + index)}</Typography>
-                                        </Box>
+
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>
                                             <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>

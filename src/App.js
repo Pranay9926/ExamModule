@@ -26,7 +26,7 @@ function App() {
         <Route path="/user" element={<UserDashboard />} />
         <Route path="/user/:userId/exam/:examId" element={<PermissionUserExam />} />
         <Route path="/user/:userId/exam/:examId/assessment/:examAttemptId" element={<UserExamModuel />} />
-        <Route path="/user/:userId/exam/:examId/review/:examAttemptId" element={<ReviewPage />} />
+        <Route path="/user/:userId/exam/:examId/review" element={<ReviewPage />} />
         <Route path="/user/:userId/exam/:examId/result" element={<ResultComponent />} />
 
       </Routes>

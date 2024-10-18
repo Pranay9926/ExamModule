@@ -67,8 +67,14 @@ export const userApi = createApi({
                 url: `student/${userId}/exam/${examId}/examStat?attemptId=${examAttemptId}`,
                 method: 'GET'
             })
+        }),
+        getExamReport: builder.mutation({
+            query: ({ userId, examId }) => ({
+                url: `student/${userId}/exam/${examId}/examReport`,
+                method: 'GET'
+            })
         })
     }),
 })
 
-export const { useGetStudentDataQuery, useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation, useGetReviewExamQuestionMutation, useGetExamStatisticMutation } = userApi
+export const { useGetStudentDataQuery, useGetUserExamDataQuery, useGetAttemptedIdQuery, useGetExamQuestionsMutation, useUploadExamQuestionsMutation, useAddExamDataMutation, useUpdateExamDataMutation, useGetExamResultMutation, useGetReviewAnswerSheetMutation, useGetReviewExamQuestionMutation, useGetExamStatisticMutation, useGetExamReportMutation } = userApi

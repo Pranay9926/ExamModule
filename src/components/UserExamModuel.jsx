@@ -255,6 +255,7 @@ const UserExamModule = () => {
                 );
                 setQuestions(updatedQuestions);
                 setActiveQuestion(data.data[0]);
+                setActivePartId(obj.partId)
             }
         } catch (e) {
             console.log(e);
@@ -340,7 +341,7 @@ const UserExamModule = () => {
                     {/* Right: Status Panel (Visible on larger screens, toggle on small screens) */}
                     <Grid2 item size={{ sm: 4, md: 3 }} sx={{ bgcolor: 'white', p: 0, borderLeft: '1px solid #e0e0e0', display: { xs: 'none', sm: 'block' } }}>
                         {(isSubmit && !isSubmission) || isReviewMode ? (
-                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} submitButton={submitButton} />
+                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} setIsSubmit={setIsSubmit} examId={examId} submitButton={submitButton} showReport={isReviewMode} setShowReport={setIsReviewMode} />
                         ) : (
                             <StatusPanel
                                 questions={questions}
@@ -376,7 +377,7 @@ const UserExamModule = () => {
                     </IconButton>
                     <Box sx={{ width: 300, p: 2, height: '100%' }}>
                         {isSubmit && !isSubmission ? (
-                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} submitButton={submitButton} />
+                            <ResultStatus onSubmitQuiz={handleSubmitQuiz} userId={userId} examId={examId} setIsSubmit={setIsSubmit} submitButton={submitButton} showReport={isReviewMode} setShowReport={setIsReviewMode} />
                         ) : (
                             <StatusPanel
                                 questions={questions}

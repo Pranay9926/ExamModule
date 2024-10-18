@@ -6,19 +6,25 @@ import { useUploadExamQuestionsMutation } from '../../store/service/user/UserSer
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable, handleReviewQuestion }) => {
+const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable, handleReviewQuestion, activePartId }) => {
     const [selectedOption, setSelectedOption] = useState('');
     const [loading, setLoading] = useState(false)
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId, examId } = useParams();
     const [activePart, setActivePart] = useState(null);
-    // console.log("question", question);
 
+    // Effect to handle setting the active part based on partIds or activePartId
     useEffect(() => {
-        if (partIds && partIds.length > 0 && !activePart) {
-            setActivePart(partIds[0]);
+        if (partIds && partIds.length > 0) {
+            if (activePartId) {
+                // If activePartId is provided, use it as the active part
+                setActivePart(activePartId);
+            } else if (!activePart) {
+                // Otherwise, set the first part as the active part by default
+                setActivePart(partIds[0]);
+            }
         }
-    }, [partIds, activePart]);
+    }, [partIds, activePartId]);
 
     useEffect(() => {
         let selectedValue = question?.answer?.selectedOption;
@@ -154,10 +160,10 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                                     fontSize: '0.875rem',
                                                 }}
                                             >
-                                                Marks: +{question.score}
+                                                Marks: +{question?.score}
                                             </Box>
 
-                                            {question.negativeScore && (
+                                            {question?.negativeScore && (
                                                 <Box
                                                     sx={{
                                                         backgroundColor: '#dc3545', // Red background for negative marks
@@ -168,7 +174,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                                         fontSize: '0.875rem',
                                                     }}
                                                 >
-                                                    -{question.negativeScore}
+                                                    -{question?.negativeScore}
                                                 </Box>
                                             )}
                                         </Box>

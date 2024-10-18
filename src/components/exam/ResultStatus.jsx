@@ -132,7 +132,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId, setIsSubmit, showReport, s
 
 
                 <Box sx={{
-                    padding: '8px', height: { xs: '70vh' }, overflowY: 'auto',
+                    padding: '8px', height: { xs: '70vh', sm: '64vh', md: '65vh', lg: '70vh' }, overflowY: 'auto',
                 }}>
                     <Box sx={{ display: "flex", fontWeight: '700', justifyContent: 'space-around', mb: '6px', fontSize: { xs: '12px', sm: '13px' } }}>
                         <Box>Q.No.</Box>

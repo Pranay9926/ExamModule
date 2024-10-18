@@ -140,7 +140,7 @@ const PermissionUserExam = () => {
                                 sx={{
                                     textAlign: examDetails?.instructions ? 'start' : 'center',
                                     color: examDetails?.instructions ? 'black' : '#777',
-                                    minHeight: '400px',
+                                    minHeight: '340px',
                                     border: '1px dashed #ddd',
                                     p: 2,
                                     mb: 3
