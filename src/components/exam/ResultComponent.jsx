@@ -82,17 +82,17 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                         <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                 <Box sx={{ textAlign: 'center' }}>
-                                    <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Marks scored</Typography>
+                                    <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Total Marked Scored</Typography>
                                     <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Percentage</Typography>
                                     <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage.toFixed(2)} %</Typography>
                                 </Box>
-                                <Box sx={{ textAlign: 'center' }}>
+                                {/* <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>{'Accuracy'}</Typography>
                                     <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.accuracy.toFixed(2)} %</Typography>
-                                </Box>
+                                </Box> */}
                             </Box>
                             <Divider />
 

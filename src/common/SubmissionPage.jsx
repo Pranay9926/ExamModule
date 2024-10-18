@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 const tableHeaders = [
     { label: 'Section Name', accessor: 'partId', isPart: true },
     { label: 'No. of Questions', accessor: 'noOfQuestions' },
-    { label: 'Max Questions Allowed', accessor: 'maxQuestionsAllowed' },
     { label: 'Answered', accessor: 'answered' },
     { label: 'Not Answered', accessor: 'notAnswered' },
     { label: 'Marked for Review', accessor: 'markForReview' },
@@ -86,7 +85,7 @@ const SubmissionPage = ({
                                     <TableRow key={rowIndex}>
                                         {tableHeaders.map((header, colIndex) => (
                                             <TableCell key={colIndex} sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)', fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' }, padding: '10px' }}>
-                                                {header.isPart ? `Part ${row[header.accessor]}` : row[header.accessor]}
+                                                {header.isPart ? `Part ${String.fromCharCode(65 + rowIndex)}` : row[header.accessor]}
                                             </TableCell>
                                         ))}
                                     </TableRow>
