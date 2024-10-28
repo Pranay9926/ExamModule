@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, Stack, Paper } from '@mui/material';
+import { Box, Button, Typography, Stack } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const QuitConfirmation = ({ setQuitConfirmation, setIsSubmission, setIsSubmit, setTimeLeft, setIsTimeOver }) => {

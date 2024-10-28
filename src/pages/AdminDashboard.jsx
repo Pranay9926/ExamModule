@@ -56,13 +56,13 @@ function AdminDashboard() {
     return (
         <div className="p-4">
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h5" >Examinations</Typography>
+                <Typography variant="h5" sx={{ fontSize: { xs: '15px', sm: '16px', md: '18px', xl: '20px' }, fontWeight: 'bold' }}>Examinations</Typography>
 
-                {/* Filter and Add Buttons */}
-                <div>
+
+                <Box sx={{ textAlign: 'center', display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: '10px' }}>
                     <Button
                         variant="contained"
-                        sx={{ marginRight: 2 }}
+                        sx={{ fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' } }}
                         onClick={resetFilters}
                     >
                         Reset Filters
@@ -71,18 +71,19 @@ function AdminDashboard() {
                         variant="contained"
                         color="primary"
                         onClick={handleAddNewExam}
+                        sx={{ fontSize: { xs: '9px', sm: '10px', md: '12px', xl: '14px' } }}
                     >
                         + Add New
                     </Button>
-                </div>
+                </Box>
             </Box>
 
             <Box sx={{ mb: 3 }}>
-                {/* Filters - Select Batch and Date */}
+
                 <Grid2 container spacing={2}>
-                    <Grid2 item size={4}>
+                    <Grid2 item sx={{ width: { sm: '40%', xl: '25%', xs: '65%', md: '30%', lg: '20%' } }}>
                         <FormControl fullWidth>
-                            <InputLabel id="1">Select Batch</InputLabel>
+                            <InputLabel id="1" >Select Batch</InputLabel>
                             <Select
                                 labelId="1"
                                 id="demo-simple-select"
@@ -102,7 +103,7 @@ function AdminDashboard() {
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 item size={4}>
+                    <Grid2 item sx={{ width: { sm: '40%', xl: '25%', xs: '65%', md: '30%', lg: '25%' } }}>
                         <FormControl fullWidth>
                             <InputLabel id='2'>Date Criteria</InputLabel>
                             <Select
@@ -114,13 +115,12 @@ function AdminDashboard() {
                                 <MenuItem value="All">All</MenuItem>
                                 <MenuItem value="past">Past</MenuItem>
                                 <MenuItem value="upcoming">Upcoming</MenuItem>
-                                {/* Add more options */}
+
                             </Select>
                         </FormControl>
                     </Grid2>
                 </Grid2>
             </Box>
-
             {/* Table Component */}
             <CommonTable
                 headers={[

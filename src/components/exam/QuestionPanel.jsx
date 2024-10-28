@@ -4,7 +4,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import { useUploadExamQuestionsMutation } from '../../store/service/user/UserService';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import DraggableCalculator from '../../common/DraggableCalculator';
 
 const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearResponse, questions, getSection, isReviewMode, partIds, buttonDisable, handleReviewQuestion, activePartId }) => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -12,6 +12,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
     const [UploadExamQuestions] = useUploadExamQuestionsMutation();
     const { userId, examAttemptId, examId } = useParams();
     const [activePart, setActivePart] = useState(null);
+    const [showCalculator, setShowCalculator] = useState(false);
 
     // Effect to handle setting the active part based on partIds or activePartId
     useEffect(() => {
@@ -31,6 +32,14 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
         // setSelectedOption(selectedValue ? selectedValue : question?.selectedOption || null);
         setSelectedOption(question && question.selectedOption ? question.selectedOption : selectedValue || null);
     }, [isReviewMode, question]);
+
+    const handleCalculatorToggle = () => {
+        setShowCalculator(!showCalculator); // Toggle calculator visibility
+    };
+
+    const closeCalculator = () => {
+        setShowCalculator(false); // Close the calculator
+    };
 
 
     const handleOptionChange = (event) => {
@@ -141,7 +150,14 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                     </Box>
                                 ))}
                             </Box>
-                            <Box><RefreshIcon onClick={handleRefresh} sx={{ fontSize: '30px', cursor: 'pointer' }} /> <CalculateOutlinedIcon sx={{ fontSize: '30px', cursor: 'pointer' }} /></Box>
+                            <Box><RefreshIcon onClick={handleRefresh} sx={{ fontSize: '30px', cursor: 'pointer' }} />
+                                {isReviewMode ? <></> : <CalculateOutlinedIcon onClick={handleCalculatorToggle} sx={{ fontSize: '30px', cursor: 'pointer' }} />}
+                            </Box>
+                            {/* Step 4: Conditionally render the iframe */}
+                            <DraggableCalculator
+                                isVisible={showCalculator}
+                                closeCalculator={closeCalculator}
+                            />
                         </Box>
 
                         <Box sx={{ p: 2, height: 'calc(100vh - 289px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'auto' }}>
@@ -157,7 +173,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                                     padding: '0.2rem 0.5rem',
                                                     borderRadius: '0.25rem',
                                                     fontWeight: 'bold',
-                                                    fontSize: '0.875rem',
+                                                    fontSize: { xl: '0.875rem', xs: '11px', md: '12px' },
                                                 }}
                                             >
                                                 Marks: +{question?.score}
@@ -171,7 +187,7 @@ const QuestionPanel = ({ question, onAnswer, onNext, onMarkForReview, onClearRes
                                                         padding: '0.2rem 0.5rem',
                                                         borderRadius: '0.25rem',
                                                         fontWeight: 'bold',
-                                                        fontSize: '0.875rem',
+                                                        fontSize: { xl: '0.875rem', xs: '11px', md: '12px' },
                                                     }}
                                                 >
                                                     -{question?.negativeScore}

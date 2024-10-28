@@ -143,10 +143,10 @@ const ReviewPage = () => {
                             sm: 'flex',
                         }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
-                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: { xs: '12px', md: '16px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
                             {examDetails?.title}
                         </Typography>
-                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: { xs: '12px', md: '16px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
                             Time Taken: {examDetails?.duration}
                         </Typography>
                     </Box>

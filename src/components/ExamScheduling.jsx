@@ -448,7 +448,7 @@ const ExamScheduling = ({ ExamData }) => {
               <label className="w-1/3">Invigilators <span className="text-[red]">*</span></label>
               <div className="w-full">
                 {invigilators.map((item, index) => (
-                  <div key={index} className="ss:flex grid items-center gap-2 mb-2">
+                  <div key={index} className="ss:flex grid items-center gap-[0.8rem] mb-[12px] mt-[7px]">
                     <TextField
                       fullWidth
                       select

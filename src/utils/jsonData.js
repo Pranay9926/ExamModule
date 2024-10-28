@@ -164,7 +164,7 @@ export const questionData = [
 ];
 
 // Sample data for the exams
-const data1 = [
+export const data1 = [
   {
     examName: 'March DV Test',
     subjectName: "Maths",

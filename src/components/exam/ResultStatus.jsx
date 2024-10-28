@@ -70,12 +70,12 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId, setIsSubmit, showReport, s
                     {profile.img ? (
                         <Avatar src={profile.img} sx={{ width: "35px", height: '35px', mr: 2 }} />
                     ) : (
-                        <Avatar sx={{ width: "40px", height: '40px', backgroundColor: '#f97316', mr: 2, fontSize: '18px', fontWeight: 'bold' }}>
+                        <Avatar sx={{ width: "40px", height: '40px', backgroundColor: '#f97316', mr: 2, fontSize: { xs: '12px', sm: '13px', md: '14px', lg: '15px' }, fontWeight: 'bold' }}>
                             {getInitials(profile.name)}
                         </Avatar>
                     )}
                     <Box >
-                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', lg: '15px' } }}>
                             {profile.name}
                         </Typography>
                     </Box>
@@ -106,7 +106,7 @@ const ResultStatus = ({ onSubmitQuiz, userId, examId, setIsSubmit, showReport, s
                                 >
                                     {status.id}
                                 </Avatar>
-                                <Typography variant="subtitle2" sx={{ color: '#333', fontWeight: 'bold' }}>
+                                <Typography sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '11px', sm: '12px', md: '13px', lg: '14px' } }}>
                                     {status.label}
                                 </Typography>
                             </Box>

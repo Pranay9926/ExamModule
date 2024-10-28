@@ -6,7 +6,8 @@ const baseQuery = fetchBaseQuery({
         // const data = JSON.parse(String(localStorage.getItem("token")));
         const data = "31|uyUHQUw8TGBcj0xlU2jmsgMJvWEoQ9Iuk3lxMCwb5f1437ba";
         if (data) {
-            headers.set("authorization", `Bearer ${data}`);
+            // headers.set("authorization", `Bearer ${data}`);
+            headers.set("developer", true);
             // if (process.env.REACT_APP_API_URL)
             //     headers.set("x_api_key", process.env.NEXT_PUBLIC_X_API_KEY);
         }

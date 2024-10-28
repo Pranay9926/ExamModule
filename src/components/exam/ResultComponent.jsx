@@ -88,17 +88,17 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                         {/* Marks and Performance Summary */}
                         <Box sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
                             <Box sx={{ textAlign: 'center', borderBottom: '1px solid #e0e0e0', }}>
-                                <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Title</Typography>
-                                <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Total Marked Scored </Typography>
+                                <Typography sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, mt: 1 }}>Title</Typography>
+                                <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600', mb: 1 }}>Total Marked Scored </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Marks scored</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
+                                    <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.totalMarksObtained} / {examResultData?.aggregateReport?.maxMarks}</Typography>
                                 </Box>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                    <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage.toFixed(2)} %</Typography>
+                                    <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600' }}>{examResultData?.aggregateReport?.percentage.toFixed(2)} %</Typography>
                                 </Box>
                                 {/* <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h7" sx={{ fontWeight: '700', color: '#2f2c2c', fontSize: { xs: 13 } }}>{'Accuracy'}</Typography>
@@ -146,18 +146,18 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                             {examResultData?.partWiseReport?.map((item, index) => (
                                 <Box key={index} sx={{ border: '1px solid #e0e0e0', mb: 2 }}>
                                     <Box sx={{ textAlign: 'center', borderBottom: '1px solid #e0e0e0', }}>
-                                        <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Section Name</Typography>
-                                        <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>Part  {String.fromCharCode(65 + index)}</Typography>
+                                        <Typography sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 }, mt: 1 }}>Section Name</Typography>
+                                        <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600', mb: 1 }}>Part  {String.fromCharCode(65 + index)}</Typography>
                                     </Box>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3, py: 2, px: 4, flexWrap: 'wrap', gap: '13px' }}>
 
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Marks scored</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>
+                                            <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600' }}>{item?.marksObtained} / {item?.maxMarksForSection}</Typography>
                                         </Box>
                                         <Box sx={{ textAlign: 'center' }}>
                                             <Typography variant="h7" sx={{ fontWeight: '700', color: 'gray', fontSize: { xs: 13 } }}>Percentage</Typography>
-                                            <Typography sx={{ fontSize: { md: 25, xs: 14 }, fontWeight: '600' }}>{((item?.marksObtained / item?.maxMarksForSection) * 100).toFixed(2)} %</Typography>
+                                            <Typography sx={{ fontSize: { md: 22, xs: 14 }, fontWeight: '600' }}>{((item?.marksObtained / item?.maxMarksForSection) * 100).toFixed(2)} %</Typography>
                                         </Box>
                                     </Box>
                                     <Divider />
@@ -188,7 +188,7 @@ const ResultComponent = ({ userId, examId, examAttemptId, handleReviewQuestion, 
                                     {/* Review Questions Button */}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'start' }, px: 4, py: 2 }}>
-                                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '15px' }, fontSize: '12px' }} onClick={() => handleReviewQuestion({ userId, examId, partId: item?.partId })}
+                                        <Button variant="contained" color="warning" sx={{ p: { xs: '10px', md: '12px' }, fontSize: '12px' }} onClick={() => handleReviewQuestion({ userId, examId, partId: item?.partId })}
                                         >
                                             Review Questions
                                         </Button>

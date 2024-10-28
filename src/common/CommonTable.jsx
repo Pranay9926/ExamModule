@@ -64,7 +64,7 @@ const CommonTable = ({
     return (
         <Paper sx={{ margin: '20px 0', boxShadow: 'none', ...style.paper }}>
             <TableContainer component={Paper} sx={{ overflowX: 'auto', ...style.container }}>
-                <Table sx={{ minWidth: 650 }} aria-label="customized table">
+                <Table sx={{ minWidth: 970 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>
                             {headers?.map((header, index) => (
@@ -72,7 +72,7 @@ const CommonTable = ({
                                     key={index}
                                     sx={{
                                         fontWeight: 'bold',
-                                        ...(style.headerCell || {}),
+                                        ...(style.headerCell || {}), fontSize: { xs: '11px', sm: '12px', md: '13px', xl: '13px' }, px: 2, width: '11.8%',
                                     }}
                                 >
                                     {header.label}
@@ -90,6 +90,7 @@ const CommonTable = ({
                             <TableRow
                                 key={rowIndex}
                                 sx={{
+
                                     transition: 'background-color 0.3s ease',
                                     '&:hover': {
                                         backgroundColor: '#f0f0f0', // Change background on hover
@@ -102,6 +103,8 @@ const CommonTable = ({
                                         sx={{
                                             padding: '8px 16px',
                                             ...(style.bodyCell || {}),
+                                            fontSize: { xs: '10px', sm: '12px', md: '12px', xl: '13px' },
+                                            width: '11.8%',
                                         }}
                                     >
                                         {typeof header.accessor === 'function'
@@ -111,14 +114,14 @@ const CommonTable = ({
                                 ))}
 
                                 {(onMarksListClick || onViewAttendanceClick || onAddClick || onEditClick) && (
-                                    <TableCell sx={{ textAlign: 'center' }}>
+                                    <TableCell sx={{ textAlign: 'center', display: 'flex', flexWrap: 'wrap', gap: '5px', }}>
                                         {/* Marks List and View Attendance Buttons */}
                                         {onMarksListClick && (
                                             <Button
                                                 variant="contained"
                                                 color="primary"
                                                 size="small"
-                                                sx={{ marginRight: 1 }}
+                                                sx={{ fontSize: { xs: '9px', sm: '10px', md: '11px', xl: '12px' } }}
                                                 onClick={() => onMarksListClick(row)}
                                             >
                                                 Marks List
@@ -129,7 +132,7 @@ const CommonTable = ({
                                                 variant="contained"
                                                 color="secondary"
                                                 size="small"
-                                                sx={{ marginLeft: 1 }}
+                                                sx={{ fontSize: { xs: '9px', sm: '10px', md: '11px', xl: '12px' } }}
                                                 onClick={() => onViewAttendanceClick(row)}
                                             >
                                                 View Attendance

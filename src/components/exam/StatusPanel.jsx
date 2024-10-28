@@ -56,12 +56,12 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                     {profile.img ? (
                         <Avatar src={profile.img} sx={{ width: "35px", height: '35px', mr: 2 }} />
                     ) : (
-                        <Avatar sx={{ width: "40px", height: '40px', backgroundColor: '#f97316', mr: 2, fontSize: '18px', fontWeight: 'bold' }}>
+                        <Avatar sx={{ width: "40px", height: '40px', backgroundColor: '#f97316', mr: 2, fontSize: '18px', fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', lg: '15px' } }}>
                             {getInitials(profile.name)}
                         </Avatar>
                     )}
                     <Box >
-                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '12px', sm: '13px', md: '14px', lg: '15px' } }}>
                             {profile.name}
                         </Typography>
                     </Box>
@@ -110,7 +110,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                     clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 44%, 0 70%) '// Green triangle for answered & marked
                                 }}
                             />}
-                            <Typography sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '12px', md: '13px', xl: '14px' } }}>
+                            <Typography sx={{ color: '#333', fontWeight: 'bold', fontSize: { xs: '11px', md: '12px', xl: '14px' } }}>
                                 {status.label}
                             </Typography>
                         </Box>
@@ -141,7 +141,7 @@ const StatusPanel = ({ questions, activeQuestion, onQuestionChange, onSubmitQuiz
                                                         : question.markedForReview || question.statusCode === "4" ? '16px'
                                                             : question.visited || question.statusCode === "2" ? '20px 20px 0 0' : '6px',
                                                 width: 35, // Ensure size matches the image example
-                                                height: 35,
+                                                height: 33,
                                                 fontSize: '15px',
                                                 // Ensure size matches the image example
                                                 '&:hover': { bgcolor: '#f97316' }

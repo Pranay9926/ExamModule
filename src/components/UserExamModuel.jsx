@@ -289,10 +289,10 @@ const UserExamModule = () => {
                             sm: 'flex',
                         }, alignItems: 'center', p: 1, justifyContent: "space-between", width: "60%",
                     }}>
-                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: { xs: '14px', md: '17px', lg: '20px' }, color: 'white', ml: '1.5px', fontWeight: 'bold' }}>
                             {examDetails?.title}
                         </Typography>
-                        <Typography sx={{ fontSize: { xs: '15px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: { xs: '14px', md: '17px', lg: '20px' }, color: 'white', fontWeight: 'bold' }}>
                             Time Left:
                             {startTime && (
                                 <Countdown
@@ -303,9 +303,20 @@ const UserExamModule = () => {
                             )}
                         </Typography>
                     </Box>
-                    <Button onClick={handleQuitConfirmations} sx={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Button onClick={() => {
+                        if (isSubmit) {
+                            window.close();
+                        } else {
+                            handleQuitConfirmations();
+                        }
+                    }} sx={{ position: 'absolute', top: 0, right: 0 }}>
                         <CloseIcon sx={{ color: 'white' }} />
                     </Button>
+                    {/* {isSubmit ? <Button onClick={() => nav('/user')} sx={{ position: 'absolute', top: 0, right: 0 }}>
+                        <CloseIcon sx={{ color: 'white' }} />
+                    </Button> : <Button onClick={handleQuitConfirmations} sx={{ position: 'absolute', top: 0, right: 0 }}>
+                        <CloseIcon sx={{ color: 'white' }} />
+                    </Button>} */}
                 </Box>
                 {/* Main Content Section */}
                 <Grid2 container spacing={0} sx={{ height: `calc(100vh - 49px)`, '@media (min-width: 0px) and (max-width: 599px)': { height: `calc(100vh - 63px)` }, '@media (min-width: 599px) and (max-width: 1100px)': { height: `calc(100vh - 42px)` } }}>
@@ -357,9 +368,7 @@ const UserExamModule = () => {
 
                 {/* Toggle Button for Status Panel on Small Screens */}
                 <Box sx={{
-                    display: { xs: 'block', sm: 'none' }, position: 'fixed', bottom: 16, right: 16, '@media (min-width: 350px) and (max-width: 463px)': {
-                        bottom: '65px',
-                    }
+                    display: { xs: 'block', sm: 'none' }, position: 'fixed', bottom: 60, right: 16,
                 }}>
                     <IconButton onClick={toggleStatusPanel(true)} sx={{ bgcolor: '#f97316', color: 'white' }}>
                         <MenuIcon />
